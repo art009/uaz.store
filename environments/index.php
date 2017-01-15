@@ -36,6 +36,10 @@ return [
             'backend/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
+            'common/models',
+            'backend/controllers',
+            'backend/models',
+            'backend/views',
         ],
         'setExecutable' => [
             'yii',
