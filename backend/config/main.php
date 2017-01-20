@@ -44,7 +44,11 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '<action:(login|logout|error)>' => 'site/<action>',
+                'catalog' => 'catalog-category',
             ],
+        ],
+        'ih' => [
+            'class' => 'common\components\ImageHandler',
         ],
     ],
     'params' => $params,

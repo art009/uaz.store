@@ -2,18 +2,17 @@
 
 namespace backend\controllers;
 
-use common\actions\SortableAction;
 use Yii;
-use backend\models\Menu;
-use backend\models\MenuSearch;
+use common\models\CatalogCategory;
+use backend\models\CatalogCategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * MenuController implements the CRUD actions for Menu model.
+ * CatalogCategoryController implements the CRUD actions for CatalogCategory model.
  */
-class MenuController extends Controller
+class CatalogCategoryController extends Controller
 {
     /**
      * @inheritdoc
@@ -31,35 +30,28 @@ class MenuController extends Controller
     }
 
     /**
-     * @inheritdoc
+     * Список категорий
+     *
+     * @param int|null $id
+     *
+     * @return string
      */
-    public function actions()
+    public function actionIndex($id = null)
     {
-        return [
-            SortableAction::DEFAULT_NAME => [
-                'class' => SortableAction::className(),
-                'modelName' => Menu::className(),
-            ],
-        ];
-    }
-
-    /**
-     * Lists all Menu models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new MenuSearch();
+        $searchModel = new CatalogCategorySearch();
+        $searchModel->parent_id = $id;
+        $parentModel = $id ? $this->findModel($id) : null;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'parentModel' => $parentModel,
         ]);
     }
 
     /**
-     * Displays a single Menu model.
+     * Displays a single CatalogCategory model.
      * @param integer $id
      * @return mixed
      */
@@ -71,25 +63,30 @@ class MenuController extends Controller
     }
 
     /**
-     * Creates a new Menu model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Создание категории
+     *
+     * @param int|null $id
+     *
+     * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($id = null)
     {
-        $model = new Menu();
+        $model = new CatalogCategory();
+        $model->parent_id = $id;
+        $parentModel = $id ? $this->findModel($id) : null;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index', 'id' => $model->parent_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'parentModel' => $parentModel,
             ]);
         }
     }
 
     /**
-     * Updates an existing Menu model.
+     * Updates an existing CatalogCategory model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -97,18 +94,20 @@ class MenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $parentModel = $model->parent_id ? $this->findModel($model->parent_id) : null;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['index', 'id' => $model->parent_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'parentModel' => $parentModel,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Menu model.
+     * Deletes an existing CatalogCategory model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -121,15 +120,15 @@ class MenuController extends Controller
     }
 
     /**
-     * Finds the Menu model based on its primary key value.
+     * Finds the CatalogCategory model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Menu the loaded model
+     * @return CatalogCategory the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Menu::findOne($id)) !== null) {
+        if (($model = CatalogCategory::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

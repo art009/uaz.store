@@ -40,6 +40,10 @@ return [
             'backend/controllers',
             'backend/models',
             'backend/views',
+            'frontend/web/uploads',
+            'frontend/web/uploads/catalog-category',
+            'frontend/web/uploads/catalog-category/m',
+            'frontend/web/uploads/catalog-category/s',
         ],
         'setExecutable' => [
             'yii',
@@ -57,6 +61,10 @@ return [
             'backend/web/assets',
             'frontend/runtime',
             'frontend/web/assets',
+            'frontend/web/uploads',
+            'frontend/web/uploads/catalog-category',
+            'frontend/web/uploads/catalog-category/m',
+            'frontend/web/uploads/catalog-category/s',
         ],
         'setExecutable' => [
             'yii',
