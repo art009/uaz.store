@@ -36,7 +36,11 @@ JS
         <?php if ($model->image): ?>
             <?= Html::activeLabel($model, 'image'); ?>
             <br/>
-            <?= Html::img(AppHelper::uploadsPath() . '/' . $model::FOLDER_MEDIUM . '/' . $model->image, ['id' => 'product-main-image']); ?>
+            <?= Html::a(
+                Html::img(AppHelper::uploadsPath() . '/' . $model::FOLDER_MEDIUM . '/' . $model->image, ['id' => 'product-main-image']),
+                AppHelper::uploadsPath() . '/' . $model::FOLDER . '/' . $model->image,
+                ['data-fancybox' => true]
+            ); ?>
             <br/>
             <?php if ($model->images): ?>
                 <?= Html::activeLabel($model, 'images'); ?>

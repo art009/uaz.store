@@ -5,6 +5,10 @@
 // READY
 jQuery(document).ready(function () {
 
+    $("[data-fancybox]").fancybox({
+        'padding': 0,
+    });
+
     $(document).on('click', 'div.product-image a.set-image', function(){
         // Установка основной картинки
         var url = $(this).prop('href'),
@@ -15,6 +19,7 @@ jQuery(document).ready(function () {
             success: function (data) {
                 if (data) {
                     $('#product-main-image').prop('src', data);
+                    $('#product-main-image').parent().prop('href', data.replace('/m/', '/'));
                 }
                 $('div.product-image').removeClass('main');
                 $(parent).addClass('main');
@@ -36,6 +41,7 @@ jQuery(document).ready(function () {
                 success: function (data) {
                     if (data) {
                         $('#product-main-image').prop('src', data);
+                        $('#product-main-image').parent().prop('href', data.replace('/m/', '/'));
                         var addImage = $('div.product-image').find('img[src="' + data + '"]');
                         if (addImage.length) {
                             $(addImage).closest('div.product-image').addClass('main');

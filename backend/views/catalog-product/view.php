@@ -51,7 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'image',
                 'format' => 'raw',
-                'value' => $model->image ? Html::img(AppHelper::uploadsPath() . '/' . $model::FOLDER_MEDIUM . '/' . $model->image, ['id' => 'product-main-image']) : null,
+                'value' => $model->image ? Html::a(
+                        Html::img(AppHelper::uploadsPath() . '/' . $model::FOLDER_MEDIUM . '/' . $model->image, ['id' => 'product-main-image']),
+                        AppHelper::uploadsPath() . '/' . $model::FOLDER . '/' . $model->image,
+                        ['data-fancybox' => true]
+                ) : null,
             ],
             [
                 'attribute' => 'image',
