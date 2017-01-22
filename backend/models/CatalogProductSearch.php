@@ -5,7 +5,6 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\CatalogProduct;
 
 /**
  * CatalogProductSearch represents the model behind the search form about `common\models\CatalogProduct`.
@@ -18,9 +17,10 @@ class CatalogProductSearch extends CatalogProduct
     public function rules()
     {
         return [
-            [['id', 'category_id', 'hide', 'on_main', 'cart_counter', 'length', 'width', 'height', 'weight', 'rest', 'external_id'], 'integer'],
+            [['id', 'category_id', 'hide', 'on_main', 'length', 'width', 'height', 'weight', 'rest', 'external_id'], 'integer'],
             [['title', 'link', 'image', 'meta_keywords', 'meta_description', 'shop_title', 'provider_title', 'shop_code', 'provider_code', 'description', 'provider', 'manufacturer', 'unit', 'created_at', 'updated_at'], 'safe'],
-            [['price', 'price_to', 'price_old'], 'number'],
+            [['price_to', 'price_old'], 'number'],
+            [['price', 'cart_counter'], 'match', 'pattern' => '/^(>|<|>=|<=|=|)(\s*[+-]?\d+\s*)$/'],
         ];
     }
 
@@ -61,13 +61,10 @@ class CatalogProductSearch extends CatalogProduct
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'category_id' => $this->category_id,
-            'price' => $this->price,
             'price_to' => $this->price_to,
             'price_old' => $this->price_old,
             'hide' => $this->hide,
             'on_main' => $this->on_main,
-            'cart_counter' => $this->cart_counter,
             'length' => $this->length,
             'width' => $this->width,
             'height' => $this->height,
@@ -78,9 +75,25 @@ class CatalogProductSearch extends CatalogProduct
             'updated_at' => $this->updated_at,
         ]);
 
+        if ($this->category_id) {
+            $query->andFilterWhere(['category_id' => $this->category_id]);
+        } else {
+            $query->andWhere(['category_id' => null]);
+        }
+
+        $query->andFilterCompare('price', $this->price);
+        $query->andFilterCompare('cart_counter', $this->cart_counter);
+
+        if (mb_strlen($this->image) > 0) {
+            if ($this->image) {
+                $query->andWhere(['is not', 'image', null]);
+            } else {
+                $query->andWhere(['is', 'image', null]);
+            }
+        }
+
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'link', $this->link])
-            ->andFilterWhere(['like', 'image', $this->image])
             ->andFilterWhere(['like', 'meta_keywords', $this->meta_keywords])
             ->andFilterWhere(['like', 'meta_description', $this->meta_description])
             ->andFilterWhere(['like', 'shop_title', $this->shop_title])

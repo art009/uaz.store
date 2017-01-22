@@ -39,10 +39,14 @@ use yii\behaviors\TimestampBehavior;
  * @property string $updated_at
  *
  * @property CatalogCategory $category
- * @property CatalogProductImage[] $catalogProductImages
+ * @property CatalogProductImage[] $images
  */
 class CatalogProduct extends \yii\db\ActiveRecord
 {
+    const FOLDER = 'catalog-product';
+    const FOLDER_SMALL = self::FOLDER . '/s';
+    const FOLDER_MEDIUM = self::FOLDER . '/m';
+
     /**
      * @inheritdoc
      */
@@ -75,10 +79,10 @@ class CatalogProduct extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'category_id' => 'ID родительской категории',
+            'category_id' => 'Родительская категория',
             'title' => 'Заголовок',
             'link' => 'Ссылка',
-            'image' => 'Картинка',
+            'image' => 'Главная картинка',
             'meta_keywords' => 'Текст метатега keywords',
             'meta_description' => 'Текст метатега description',
             'price' => 'Цена',
@@ -130,7 +134,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCatalogProductImages()
+    public function getImages()
     {
         return $this->hasMany(CatalogProductImage::className(), ['product_id' => 'id']);
     }

@@ -23,7 +23,9 @@ class ImageHandler extends Component
     private $height = 0;
     private $mimeType = '';
     private $fileName = '';
+
     public $transparencyColor = array(0, 0, 0);
+
     const IMG_GIF = 1;
     const IMG_JPEG = 2;
     const IMG_PNG = 3;
@@ -39,30 +41,37 @@ class ImageHandler extends Component
     const FLIP_HORIZONTAL = 1;
     const FLIP_VERTICAL = 2;
     const FLIP_BOTH = 3;
+
     public function getImage()
     {
         return $this->image;
     }
+
     public function getFormat()
     {
         return $this->format;
     }
+
     public function getWidth()
     {
         return $this->width;
     }
+
     public function getHeight()
     {
         return $this->height;
     }
+
     public function getMimeType()
     {
         return $this->mimeType;
     }
+
     public function __destruct()
     {
         $this->freeImage();
     }
+
     private function freeImage()
     {
         if(is_resource($this->image))
@@ -79,6 +88,10 @@ class ImageHandler extends Component
             $this->originalImage = null;
         }
     }
+
+    /**
+     * @throws \Exception
+     */
     private function checkLoaded()
     {
         if (!is_resource($this->image))
@@ -86,6 +99,12 @@ class ImageHandler extends Component
             throw new \Exception('Load image first');
         }
     }
+
+    /**
+     * @param $file
+     * @return array
+     * @throws \Exception
+     */
     private function loadImage($file)
     {
         $result = array();
@@ -136,6 +155,9 @@ class ImageHandler extends Component
         }
     }
 
+    /**
+     * @param bool $image
+     */
     protected function initImage($image = false)
     {
         if($image === false)
@@ -186,6 +208,9 @@ class ImageHandler extends Component
         return $this;
     }
 
+    /**
+     * @param $newImage
+     */
     private function preserveTransparency($newImage)
     {
         switch($this->format)
@@ -215,6 +240,13 @@ class ImageHandler extends Component
                 break;
         }
     }
+
+    /**
+     * @param $toWidth
+     * @param $toHeight
+     * @param bool $proportional
+     * @return $this
+     */
     public function resize($toWidth, $toHeight, $proportional = true)
     {
         $this->checkLoaded();
@@ -247,6 +279,13 @@ class ImageHandler extends Component
         $this->height = $newHeight;
         return $this;
     }
+
+    /**
+     * @param $toWidth
+     * @param $toHeight
+     * @param bool $proportional
+     * @return $this
+     */
     public function thumb($toWidth, $toHeight, $proportional = true)
     {
         $this->checkLoaded();
@@ -258,6 +297,16 @@ class ImageHandler extends Component
         $this->resize($toWidth, $toHeight, $proportional);
         return $this;
     }
+
+    /**
+     * @param $watermarkFile
+     * @param $offsetX
+     * @param $offsetY
+     * @param int $corner
+     * @param bool $zoom
+     * @return $this|bool
+     * @throws \Exception
+     */
     public function watermark($watermarkFile, $offsetX, $offsetY, $corner = self::CORNER_RIGHT_BOTTOM, $zoom = false)
     {
         $this->checkLoaded();
@@ -340,6 +389,12 @@ class ImageHandler extends Component
             return false;
         }
     }
+
+    /**
+     * @param $mode
+     * @return $this
+     * @throws \Exception
+     */
     public function flip($mode)
     {
         $this->checkLoaded();
@@ -374,6 +429,11 @@ class ImageHandler extends Component
         //dimensions not changed
         return $this;
     }
+
+    /**
+     * @param $degrees
+     * @return $this
+     */
     public function rotate($degrees)
     {
         $this->checkLoaded();
@@ -383,6 +443,14 @@ class ImageHandler extends Component
         $this->height = imagesy($this->image);
         return $this;
     }
+
+    /**
+     * @param $width
+     * @param $height
+     * @param bool $startX
+     * @param bool $startY
+     * @return $this
+     */
     public function crop($width, $height, $startX = false, $startY = false)
     {
         $this->checkLoaded();
@@ -405,6 +473,20 @@ class ImageHandler extends Component
         $this->height = $height;
         return $this;
     }
+
+    /**
+     * @param $text
+     * @param $fontFile
+     * @param int $size
+     * @param array $color
+     * @param int $corner
+     * @param int $offsetX
+     * @param int $offsetY
+     * @param int $angle
+     * @param int $alpha
+     * @return $this
+     * @throws \Exception
+     */
     public function text($text, $fontFile, $size=12, $color=array(0, 0, 0),
                          $corner=self::CORNER_LEFT_TOP, $offsetX=0, $offsetY=0, $angle=0, $alpha = 0)
     {
@@ -492,6 +574,14 @@ class ImageHandler extends Component
         $this->crop($width, $height);
         return $this;
     }
+
+    /**
+     * @param $toWidth
+     * @param $toHeight
+     * @param array $backgroundColor
+     *
+     * @return $this
+     */
     public function resizeCanvas($toWidth, $toHeight, $backgroundColor = array(255, 255, 255))
     {
         $this->checkLoaded();
@@ -520,6 +610,9 @@ class ImageHandler extends Component
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function grayscale()
     {
         $newImage = imagecreatetruecolor($this->width, $this->height);
@@ -531,6 +624,13 @@ class ImageHandler extends Component
 
         return $this;
     }
+
+    /**
+     * @param bool $inFormat
+     * @param int $jpegQuality
+     * @return $this
+     * @throws \Exception
+     */
     public function show($inFormat = false, $jpegQuality = 75)
     {
         $this->checkLoaded();

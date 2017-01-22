@@ -16,6 +16,9 @@ use Yii;
  */
 class CatalogProductImage extends \yii\db\ActiveRecord
 {
+    const MAIN_NO = 0;
+    const MAIN_YES = 1;
+
     /**
      * @inheritdoc
      */

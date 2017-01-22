@@ -118,3 +118,8 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+div.product-image { display: inline-block; border: 1px solid #ccc; position: relative; }
+div.product-image.main { border-color: #3c763d; outline: 1px solid #3c763d; }
+div.product-image a.delete-image { display: block; position: absolute; top: 0; right: 0; background-color: #ccc;
+    width: 24px; text-align: center; border-radius: 0 0 0 8px; }

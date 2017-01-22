@@ -2,8 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\CatalogProductSearch;
 use Yii;
-use common\models\CatalogCategory;
+use backend\models\CatalogCategory;
 use backend\models\CatalogCategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -43,10 +44,16 @@ class CatalogCategoryController extends Controller
         $parentModel = $id ? $this->findModel($id) : null;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $productSearch = new CatalogProductSearch();
+        $productSearch->category_id = $id;
+        $productProvider = $productSearch->search(Yii::$app->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'parentModel' => $parentModel,
+            'productSearch' => $productSearch,
+            'productProvider' => $productProvider,
         ]);
     }
 
@@ -114,9 +121,12 @@ class CatalogCategoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $parentId = $model->parent_id;
 
-        return $this->redirect(['index']);
+        $model->delete();
+
+        return $this->redirect(['index', 'id' => $parentId]);
     }
 
     /**

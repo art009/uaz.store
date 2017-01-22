@@ -44,6 +44,9 @@ return [
             'frontend/web/uploads/catalog-category',
             'frontend/web/uploads/catalog-category/m',
             'frontend/web/uploads/catalog-category/s',
+            'frontend/web/uploads/catalog-product',
+            'frontend/web/uploads/catalog-product/m',
+            'frontend/web/uploads/catalog-product/s',
         ],
         'setExecutable' => [
             'yii',
@@ -65,6 +68,9 @@ return [
             'frontend/web/uploads/catalog-category',
             'frontend/web/uploads/catalog-category/m',
             'frontend/web/uploads/catalog-category/s',
+            'frontend/web/uploads/catalog-product',
+            'frontend/web/uploads/catalog-product/m',
+            'frontend/web/uploads/catalog-product/s',
         ],
         'setExecutable' => [
             'yii',

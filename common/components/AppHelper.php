@@ -47,4 +47,14 @@ class AppHelper
     {
         return Yii::$app->params[$env . 'Url'] . self::UPLOADS_FOLDER;
     }
+
+    /**
+     * Пуль до картинки-водяного знака (120x64)
+     *
+     * @return string
+     */
+    public static function watermarkFile()
+    {
+        return Yii::getAlias('@backend') . '/web/img/watermark.png';
+    }
 }

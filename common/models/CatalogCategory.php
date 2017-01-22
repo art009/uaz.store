@@ -154,9 +154,10 @@ class CatalogCategory extends \yii\db\ActiveRecord
     protected function deleteImages()
     {
         if ($this->image) {
-            @unlink(self::FOLDER . '/' . $this->image);
-            @unlink(self::FOLDER_SMALL . '/' . $this->image);
-            @unlink(self::FOLDER_MEDIUM . '/' . $this->image);
+            $uploadsFolder = AppHelper::uploadsFolder();
+            @unlink($uploadsFolder . '/' . self::FOLDER . '/' . $this->image);
+            @unlink($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $this->image);
+            @unlink($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $this->image);
         }
     }
 
@@ -196,7 +197,7 @@ class CatalogCategory extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
-        $result = false;
+        $result = true;
         if (parent::beforeSave($insert)) {
             if ($this->imageFile) {
                 $name = md5(time()) . '.' . $this->imageFile->extension;
@@ -209,6 +210,9 @@ class CatalogCategory extends \yii\db\ActiveRecord
                     $imageHandler = Yii::$app->ih;
                     $imageHandler
                         ->load($uploadsFolder . '/' . self::FOLDER . '/' . $name)
+                        ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
+                        ->save($uploadsFolder . '/' . self::FOLDER . '/' . $name)
+                        ->reload()
                         ->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
                         ->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name)
                         ->reload()
@@ -216,14 +220,11 @@ class CatalogCategory extends \yii\db\ActiveRecord
                         ->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name);
                 } else {
                     $this->addError('imageFile', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
+                    $result = false;
                 }
             }
-
-            if ($this->image)
-                $result = true;
-            else
-                $this->addError('imageFile', 'Необходимо загрузить файл.');
         }
+
         return $result;
     }
 
@@ -237,6 +238,9 @@ class CatalogCategory extends \yii\db\ActiveRecord
             if ($this->children) {
                 throw new BadRequestHttpException('Невозможно удалить категорию с подкатегориями');
             }
+            if ($this->products) {
+                throw new BadRequestHttpException('Невозможно удалить категорию с товарами');
+            }
 
             $this->deleteImages();
 
@@ -244,5 +248,31 @@ class CatalogCategory extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param int|null $parentId
+     * @param string|null $prefix
+     * @param int $excludeId
+     *
+     * @return array
+     */
+    public static function getTreeView($parentId = null, $prefix = null, $excludeId = 0)
+    {
+        $result = [];
+        /* @var $categories CatalogCategory[] */
+        $categories = self::find()
+            ->where(['parent_id' => $parentId])
+            ->andWhere(['<>', 'id', $excludeId])
+            ->all();
+
+        if ($categories) {
+            foreach ($categories as $category) {
+                $result[$category->id] = $prefix . $category->title;
+                $result += self::getTreeView($category->id, $prefix . '-', $excludeId);
+            }
+        }
+
+        return $result;
     }
 }

@@ -2,9 +2,13 @@
 
 namespace backend\controllers;
 
+use common\components\AppHelper;
 use Yii;
-use common\models\CatalogProduct;
+use backend\models\CatalogProduct;
 use backend\models\CatalogProductSearch;
+use backend\models\CatalogCategory;
+use backend\models\CatalogProductImage;
+use yii\helpers\Html;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -57,19 +61,24 @@ class CatalogProductController extends Controller
     }
 
     /**
-     * Creates a new CatalogProduct model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * Добавление товара
+     *
+     * @param integer|null $id
+     *
+     * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($id = null)
     {
         $model = new CatalogProduct();
+        $model->category_id = $id;
+        $category = $id ? $this->findCategoryModel($id) : null;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'category' => $category,
             ]);
         }
     }
@@ -101,9 +110,11 @@ class CatalogProductController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $categoryId = $model->category_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/catalog-category/index', 'id' => $categoryId]);
     }
 
     /**
@@ -118,7 +129,84 @@ class CatalogProductController extends Controller
         if (($model = CatalogProduct::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Товар не найден.');
+        }
+    }
+
+    /**
+     * Finds the CatalogCategory model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return CatalogCategory the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findCategoryModel($id)
+    {
+        if (($model = CatalogCategory::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Родительская категория не найдена.');
+        }
+    }
+
+    /**
+     * Finds the CatalogProductImage model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return CatalogProductImage the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findImageModel($id)
+    {
+        if (($model = CatalogProductImage::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Картинка не найдена.');
+        }
+    }
+
+    /**
+     * Удаление картинки
+     *
+     * @param int $id
+     *
+     * @return \yii\web\Response|string
+     */
+    public function actionDeleteImage($id)
+    {
+        $image = $this->findImageModel($id);
+        $product = $this->findModel($image->product_id);
+        $image->delete();
+        $product->updateImage();
+
+        if (Yii::$app->request->isAjax) {
+            return $product->image ? AppHelper::uploadsPath() . '/' . $product::FOLDER_MEDIUM . '/' . $product->image : null;
+        } else {
+            return $this->goBack(['view', 'id' => $product->id]);
+        }
+    }
+
+    /**
+     * Установка главной картинки
+     *
+     * @param $id
+     *
+     * @return string|\yii\web\Response
+     */
+    public function actionSetImage($id)
+    {
+        $image = $this->findImageModel($id);
+        $product = $this->findModel($image->product_id);
+        CatalogProductImage::updateAll(['main' => CatalogProductImage::MAIN_NO], ['product_id' => $product->id]);
+        if ($image->updateAttributes(['main' => CatalogProductImage::MAIN_YES])) {
+            $product->image = $image->image;
+            $product->updateAttributes(['image' => $image->image]);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return AppHelper::uploadsPath() . '/' . $product::FOLDER_MEDIUM . '/' . $product->image;
+        } else {
+            return $this->goBack(['view', 'id' => $product->id]);
         }
     }
 }

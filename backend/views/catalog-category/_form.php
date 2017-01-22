@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use common\components\AppHelper;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\CatalogCategory */
+/* @var $model backend\models\CatalogCategory */
 /* @var $form yii\widgets\ActiveForm */
 
 if ($model->isNewRecord) {
@@ -26,7 +26,10 @@ JS
     <?php $form = ActiveForm::begin(); ?>
 
     <?php echo $form->errorSummary($model); ?>
-    <?= $form->field($model, 'parent_id')->dropDownList($model::getListed(), ['prompt' => 'Выберите категорию']) ?>
+    <?= $form->field($model, 'parent_id')->dropDownList(
+        $model::getTreeView(null, null, $model->isNewRecord ? 0 : $model->id),
+        ['prompt' => 'Выберите категорию']
+    ) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
