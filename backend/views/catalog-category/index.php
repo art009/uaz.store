@@ -33,7 +33,7 @@ if ($parentModel) {
         <?= Html::a('Добавить категорию', ['create', 'id' => $parentModel->id], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Добавить товар', ['catalog-product/create', 'id' => $parentModel->id], ['class' => 'btn btn-primary']) ?>
         <?php if ($parentModel == null): ?>
-        <?= Html::a('Импорт товаров', ['create'], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Импорт товаров', ['catalog-product/import'], ['class' => 'btn btn-warning']) ?>
         <?php endif; ?>
     </p>
     <?= GridView::widget([
@@ -90,8 +90,14 @@ if ($parentModel) {
                     'width' => '40px;'
                 ]
             ],
-            'title',
-            'link',
+            [
+                'attribute' => 'title',
+                'options' => [
+                    //'width' => '350px;'
+                ],
+            ],
+            //'title',
+            //'link',
             [
                 'attribute' => 'image',
                 'format' => 'raw',
@@ -113,6 +119,9 @@ if ($parentModel) {
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'options' => [
+                    'width' => '70px;'
+                ],
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
                         return Html::a(Html::icon('eye-open'), ['/catalog-product/view', 'id' => $model->id], [

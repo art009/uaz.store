@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\ImportForm;
 use common\components\AppHelper;
 use Yii;
 use backend\models\CatalogProduct;
@@ -208,5 +209,29 @@ class CatalogProductController extends Controller
         } else {
             return $this->goBack(['view', 'id' => $product->id]);
         }
+    }
+
+    /**
+     * Импорт товаров
+     *
+     * @return string
+     */
+    public function actionImport()
+    {
+        $model = new ImportForm();
+        if ($model->load(Yii::$app->request->post()) && $model->import()) {
+            if ($model->hasErrors('file')) {
+                Yii::$app->session->setFlash('danger', $model->getFirstError('file'));
+            } else {
+                Yii::$app->session->setFlash('success', 'Добавлено товаров: ' . $model->counts['insert']);
+                Yii::$app->session->setFlash('info', 'Обновлено товаров: ' . $model->counts['update']);
+                Yii::$app->session->setFlash('warning', 'Скрыто товаров: ' . $model->counts['delete']);
+                return $this->refresh();
+            }
+        }
+
+        return $this->render('import', [
+            'model' => $model,
+        ]);
     }
 }
