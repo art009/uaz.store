@@ -47,6 +47,8 @@ return [
             'frontend/web/uploads/catalog-product',
             'frontend/web/uploads/catalog-product/m',
             'frontend/web/uploads/catalog-product/s',
+            'backend/web/min',
+            'frontend/web/min',
         ],
         'setExecutable' => [
             'yii',
@@ -71,6 +73,8 @@ return [
             'frontend/web/uploads/catalog-product',
             'frontend/web/uploads/catalog-product/m',
             'frontend/web/uploads/catalog-product/s',
+			'backend/web/min',
+			'frontend/web/min',
         ],
         'setExecutable' => [
             'yii',

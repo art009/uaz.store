@@ -21,6 +21,7 @@ class m170115_183626_catalog_product extends Migration
             'provider_title' => $this->string()->null()->comment('Название у поставщика'),
             'shop_code' => $this->string()->null()->comment('Артикул в магазине'),
             'provider_code' => $this->string()->null()->comment('Артикул у поставщика'),
+            'manufacturer_code' => $this->string()->null()->comment('Артикул у производителя'),
             'description' => $this->text()->null()->comment('Описание'),
             'hide' => $this->boolean()->notNull()->defaultValue(0)->comment('Скрывать?'),
             'on_main' => $this->boolean()->notNull()->defaultValue(0)->comment('На главной странице?'),
