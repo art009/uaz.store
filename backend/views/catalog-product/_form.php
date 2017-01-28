@@ -67,6 +67,8 @@ JS
 
     <?= $form->field($model, 'provider_code')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'manufacturer_code')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'description')->widget(TinyMce::className());?>
 
     <?= $form->field($model, 'hide')->checkbox() ?>

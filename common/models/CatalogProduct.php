@@ -22,6 +22,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $provider_title
  * @property string $shop_code
  * @property string $provider_code
+ * @property string $manufacturer_code
  * @property string $description
  * @property integer $hide
  * @property integer $on_main
@@ -66,7 +67,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
             [['meta_keywords', 'meta_description', 'description'], 'string'],
             [['price', 'price_to', 'price_old'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
-            [['title', 'link', 'image', 'shop_title', 'provider_title', 'shop_code', 'provider_code', 'provider', 'manufacturer', 'unit'], 'string', 'max' => 255],
+            [['title', 'link', 'image', 'shop_title', 'provider_title', 'shop_code', 'provider_code, manufacturer_code', 'provider', 'manufacturer', 'unit'], 'string', 'max' => 255],
             [['link'], 'unique'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
@@ -92,6 +93,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
             'provider_title' => 'Название у поставщика',
             'shop_code' => 'Артикул в магазине',
             'provider_code' => 'Артикул у поставщика',
+            'manufacturer_code' => 'Артикул у производителя',
             'description' => 'Описание',
             'hide' => 'Скрывать?',
             'on_main' => 'На главной странице?',

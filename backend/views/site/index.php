@@ -10,6 +10,9 @@ $this->title = 'Административная панель';
     <p>
         <a class="btn btn-md btn-info" href="/menu">Меню</a>
         <a class="btn btn-md btn-primary" href="/page">Текстовые страницы</a>
+    </p>
+    <p>
         <a class="btn btn-md btn-danger" href="/catalog">Каталог</a>
+        <a class="btn btn-md btn-warning" href="/catalog-manual">Справочники</a>
     </p>
 </div>

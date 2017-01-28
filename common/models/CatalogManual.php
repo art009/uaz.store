@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "catalog_manual".
@@ -18,10 +19,16 @@ use Yii;
  * @property string $created_at
  * @property string $updated_at
  *
- * @property CatalogManualCategory[] $catalogManualCategories
+ * @property CatalogManualCategory[] $categories
  */
 class CatalogManual extends \yii\db\ActiveRecord
 {
+	const FOLDER = 'catalog-manual';
+	const FOLDER_MEDIUM = self::FOLDER . '/m';
+
+	const MEDIUM_IMAGE_WIDTH = 100;
+	const MEDIUM_IMAGE_HEIGHT = 100;
+
     /**
      * @inheritdoc
      */
@@ -64,10 +71,23 @@ class CatalogManual extends \yii\db\ActiveRecord
         ];
     }
 
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			[
+				'class' => TimestampBehavior::className(),
+				'value' => date('Y-m-d H:i:s'),
+			],
+		];
+	}
+
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCatalogManualCategories()
+    public function getCategories()
     {
         return $this->hasMany(CatalogManualCategory::className(), ['manual_id' => 'id']);
     }
