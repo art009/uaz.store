@@ -11,7 +11,7 @@ body {
 }
 
 .wrap > .container {
-    padding: 70px 15px 20px;
+    padding: 0 15px 20px;
 }
 
 .footer {
@@ -123,3 +123,11 @@ div.product-image { display: inline-block; border: 1px solid #ccc; position: rel
 div.product-image.main { border-color: #3c763d; outline: 1px solid #3c763d; }
 div.product-image a.delete-image { display: block; position: absolute; top: 0; right: 0; background-color: #ccc;
     width: 24px; text-align: center; border-radius: 0 0 0 8px; }
+
+select.has-chosen { height: 34px; width: 100%; display: inline-block; vertical-align: middle; color: #ffffff; overflow: hidden; }
+
+.has-error .chosen-container-single .chosen-single {
+    border-color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}

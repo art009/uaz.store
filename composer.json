@@ -20,7 +20,9 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "2amigos/yii2-tinymce-widget" : "~1.1",
         "phpoffice/phpexcel": "1.8",
-        "rmrevin/yii2-minify-view": "~1.14"
+        "rmrevin/yii2-minify-view": "~1.14",
+        "bower-asset/chosen-bootstrap": "1.1.*",
+        "nex/yii2-chosen" : "1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

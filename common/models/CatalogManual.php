@@ -19,7 +19,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_at
  * @property string $updated_at
  *
- * @property CatalogManualCategory[] $categories
+ * @property CatalogManualPage[] $pages
  */
 class CatalogManual extends \yii\db\ActiveRecord
 {
@@ -89,6 +89,6 @@ class CatalogManual extends \yii\db\ActiveRecord
      */
     public function getCategories()
     {
-        return $this->hasMany(CatalogManualCategory::className(), ['manual_id' => 'id']);
+        return $this->hasMany(CatalogManualPage::className(), ['manual_id' => 'id']);
     }
 }

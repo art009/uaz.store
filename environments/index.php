@@ -51,6 +51,8 @@ return [
             'frontend/web/min',
 			'frontend/web/uploads/catalog-manual',
 			'frontend/web/uploads/catalog-manual/m',
+			'frontend/web/uploads/catalog-manual-page',
+			'frontend/web/uploads/catalog-manual-page/m',
         ],
         'setExecutable' => [
             'yii',
@@ -79,6 +81,8 @@ return [
 			'frontend/web/min',
 			'frontend/web/uploads/catalog-manual',
 			'frontend/web/uploads/catalog-manual/m',
+			'frontend/web/uploads/catalog-manual-page',
+			'frontend/web/uploads/catalog-manual-page/m',
         ],
         'setExecutable' => [
             'yii',

@@ -31,7 +31,7 @@ AppAsset::register($this);
         'brandLabel' => 'Административная панель',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-inverse navbar-top',
         ],
     ]);
     $menuItems = [

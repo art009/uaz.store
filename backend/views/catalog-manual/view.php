@@ -3,9 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\components\AppHelper;
+use common\widgets\TreeView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\CatalogManual */
+/* @var $model backend\models\CatalogManual */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Справочники', 'url' => ['index']];
@@ -20,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Вы уверены, что хотите удалить справочник?',
+                'confirm' => 'Вы уверены, что хотите удалить этот справочник?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -53,4 +54,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <h3>Страницы справочника</h3>
+    <?php echo TreeView::widget(['data' => $model->getCategoryTree()]); ?>
 </div>

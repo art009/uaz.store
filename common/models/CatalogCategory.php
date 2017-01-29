@@ -269,7 +269,7 @@ class CatalogCategory extends \yii\db\ActiveRecord
         if ($categories) {
             foreach ($categories as $category) {
                 $result[$category->id] = $prefix . $category->title;
-                $result += self::getTreeView($category->id, $prefix . '-', $excludeId);
+                $result += self::getTreeView($category->id, $result[$category->id] . ' / ', $excludeId);
             }
         }
 
