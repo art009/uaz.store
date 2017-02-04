@@ -11,12 +11,25 @@ use yii\web\IdentityInterface;
  * User model
  *
  * @property integer $id
- * @property string $username
+ * @property string $email
+ * @property string $phone
+ * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
- * @property string $email
- * @property string $auth_key
  * @property integer $status
+ * @property integer $role
+ * @property integer $legal
+ * @property string $name
+ * @property integer $passport_series
+ * @property integer $passport_number
+ * @property integer $inn
+ * @property integer $kpp
+ * @property integer $postcode
+ * @property string $address
+ * @property string $fax
+ * @property string $photo
+ * @property integer $offer_accepted
+ * @property integer $accepted_at
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
@@ -24,8 +37,46 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 10;
+    const STATUS_ACTIVE = 1;
+    const STATUS_BLOCKED = 2;
 
+    const ROLE_CLIENT = 0;
+    const ROLE_ADMIN = 1;
+    const ROLE_MANAGER = 2;
+
+    const LEGAL_NO = 0;
+    const LEGAL_YES = 1;
+
+	/**
+	 * Список статусов
+	 *
+	 * @var array
+	 */
+    static $statusList = [
+    	self::STATUS_DELETED => 'Удален',
+    	self::STATUS_ACTIVE => 'Активен',
+	];
+
+	/**
+	 * Список ролей
+	 *
+	 * @var array
+	 */
+    static $roleList = [
+    	self::ROLE_CLIENT => 'Клиент',
+    	self::ROLE_ADMIN => 'Администратор',
+    	self::ROLE_MANAGER => 'Менеджер',
+	];
+
+	/**
+	 * Физ / Юр лицо
+	 *
+	 * @var array
+	 */
+    static $legalList = [
+    	self::LEGAL_NO => 'Физ лицо',
+    	self::LEGAL_YES => 'Юр лицо',
+	];
 
     /**
      * @inheritdoc
@@ -55,7 +106,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED, self::STATUS_BLOCKED]],
         ];
     }
 
@@ -76,14 +127,25 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by email
      *
-     * @param string $username
+     * @param string $email
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByEmail($email)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $email, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * Finds user by phone
+     *
+     * @param string $phone
+     * @return static|null
+     */
+    public static function findByPhone($phone)
+    {
+        return static::findOne(['phone' => $phone, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**

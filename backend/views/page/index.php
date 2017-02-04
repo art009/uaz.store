@@ -30,9 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'hide',
                 'value' => function ($model) {
-                    return AppHelper::$hiddenList[$model->hide];
+                    return AppHelper::$yesNoList[$model->hide];
                 },
-                'filter' => AppHelper::$hiddenList,
+                'filter' => AppHelper::$yesNoList,
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],

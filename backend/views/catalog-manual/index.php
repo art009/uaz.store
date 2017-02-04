@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'hide',
 				'value' => function ($model) {
 					/* @var $model \common\models\CatalogCategory */
-					return AppHelper::$hiddenList[$model->hide];
+					return AppHelper::$yesNoList[$model->hide];
 				},
 			],
             ['class' => 'yii\grid\ActionColumn'],

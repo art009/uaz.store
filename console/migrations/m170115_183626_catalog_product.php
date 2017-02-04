@@ -34,7 +34,7 @@ class m170115_183626_catalog_product extends Migration
             'weight' => $this->integer()->unsigned()->defaultValue(0)->comment('Вес'),
             'unit' => $this->string()->null()->comment('Единица измерения'),
             'rest' => $this->integer()->unsigned()->defaultValue(0)->comment('Остаток'),
-            'external_id' => $this->integer()->unsigned()->null()->comment('ID Поставщика'),
+            'external_id' => $this->string()->null()->comment('Код синхронизации'),
             'created_at' => $this->timestamp()->defaultValue('0000-00-00 00:00:00')->notNull()->comment('Время создания'),
             'updated_at' => $this->timestamp()->defaultValue('0000-00-00 00:00:00')->notNull()->comment('Время обновления'),
         ], 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB');

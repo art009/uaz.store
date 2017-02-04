@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:html',
 			[
 				'attribute' => 'hide',
-				'value' => AppHelper::$hiddenList[$model->hide],
+				'value' => AppHelper::$yesNoList[$model->hide],
 			],
             'created_at',
             'updated_at',

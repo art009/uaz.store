@@ -73,11 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             [
                 'attribute' => 'hide',
-                'value' => AppHelper::$hiddenList[$model->hide],
+                'value' => AppHelper::$yesNoList[$model->hide],
             ],
             [
                 'attribute' => 'on_main',
-                'value' => AppHelper::$hiddenList[$model->on_main],
+                'value' => AppHelper::$yesNoList[$model->on_main],
             ],
             'provider',
             'manufacturer',

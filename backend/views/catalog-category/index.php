@@ -68,9 +68,9 @@ if ($parentModel) {
                 'attribute' => 'hide',
                 'value' => function ($model) {
                     /* @var $model \common\models\CatalogCategory */
-                    return AppHelper::$hiddenList[$model->hide];
+                    return AppHelper::$yesNoList[$model->hide];
                 },
-                'filter' => AppHelper::$hiddenList,
+                'filter' => AppHelper::$yesNoList,
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -105,7 +105,7 @@ if ($parentModel) {
                     /* @var $model \backend\models\CatalogProduct */
                     return $model->image ? Html::img(AppHelper::uploadsPath() . '/' . $model::FOLDER_SMALL . '/' . $model->image) : null;
                 },
-                'filter' => AppHelper::$hiddenList,
+                'filter' => AppHelper::$yesNoList,
             ],
             'price',
             'cart_counter',
@@ -113,9 +113,9 @@ if ($parentModel) {
                 'attribute' => 'hide',
                 'value' => function ($model) {
                     /* @var $model \backend\models\CatalogProduct */
-                    return AppHelper::$hiddenList[$model->hide];
+                    return AppHelper::$yesNoList[$model->hide];
                 },
-                'filter' => AppHelper::$hiddenList,
+                'filter' => AppHelper::$yesNoList,
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

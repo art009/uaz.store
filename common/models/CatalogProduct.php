@@ -35,7 +35,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $weight
  * @property string $unit
  * @property integer $rest
- * @property integer $external_id
+ * @property string $external_id
  * @property string $created_at
  * @property string $updated_at
  *
@@ -106,7 +106,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
             'weight' => 'Вес',
             'unit' => 'Единица измерения',
             'rest' => 'Остаток',
-            'external_id' => 'ID Поставщика',
+            'external_id' => 'Код синхронизации',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',
         ];

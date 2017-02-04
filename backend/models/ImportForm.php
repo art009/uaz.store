@@ -154,7 +154,7 @@ class ImportForm extends Model
                 if ($hideItems) {
                     $part = array_splice($hideItems, 0, 100);
                     while (!empty($part)) {
-                        $this->counts['delete'] += CatalogProduct::updateAll(['hide' => AppHelper::HIDDEN_YES], ['id' => $part]);
+                        $this->counts['delete'] += CatalogProduct::updateAll(['hide' => AppHelper::YES], ['id' => $part]);
                         $part = array_splice($hideItems, 0, 100);
                     }
                 }
