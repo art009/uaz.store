@@ -22,4 +22,7 @@ $this->title = 'Административная панель';
     <p>
         <a class="btn btn-md btn-success btn-block" href="/user">Пользователи</a>
     </p>
+    <p>
+        <a class="btn btn-md btn-default btn-block" href="/mail-queue">Очередь писем</a>
+    </p>
 </div>

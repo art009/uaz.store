@@ -53,6 +53,19 @@ return [
         'ih' => [
             'class' => 'common\components\ImageHandler',
         ],
+		'mailer' => [
+			'class' => 'yii\swiftmailer\Mailer',
+			'viewPath' => '@common/mail',
+			'useFileTransport' => false,
+			'transport' => [
+				'class' => 'Swift_SmtpTransport',
+				'host' => 'smtp.yandex.ru',
+				'username' => 'no-reply@uaz.store',
+				'password' => 'gybpbpwpcpkgvokh',
+				'port' => '465',
+				'encryption' => 'ssl',
+			],
+		],
     ],
     'params' => $params,
 	'as beforeRequest' => [
