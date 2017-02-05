@@ -1,4 +1,7 @@
 <?php
+
+use backend\models\User;
+
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -19,7 +22,7 @@ return [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
-            'identityClass' => 'backend\models\User',
+            'identityClass' => User::class,
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
@@ -52,4 +55,28 @@ return [
         ],
     ],
     'params' => $params,
+	'as beforeRequest' => [
+		'class' => 'yii\filters\AccessControl',
+		'rules' => [
+			[
+				'allow' => true,
+				'matchCallback' => function () {
+					if (Yii::$app->controller->id == 'site' && (in_array(Yii::$app->controller->action->id, ['login', 'error']))) {
+						return true;
+					} elseif (Yii::$app->user->isGuest == false && Yii::$app->user->identity->role == User::ROLE_ADMIN) {
+						return true;
+					}
+
+					return false;
+				},
+			],
+		],
+		'denyCallback' => function () {
+			if (Yii::$app->user->isGuest == false) {
+				throw new \yii\web\NotFoundHttpException('У вас нет доступа к этой странице.');
+			} else {
+				return Yii::$app->response->redirect(['site/login']);
+			}
+		},
+	],
 ];

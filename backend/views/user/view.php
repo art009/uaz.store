@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use backend\models\User;
+use common\components\AppHelper;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\User */
@@ -35,7 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
         $attributes = [
 			'id',
 			'email:email',
-			'phone',
+            [
+				'attribute' => 'phone',
+				'value' => $model->phone ? '+7' . $model->phone : null,
+			],
             [
 				'attribute' => 'status',
 				'value' => $model->getStatusName(),
@@ -54,7 +58,15 @@ $this->params['breadcrumbs'][] = $this->title;
         }
 
         $attributes[] = 'name';
-	    $attributes[] = 'photo';
+	    $attributes[] = [
+		    'attribute' => 'image',
+			'format' => 'raw',
+			'value' => $model->photo ? Html::a(
+			    Html::img(AppHelper::uploadsPath() . '/' . $model::FOLDER_SMALL . '/' . $model->photo),
+				AppHelper::uploadsPath() . '/' . $model::FOLDER . '/' . $model->photo,
+				['data-fancybox' => true]
+            ) : null,
+        ];
 
 
 	    if ($model->role == User::ROLE_CLIENT && $model->legal == User::LEGAL_NO) {
@@ -71,7 +83,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			$attributes[] = 'postcode';
 			$attributes[] = 'address';
 			$attributes[] = 'fax';
-			$attributes[] = 'offer_accepted';
+			$attributes[] = [
+				'attribute' => 'offer_accepted',
+				'value' => AppHelper::$yesNoList[$model->offer_accepted],
+			];
 			$attributes[] = 'accepted_at';
         }
 

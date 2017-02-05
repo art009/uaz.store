@@ -3,9 +3,15 @@
 namespace backend\models;
 
 use codeonyii\yii2validators\AtLeastValidator;
+use Yii;
+use yii\web\UploadedFile;
+use common\components\AppHelper;
+use common\components\ImageHandler;
 
 /**
  * Class User
+ *
+ * @property UploadedFile $imageFile
  *
  * @package backend\models
  */
@@ -18,6 +24,11 @@ class User extends \common\models\User
 	 * @var string
 	 */
 	public $password;
+
+	/**
+	 * @var UploadedFile
+	 */
+	public $imageFile;
 
 	/**
 	 * @return array
@@ -55,6 +66,10 @@ class User extends \common\models\User
 			['password', 'required', 'on' => self::SCENARIO_CREATE],
 			['password', 'string', 'min' => 5],
 
+			[['passport_series', 'passport_number', 'inn', 'kpp', 'postcode'], 'default', 'value' => 0],
+
+			[['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+
 			[['phone', 'email', 'password', 'role', 'legal', 'name', 'photo', 'passport_series', 'passport_number', 'inn',
 				'kpp', 'postcode', 'address', 'offer_accepted', 'fax'], 'safe'],
 		];
@@ -89,6 +104,7 @@ class User extends \common\models\User
 			'created_at' => 'Время создания',
 			'updated_at' => 'Время обновления',
 			'password' => 'Пароль',
+			'imageFile' => 'Загружаемая фотография',
 		];
 	}
 
@@ -124,6 +140,28 @@ class User extends \common\models\User
 			$this->phone = $this->phone ?: null;
 			if ($this->offer_accepted && !$this->getOldAttribute('offer_accepted')) {
 				$this->accepted_at = date('Y-m-d H:i:s');
+			}
+
+			if ($this->imageFile) {
+				$name = md5(microtime() . $this->email) . '.' . $this->imageFile->extension;
+				$uploadsFolder = AppHelper::uploadsFolder();
+				if ($this->imageFile->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
+					$this->deleteImages();
+					$this->photo = $name;
+
+					/* @var $imageHandler ImageHandler */
+					$imageHandler = Yii::$app->ih;
+					$imageHandler
+						->load($uploadsFolder . '/' . self::FOLDER . '/' . $name)
+						->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_LEFT_BOTTOM)
+						->save($uploadsFolder . '/' . self::FOLDER . '/' . $name)
+						->reload()
+						->resizeCanvas(self::SMALL_IMAGE_WIDTH, self::SMALL_IMAGE_HEIGHT)
+						->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name);
+				} else {
+					$this->addError('imageFile', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
+					return false;
+				}
 			}
 
 			return true;
@@ -167,6 +205,17 @@ class User extends \common\models\User
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	public function load($data, $formName = null)
+	{
+		$result = parent::load($data, $formName = null);
+		$this->imageFile = UploadedFile::getInstance($this, 'imageFile');
+
+		return $result;
+	}
+
+	/**
 	 * Название статуса
 	 *
 	 * @return null
@@ -207,5 +256,17 @@ class User extends \common\models\User
 			self::ROLE_CLIENT => 'Клиент',
 			self::ROLE_MANAGER => 'Менеджер',
 		];
+	}
+
+	/**
+	 * Deletes model image
+	 */
+	protected function deleteImages()
+	{
+		if ($this->photo) {
+			$uploadsFolder = AppHelper::uploadsFolder();
+			@unlink($uploadsFolder . '/' . self::FOLDER . '/' . $this->photo);
+			@unlink($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $this->photo);
+		}
 	}
 }

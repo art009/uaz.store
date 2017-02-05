@@ -8,11 +8,18 @@ $this->title = 'Административная панель';
     <h1>Система управления сайтом</h1>
     <p class="lead">Выберите необходимый раздел</p>
     <p>
-        <a class="btn btn-md btn-info" href="/menu">Меню</a>
-        <a class="btn btn-md btn-primary" href="/page">Текстовые страницы</a>
+        <a class="btn btn-md btn-info btn-block" href="/menu">Меню</a>
     </p>
     <p>
-        <a class="btn btn-md btn-danger" href="/catalog">Каталог</a>
-        <a class="btn btn-md btn-warning" href="/catalog-manual">Справочники</a>
+        <a class="btn btn-md btn-primary btn-block" href="/page">Текстовые страницы</a>
+    </p>
+    <p>
+        <a class="btn btn-md btn-danger btn-block" href="/catalog">Каталог</a>
+    </p>
+    <p>
+        <a class="btn btn-md btn-warning btn-block" href="/catalog-manual">Справочники</a>
+    </p>
+    <p>
+        <a class="btn btn-md btn-success btn-block" href="/user">Пользователи</a>
     </p>
 </div>

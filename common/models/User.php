@@ -36,6 +36,12 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
+	const FOLDER = 'user';
+	const FOLDER_SMALL = self::FOLDER . '/s';
+
+	const SMALL_IMAGE_WIDTH = 100;
+	const SMALL_IMAGE_HEIGHT = 100;
+
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
     const STATUS_BLOCKED = 2;

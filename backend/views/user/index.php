@@ -30,7 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				]
 			],
             'email:email',
-            'phone',
+            [
+				'attribute' => 'phone',
+				'value' => function ($model) {
+					/* @var $model \backend\models\User */
+					return  $model->phone ? '+7' . $model->phone : null;
+				},
+			],
 			[
 				'attribute' => 'status',
 				'value' => function ($model) {
