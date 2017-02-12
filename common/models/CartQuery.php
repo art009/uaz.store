@@ -9,10 +9,31 @@ namespace common\models;
  */
 class CartQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+	/**
+	 * Отбор по идентификатору сущности
+	 *
+	 * @param string $identityId
+	 * @return $this
+	 */
+    public function byIdentityId($identityId)
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere([
+        	'identity_id' => $identityId,
+		]);
+    }
+
+	/**
+	 * Отбор по идентификатору товара
+	 *
+	 * @param integer $productId
+	 * @return $this
+	 */
+    public function byProductId($productId)
+    {
+        return $this->andWhere([
+        	'product_id' => $productId,
+		]);
+    }
 
     /**
      * @inheritdoc

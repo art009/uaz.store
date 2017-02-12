@@ -9,10 +9,29 @@ namespace common\models;
  */
 class OrderQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+	/**
+	 * Поиск по статусу
+	 *
+	 * @param int|int[] $status
+	 *
+	 * @return $this
+	 */
+    public function byStatus($status)
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere(['status' => $status]);
+    }
+
+	/**
+	 * Поиск по идентификатору пользователя
+	 *
+	 * @param integer $userId
+	 *
+	 * @return $this
+	 */
+    public function byUserId($userId)
+    {
+        return $this->andWhere(['user_id' => $userId]);
+    }
 
     /**
      * @inheritdoc

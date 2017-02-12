@@ -16,6 +16,7 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+			'cookieValidationKey' => 'IpFuTmh9WWkmdRAO',
         ],
         'user' => [
             'identityClass' => 'frontend\models\User',
@@ -72,6 +73,9 @@ return [
 				'port' => '465',
 				'encryption' => 'ssl',
 			],
+		],
+		'cart' => [
+			'class' => 'frontend\components\Cart',
 		],
     ],
     'params' => $params,

@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use common\interfaces\CartProductInterface;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "cart".
@@ -13,7 +15,7 @@ use Yii;
  *
  * @property CatalogProduct $product
  */
-class Cart extends \yii\db\ActiveRecord
+class Cart extends \yii\db\ActiveRecord implements CartProductInterface
 {
     /**
      * @inheritdoc
@@ -64,4 +66,55 @@ class Cart extends \yii\db\ActiveRecord
     {
         return new CartQuery(get_called_class());
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			[
+				'class' => TimestampBehavior::className(),
+				'value' => date('Y-m-d H:i:s'),
+			],
+		];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getProductId()
+	{
+		return $this->product_id;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getQuantity()
+	{
+		return $this->quantity;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getPrice()
+	{
+		return $this->product ? $this->product->price : 0;
+	}
+
+	/**
+	 * Обновление количества
+	 *
+	 * @param int $quantity
+	 *
+	 * @return int
+	 */
+	public function updateQuantity($quantity)
+	{
+		$this->quantity = (int)$quantity;
+
+		return (int)$this->update();
+	}
 }

@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use common\classes\OrderStatusWorkflow;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "order".
@@ -10,7 +12,7 @@ use Yii;
  * @property string $id
  * @property integer $user_id
  * @property integer $status
- * @property string $sum
+ * @property float $sum
  * @property string $delivery_sum
  * @property integer $delivery_type
  * @property integer $payment_type
@@ -23,6 +25,9 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+	const STATUS_CART = 0;
+	const STATUS_CART_CLEAR = 1;
+
     /**
      * @inheritdoc
      */
@@ -87,4 +92,86 @@ class Order extends \yii\db\ActiveRecord
     {
         return new OrderQuery(get_called_class());
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			[
+				'class' => TimestampBehavior::className(),
+				'value' => date('Y-m-d H:i:s'),
+			],
+		];
+	}
+
+	/**
+	 * @param bool $insert
+	 *
+	 * @return bool
+	 */
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+			if ($this->isAttributeChanged('status')) {
+				$this->changed_at = date('Y-m-d H:i:s');
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param bool $insert
+	 *
+	 * @param array $changedAttributes
+	 */
+	public function afterSave($insert, $changedAttributes)
+	{
+		parent::afterSave($insert, $changedAttributes);
+	}
+
+	/**
+	 * @return OrderStatusWorkflow
+	 */
+	public function getWorkflow()
+	{
+		return new OrderStatusWorkflow($this);
+	}
+
+	/**
+	 * Обновление значения суммы заказа
+	 *
+	 * @param bool $save
+	 */
+	public function updateSum($save = false)
+	{
+		$this->sum = 0;
+		/* @var $orderProducts OrderProduct[] */
+		$orderProducts = $this->getOrderProducts()->all();
+		foreach ($orderProducts as $orderProduct) {
+			$this->sum += round($orderProduct->price * $orderProduct->quantity, 2);
+		}
+		if ($save) {
+			$this->update();
+		}
+	}
+
+	/**
+	 * Обновление цен товаров
+	 */
+	public function updateProductsPrices()
+	{
+		/* @var $orderProducts OrderProduct[] */
+		$orderProducts = $this
+			->getOrderProducts()
+			->joinWith(['product'])
+			->all();
+
+		foreach ($orderProducts as $orderProduct) {
+			$orderProduct->updatePrice();
+			$orderProduct->update();
+		}
+	}
 }

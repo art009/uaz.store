@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\interfaces\CartProductInterface;
 use Yii;
 
 /**
@@ -9,13 +10,13 @@ use Yii;
  *
  * @property string $order_id
  * @property integer $product_id
- * @property string $price
+ * @property float $price
  * @property integer $quantity
  *
  * @property CatalogProduct $product
  * @property Order $order
  */
-class OrderProduct extends \yii\db\ActiveRecord
+class OrderProduct extends \yii\db\ActiveRecord implements CartProductInterface
 {
     /**
      * @inheritdoc
@@ -76,4 +77,86 @@ class OrderProduct extends \yii\db\ActiveRecord
     {
         return new OrderProductQuery(get_called_class());
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getProductId()
+	{
+		return $this->product_id;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getQuantity()
+	{
+		return $this->quantity;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getPrice()
+	{
+		return $this->price;
+	}
+
+	/**
+	 * Обновление количества
+	 *
+	 * @param int $quantity
+	 *
+	 * @return int
+	 */
+	public function updateQuantity($quantity)
+	{
+		$this->quantity = (int)$quantity;
+
+		return (int)$this->update();
+	}
+
+	/**
+	 * @param bool $insert
+	 *
+	 * @return bool
+	 */
+	public function beforeSave($insert)
+	{
+		$result = false;
+		if (parent::beforeSave($insert)) {
+			if ($this->isNewRecord) {
+				/* @var $product CatalogProduct */
+				$product = $this->getProduct()->one();
+				if ($product) {
+					$this->price = $product->price;
+				}
+			}
+
+			$result = true;
+		}
+		return $result;
+	}
+
+	/**
+	 * Обновление стоимости товара
+	 */
+	public function updatePrice()
+	{
+		if ($this->product) {
+			$this->price = $this->product->price;
+		}
+	}
+
+	/**
+	 * @param bool $insert
+	 *
+	 * @param array $changedAttributes
+	 */
+	public function afterSave($insert, $changedAttributes)
+	{
+		parent::afterSave($insert, $changedAttributes);
+
+		$this->order->updateSum(true);
+	}
 }

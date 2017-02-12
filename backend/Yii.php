@@ -18,6 +18,7 @@ Yii::$container = new yii\di\Container();
  * Include only Web application related components here
  *
  * @property \common\components\ImageHandler $ih
+ * @property \frontend\components\Cart $cart
  */
 class WebApplication extends yii\web\Application
 {
