@@ -9,14 +9,6 @@ use common\components\AppHelper;
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Категории товаров', 'url' => ['/catalog']];
-if ($model->category) {
-    if ($parentsList = $model->category->getParentsList(true)) {
-        foreach ($parentsList as $id => $title) {
-            $this->params['breadcrumbs'][] = ['label' => $title, 'url' => ['catalog-category/index', 'id' => $id]];
-        }
-    }
-    $this->params['breadcrumbs'][] = ['label' => $model->category->title, 'url' => ['catalog-category/index', 'id' => $model->category->id]];
-}
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="catalog-product-view">
@@ -43,8 +35,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             [
-                'attribute' => 'category_id',
-                'value' => $model->category ? $model->category->title : null,
+                'attribute' => 'category_ids',
+				'format' => 'html',
+                'value' => function($model) {
+                    $result = null;
+                    if ($model->categories) {
+                        $categories = [];
+                        foreach ($model->categories as $category) {
+                            $categories[] = $category->title;
+                        }
+                        $result = implode('<br/>', $categories);
+                    }
+                    return $result;
+                },
             ],
             'title',
             'link',

@@ -29,14 +29,21 @@ class CatalogProduct extends \common\models\CatalogProduct
      */
     public $imageFiles;
 
+	/**
+	 * @var array
+	 */
+    public $category_ids = [];
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
-        return parent::rules() + [
-            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 5],
-        ];
+    	$rules = parent::rules();
+    	$rules[] = [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 5];
+    	$rules[] = [['category_ids'], 'safe'];
+
+        return $rules;
     }
 
     /**
@@ -51,6 +58,7 @@ class CatalogProduct extends \common\models\CatalogProduct
             'width' => 'Ширина, мм',
             'height' => 'Высота, мм',
             'weight' => 'Вес, гр',
+            'category_ids' => 'Категории',
         ]);
     }
 
@@ -103,7 +111,34 @@ class CatalogProduct extends \common\models\CatalogProduct
             }
             $this->updateImage();
         }
+
+		if (!is_array($this->category_ids)) {
+			$this->category_ids = [];
+		}
+
+		$actualCategoryIds = [];
+		foreach ($this->categories as $category) {
+			$actualCategoryIds[] = $category->id;
+        	if (!in_array($category->id, $this->category_ids)) {
+        		$this->unlink('categories', $category);
+			}
+		}
+
+		$categories = CatalogCategory::findAll(array_diff($this->category_ids, $actualCategoryIds));
+		foreach ($categories as $category) {
+			$this->link('categories', $category);
+		}
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function afterFind()
+	{
+		parent::afterFind();
+
+		$this->category_ids = $this->getCategories()->select('id')->column();
+	}
 
     /**
      * Обновление основной картинки

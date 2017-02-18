@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\CatalogManualPage;
 use backend\models\ImportForm;
 use common\components\AppHelper;
 use Yii;
@@ -234,4 +235,33 @@ class CatalogProductController extends Controller
             'model' => $model,
         ]);
     }
+
+	/**
+	 * Поиск по страницам справочника
+	 *
+	 * @param null $query
+	 *
+	 * @return string
+	 */
+    public function actionSearch($query = null)
+	{
+		$result = [];
+		if ($query) {
+			/* @var CatalogManualPage[] $manualPages */
+			$manualPages = CatalogManualPage::find()
+				->where(['like', 'catalog_manual_page.description', $query])
+				->joinWith(['category', 'manual'])
+				->all();
+
+			foreach ($manualPages as $manualPage) {
+				$result[] = [
+					'manual' => $manualPage->manual->title,
+					'category' => $manualPage->category->title,
+					'categoryId' => $manualPage->category_id,
+				];
+			}
+		}
+
+		return json_encode($result);
+	}
 }

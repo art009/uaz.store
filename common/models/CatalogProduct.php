@@ -39,7 +39,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_at
  * @property string $updated_at
  *
- * @property CatalogCategory $category
+ * @property CatalogCategory[] $categories
  * @property CatalogProductImage[] $images
  */
 class CatalogProduct extends \yii\db\ActiveRecord
@@ -67,7 +67,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
             [['meta_keywords', 'meta_description', 'description'], 'string'],
             [['price', 'price_to', 'price_old'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
-            [['title', 'link', 'image', 'shop_title', 'provider_title', 'shop_code', 'provider_code, manufacturer_code', 'provider', 'manufacturer', 'unit'], 'string', 'max' => 255],
+            [['title', 'link', 'image', 'shop_title', 'provider_title', 'shop_code', 'provider_code', 'manufacturer_code', 'provider', 'manufacturer', 'unit'], 'string', 'max' => 255],
             [['link'], 'unique'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
@@ -128,9 +128,10 @@ class CatalogProduct extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getCategories()
     {
-        return $this->hasOne(CatalogCategory::className(), ['id' => 'category_id']);
+		return $this->hasMany(CatalogCategory::className(), ['id' => 'category_id'])
+			->viaTable('catalog_product_to_category', ['product_id' => 'id']);
     }
 
     /**

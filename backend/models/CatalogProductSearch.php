@@ -42,7 +42,8 @@ class CatalogProductSearch extends CatalogProduct
      */
     public function search($params)
     {
-        $query = CatalogProduct::find();
+        $query = CatalogProduct::find()
+			->joinWith(['categories']);
 
         // add conditions that should always apply here
 
@@ -59,26 +60,15 @@ class CatalogProductSearch extends CatalogProduct
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'price_to' => $this->price_to,
-            'price_old' => $this->price_old,
-            'hide' => $this->hide,
-            'on_main' => $this->on_main,
-            'length' => $this->length,
-            'width' => $this->width,
-            'height' => $this->height,
-            'weight' => $this->weight,
-            'rest' => $this->rest,
-            'external_id' => $this->external_id,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
+		$query->andFilterWhere(['=', $this::tableName() . '.id', $this->id]);
+		$query->andFilterWhere(['=', $this::tableName() . '.hide', $this->hide]);
+		$query->andFilterWhere(['=', $this::tableName() . '.on_main', $this->on_main]);
+		$query->andFilterWhere(['=', $this::tableName() . '.external_id', $this->external_id]);
 
         if ($this->category_id) {
-            $query->andFilterWhere(['category_id' => $this->category_id]);
+            $query->andFilterWhere(['catalog_product_to_category.category_id' => $this->category_id]);
         } else {
-            $query->andWhere(['category_id' => null]);
+            $query->andWhere(['catalog_product_to_category.category_id' => null]);
         }
 
         $query->andFilterCompare('price', $this->price);
@@ -86,24 +76,24 @@ class CatalogProductSearch extends CatalogProduct
 
         if (mb_strlen($this->image) > 0) {
             if ($this->image) {
-                $query->andWhere(['is not', 'image', null]);
+                $query->andWhere(['is not', $this::tableName() . '.image', null]);
             } else {
-                $query->andWhere(['is', 'image', null]);
+                $query->andWhere(['is', $this::tableName() . '.image', null]);
             }
         }
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'link', $this->link])
-            ->andFilterWhere(['like', 'meta_keywords', $this->meta_keywords])
-            ->andFilterWhere(['like', 'meta_description', $this->meta_description])
-            ->andFilterWhere(['like', 'shop_title', $this->shop_title])
-            ->andFilterWhere(['like', 'provider_title', $this->provider_title])
-            ->andFilterWhere(['like', 'shop_code', $this->shop_code])
-            ->andFilterWhere(['like', 'provider_code', $this->provider_code])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'provider', $this->provider])
-            ->andFilterWhere(['like', 'manufacturer', $this->manufacturer])
-            ->andFilterWhere(['like', 'unit', $this->unit]);
+        $query->andFilterWhere(['like', $this::tableName() . '.title', $this->title])
+            ->andFilterWhere(['like', $this::tableName() . '.link', $this->link])
+            ->andFilterWhere(['like', $this::tableName() . '.meta_keywords', $this->meta_keywords])
+            ->andFilterWhere(['like', $this::tableName() . '.meta_description', $this->meta_description])
+            ->andFilterWhere(['like', $this::tableName() . '.shop_title', $this->shop_title])
+            ->andFilterWhere(['like', $this::tableName() . '.provider_title', $this->provider_title])
+            ->andFilterWhere(['like', $this::tableName() . '.shop_code', $this->shop_code])
+            ->andFilterWhere(['like', $this::tableName() . '.provider_code', $this->provider_code])
+            ->andFilterWhere(['like', $this::tableName() . '.description', $this->description])
+            ->andFilterWhere(['like', $this::tableName() . '.provider', $this->provider])
+            ->andFilterWhere(['like', $this::tableName() . '.manufacturer', $this->manufacturer])
+            ->andFilterWhere(['like', $this::tableName() . '.unit', $this->unit]);
 
         return $dataProvider;
     }

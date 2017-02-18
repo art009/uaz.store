@@ -125,7 +125,8 @@ class CatalogCategory extends \yii\db\ActiveRecord
      */
     public function getProducts()
     {
-        return $this->hasMany(CatalogProduct::className(), ['category_id' => 'id']);
+		return $this->hasMany(CatalogProduct::className(), ['id' => 'product_id'])
+			->viaTable('catalog_product_to_category', ['category_id' => 'id']);
     }
 
     /**

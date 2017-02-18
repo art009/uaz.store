@@ -7,14 +7,6 @@ use yii\helpers\Html;
 
 $this->title = 'Редактирование товара: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Категории товаров', 'url' => ['/catalog']];
-if ($model->category) {
-    if ($parentsList = $model->category->getParentsList(true)) {
-        foreach ($parentsList as $id => $title) {
-            $this->params['breadcrumbs'][] = ['label' => $title, 'url' => ['catalog-category/index', 'id' => $id]];
-        }
-    }
-    $this->params['breadcrumbs'][] = ['label' => $model->category->title, 'url' => ['catalog-category/index', 'id' => $model->category->id]];
-}
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

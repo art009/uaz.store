@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use common\models\CatalogCategory;
 use common\components\AppHelper;
 use common\widgets\TinyMce;
+use common\widgets\ChosenSelect;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\CatalogProduct */
@@ -20,13 +21,69 @@ JS
         , yii\web\View::POS_READY);
 
 }
+
+$this->registerJs(<<<JS
+
+    var searchAjax = null;
+    $(document).on('input', '#manual-search', function() {
+        var query = this.value,
+            cont = $('#search-results');
+        
+        if (searchAjax) {
+        	searchAjax.abort();
+        }
+        searchAjax = $.ajax({
+            type: 'get',
+            url: '/catalog-product/search',
+            async: true,
+            data: {query: query},
+            dataType: 'json',
+            success: function (data) {
+                $(cont).empty();
+            	if (data) {
+            		var html = '';
+                	$(data).each(function(i, item) {
+                		html = '<div>';
+                		html += 'В каталоге: ' + item.manual + ' -> категория ' + item.category;
+                		html += ' <a data-id="' + item.categoryId + '" class="btn btn-xs btn-success">Отметить</a>';
+                		html += '</div>';
+                	    $(cont).append(html);
+                	})
+                }
+            },
+            complete: function () {
+                searchAjax = null;
+            }
+        });
+    }).on('click', '#search-results a.btn', function() {
+        var id = $(this).data('id'),
+            select = $('#catalogproduct-category_ids');
+        
+        $(select).find('option[value=' + id + ']').prop('selected', true);
+        $(select).trigger('chosen:updated');
+        
+    	return false;
+    });
+
+JS
+	, yii\web\View::POS_READY);
+
 ?>
 
 <div class="catalog-product-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'category_id')->dropDownList(CatalogCategory::getTreeView(), ['prompt' => 'Выберите категорию']) ?>
+	<?php echo $form->field($model, 'category_ids')->widget(ChosenSelect::className(), [
+		'placeholder' => 'Выберите категории',
+		'items' => CatalogCategory::getTreeView(),
+        'multiple' => true,
+	]); ?>
+    <div class="form-group">
+        Поиск на страницах каталогов:
+        <?php echo Html::input('text', 'manual-search', null, ['id' => 'manual-search', 'placeholder' => 'Искомая строка']); ?>
+        <div id="search-results"></div>
+    </div>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
