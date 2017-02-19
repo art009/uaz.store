@@ -61,7 +61,22 @@ $this->params['breadcrumbs'][] = $this->title;
 				},
 				'filter' => $searchModel::$legalList,
 			],
-            'name',
+			[
+				'attribute' => 'name',
+                'format' => 'html',
+				'value' => function ($model) {
+					/* @var $model \backend\models\User */
+					$html = $model->name;
+					if ($model->role == \common\models\User::ROLE_CLIENT) {
+					    if ($model->orders) {
+						    $html .= '<br/>' . Html::a('заказы (' . count($model->orders) . ')', ['/order', 'userId' => $model->id], ['class' => 'btn btn-primary btn-xs']);
+					    }
+					    $html .= '<br/>' . Html::a('добавить заказ', ['/order/create', 'userId' => $model->id], ['class' => 'btn btn-success btn-xs']);
+				    }
+
+					return $html;
+				},
+			],
 			[
 				'attribute' => 'offer_accepted',
 				'value' => function ($model) {

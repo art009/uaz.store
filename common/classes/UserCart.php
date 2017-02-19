@@ -28,17 +28,7 @@ class UserCart extends AbstractCart
 	public function getOrder($create = false)
 	{
 		if ($this->order === null) {
-			$this->order = Order::find()
-				->byStatus([Order::STATUS_CART])
-				->byUserId(Yii::$app->user->id)
-				->joinWith(['orderProducts'])
-				->one();
-		}
-		if ($this->order === null && $create == true) {
-			$order = new Order();
-			$order->user_id = Yii::$app->user->id;
-			$order->status = Order::STATUS_CART;
-			$this->order = $order->save() ? $order : null;
+			$this->order = Order::create(Yii::$app->user->id, $create);
 		}
 
 		return $this->order;

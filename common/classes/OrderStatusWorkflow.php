@@ -36,6 +36,79 @@ class OrderStatusWorkflow
 	}
 
 	/**
+	 * Список доступных статусов
+	 *
+	 * @param int $status
+	 *
+	 * @return array
+	 */
+	public static function statusList($status)
+	{
+		$result = [];
+		switch ($status) {
+			case Order::STATUS_CART:
+				$result = [
+					Order::STATUS_CART_CLEAR,
+					Order::STATUS_PICKUP,
+					Order::STATUS_PROCESS,
+				];
+				break;
+			case Order::STATUS_CART_CLEAR:
+				$result = [
+					Order::STATUS_CART,
+				];
+				break;
+			case Order::STATUS_PICKUP:
+				$result = [
+					Order::STATUS_TRANSFER,
+					Order::STATUS_REJECT,
+				];
+				break;
+			case Order::STATUS_PROCESS:
+				$result = [
+					Order::STATUS_PAYMENT_WAITING,
+					Order::STATUS_REJECT,
+				];
+				break;
+			case Order::STATUS_PAYMENT_WAITING:
+				$result = [
+					Order::STATUS_PAYMENT_DONE,
+					Order::STATUS_PAYMENT_PROCESS,
+					Order::STATUS_GATHERING,
+					Order::STATUS_REJECT,
+				];
+				break;
+			case Order::STATUS_PAYMENT_DONE:
+				$result = [
+					Order::STATUS_PAYMENT_PROCESS,
+					Order::STATUS_GATHERING,
+					Order::STATUS_REJECT,
+				];
+				break;
+			case Order::STATUS_PAYMENT_PROCESS:
+				$result = [
+					Order::STATUS_GATHERING,
+					Order::STATUS_REJECT,
+				];
+				break;
+			case Order::STATUS_GATHERING:
+				$result = [
+					Order::STATUS_SENDING,
+					Order::STATUS_REJECT,
+				];
+				break;
+			case Order::STATUS_SENDING:
+				$result = [
+					Order::STATUS_DONE,
+					Order::STATUS_REJECT,
+				];
+				break;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Перевод в статус
 	 *
 	 * @param int $status

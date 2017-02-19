@@ -10,6 +10,7 @@ class m170211_192025_order extends Migration
 			'id' => $this->bigPrimaryKey()->unsigned()->comment('ID'),
 			'user_id' => $this->integer()->comment('ID Пользователя'),
 			'status' => $this->smallInteger()->notNull()->defaultValue(0)->comment('Статус'),
+			'reject' => $this->smallInteger()->notNull()->defaultValue(0)->comment('Причина отмены'),
 			'sum' => $this->decimal(10, 2)->notNull()->defaultValue('0.00')->comment('Стоимость'),
 			'delivery_sum' => $this->decimal(10, 2)->notNull()->defaultValue('0.00')->comment('Стоимость доставки'),
 			'delivery_type' => $this->smallInteger()->notNull()->defaultValue(0)->comment('Способ доставки'),

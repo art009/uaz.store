@@ -33,6 +33,8 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ * @property Order[] $orders
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -257,4 +259,12 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getOrders()
+	{
+		return $this->hasMany(Order::className(), ['user_id' => 'id']);
+	}
 }
