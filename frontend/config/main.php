@@ -23,10 +23,6 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
-        'session' => [
-            // this is the name of the session cookie used for login on the frontend
-            'name' => 'advanced-frontend',
-        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -45,21 +41,34 @@ return [
             'rules' => [
             ],
         ],
+		'redis' => [
+			'class' => 'yii\redis\Connection',
+			'hostname' => 'localhost',
+			'port' => 6379,
+		],
+		'session' => [
+			'class' => 'yii\redis\Session',
+			'name' => 'advanced-frontend',
+		],
+		'cache' => [
+			'class' => 'yii\redis\Cache',
+		],
 		'view' => [
 			'class' => '\rmrevin\yii\minify\View',
-			'enableMinify' => !YII_ENV_DEV,
-			'web_path' => '@web', // path alias to web base
-			'base_path' => '@frontend/web', // path alias to web base
-			'minify_path' => '@frontend/web/min', // path alias to save minify result
-			'js_position' => [ \yii\web\View::POS_END ], // positions of js files to be minified
-			'force_charset' => 'UTF-8', // charset forcibly assign, otherwise will use all of the files found charset
-			'expand_imports' => true, // whether to change @import on content
-			'compress_output' => true, // compress result html page
-			'compress_options' => ['extra' => true], // options for compress
+			'enableMinify' => !YII_DEBUG,
+			'webPath' => '@web', // path alias to web base
+			'basePath' => '@frontend/web', // path alias to web base
+			'minifyPath' => '@frontend/web/min', // path alias to save minify result
+			'jsPosition' => [ \yii\web\View::POS_END ], // positions of js files to be minified
 			'concatCss' => true, // concatenate css
 			'minifyCss' => true, // minificate css
 			'concatJs' => true, // concatenate js
 			'minifyJs' => true, // minificate js
+			'minifyOutput' => true, // minificate result html page
+			'forceCharset' => 'UTF-8', // charset forcibly assign, otherwise will use all of the files found charset
+			'expandImports' => true, // whether to change @import on content
+			'compressOptions' => ['extra' => true], // options for compress
+			'jsOptions' => ['async' => true],
 		],
 		'mailer' => [
 			'class' => 'yii\swiftmailer\Mailer',

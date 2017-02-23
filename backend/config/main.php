@@ -26,10 +26,18 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
-        'session' => [
-            // this is the name of the session cookie used for login on the backend
-            'name' => 'advanced-backend',
-        ],
+		'redis' => [
+			'class' => 'yii\redis\Connection',
+			'hostname' => 'localhost',
+			'port' => 6379,
+		],
+		'session' => [
+			'class' => 'yii\redis\Session',
+			'name' => 'advanced-backend',
+		],
+		'cache' => [
+			'class' => 'yii\redis\Cache',
+		],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [

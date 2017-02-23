@@ -23,7 +23,8 @@
         "rmrevin/yii2-minify-view": "~1.14",
         "bower-asset/chosen-bootstrap": "1.1.*",
         "nex/yii2-chosen" : "1.0",
-        "codeonyii/yii2-at-least-validator" : "~1.1"
+        "codeonyii/yii2-at-least-validator" : "~1.1",
+	  	"yiisoft/yii2-redis": "~2.0.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
@@ -43,6 +44,9 @@
         }
     },
     "scripts": {
-        "post-install-cmd": "php init --env=Development --overwrite=n"
+        "post-install-cmd": [
+		  	"composer dumpautoload -o",
+		  	"php init --env=Development --overwrite=n"
+		]
     }
 }
