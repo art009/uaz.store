@@ -52,23 +52,43 @@ footer > .container { height: 100%; padding-top: 20px; background-color: rgba(0,
 
 .navbar-brand { height: 68px; padding: 11px 15px; }
 
+.navbar-inverse .navbar-nav > li > a { color: #ffffff; }
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+	color: #ecb52d;
+}
+
+.navbar-toggle { margin-top: 15px; padding: 10px 11px; }
+.navbar-toggle .icon-bar { height: 3px; }
+
 /* align the logout "link" (button in form) of the navbar */
 .nav li > form > button.logout { padding: 15px; border: none; }
 .nav > li > form > button.logout:focus,
 .nav > li > form > button.logout:hover { text-decoration: none; }
 .nav > li > form > button.logout:focus { outline: none; }
 
-.navbar-nav > li > a { line-height: 38px; }
+.navbar-nav { text-align: center; }
+.navbar-nav > li { display: inline-block; float: none; }
+.navbar-nav > li > a { line-height: 38px; font-weight: bold; }
+.navbar-nav.navbar-right { padding: 15px 0; }
+.navbar-nav.navbar-right > li > a { width: 38px; line-height: 38px; padding: 0; border: 1px solid; text-align: center; margin-right: 8px; }
+.navbar-nav.navbar-right > li:last-child > a { margin-right: 15px; }
+
+.nav-contacts { display: inline-block; width: 100%; text-align: center; padding-bottom: 5px;  }
+.nav-contacts .nav-phone { font-weight: bold; font-size: 18px; }
+.nav-contacts .nav-phone span { font-size: 14px; }
+.nav-contacts .nav-email { font-size: 14px; color: #b3b3b3; }
+.nav-contacts .nav-email a { color: #b3b3b3; }
 
 /* Main page */
 main.site-index {  margin: -85px -15px -20px; }
 main.site-index section { height: 100vh; }
 main.site-index section.visible { opacity: 1; }
 main.site-index section h1 { text-align: center; font-size: 2.4rem; }
-main.site-index section > div { background: url("/img/main1.jpg") no-repeat center center; background-size: cover;
-    height: 100%; }
-main.site-index section:nth-of-type(2) > div { background-image: url("/img/main2.jpg"); }
-main.site-index section:nth-of-type(3) > div { background-image: url("/img/main3.jpg"); }
+main.site-index section { background: url("/img/main1.jpg") no-repeat center center; background-size: cover; }
+main.site-index section:nth-of-type(2) { background-image: url("/img/main2.jpg"); }
+main.site-index section:nth-of-type(3) { background-image: url("/img/main3.jpg"); }
 
 main.site-index > nav { width: 100%; height: 100%; left: 0; top: 0; }
 main.site-index > nav > ul { position: absolute; margin: -50px 0 0; padding: 0; z-index: 1; right: 3%;
@@ -98,7 +118,13 @@ main.site-index > nav > ul a:hover {
 /* Main page END */
 
 @media (max-width: 767px ) {
+	.navbar-inverse .navbar-collapse,
+	.navbar-inverse .navbar-form { background-color: #4e4e4e; }
 
+	.navbar-nav.navbar-left > li { width: 40%; }
+	.navbar-nav.navbar-left > li > a { font-weight: normal; line-height: 20px; }
+
+	.navbar-nav.navbar-right { padding: 0; padding-left: 15px; }
 }
 
 @media(min-width:768px) {
@@ -111,7 +137,12 @@ main.site-index > nav > ul a:hover {
         width: 100%;
         padding: 10px 15px;
     }
+	.navbar-nav.navbar-left { width: 445px; overflow: hidden; padding: 15px 0; }
+	.navbar-nav.navbar-left > li > a { padding-bottom: 0; padding-top: 0; }
+
+	.nav-contacts { margin-top: -15px; }
 }
+
 @media(min-width:992px) {
 
     body { overflow: hidden; }
@@ -119,34 +150,17 @@ main.site-index > nav > ul a:hover {
     .wrap { width: 970px; padding: 0 0 68px; }
     footer { position: fixed; }
 
+	.nav-contacts { float: right; padding: 12px 30px; text-align: right; width: auto; margin: 0; }
+
     /* Main page */
-    main.site-index { margin: 0; }
-    main.site-index section {
-        opacity: 0;
-        visibility: hidden;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-    }
+    main.site-index {/*margin: 0;*/ }
+    main.site-index .sections-container { position: absolute; left: 0; top: 0; width: 100%; height: 100vh; }
+    main.site-index section { width: 100%; }
     main.site-index section > div { visibility: visible; }
 
     main.site-index section:first-of-type > div::before { display: none; }
 
-    main.site-index section > div {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        /* Force Hardware Acceleration */
-        -webkit-transform: translateZ(0);
-        -moz-transform: translateZ(0);
-        -ms-transform: translateZ(0);
-        -o-transform: translateZ(0);
-        transform: translateZ(0);
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-    }
+    main.site-index section > div { width: 100%; }
     main.site-index section > div { position: absolute; }
     main.site-index > nav > ul { display: block; }
     /* Main page END */

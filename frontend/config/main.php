@@ -47,7 +47,6 @@ return [
 			'port' => 6379,
 		],
 		'session' => [
-			'class' => 'yii\redis\Session',
 			'name' => 'advanced-frontend',
 		],
 		'cache' => [

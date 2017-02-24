@@ -19,6 +19,7 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "2amigos/yii2-tinymce-widget" : "~1.1",
+	  	"yiisoft/yii2-jui": "~2.0.0",
         "phpoffice/phpexcel": "1.8",
         "rmrevin/yii2-minify-view": "~1.14",
         "bower-asset/chosen-bootstrap": "1.1.*",

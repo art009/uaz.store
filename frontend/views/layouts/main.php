@@ -3,7 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
@@ -27,19 +27,28 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
-    NavBar::begin([
-        'brandLabel' => Html::img('/img/logo.png'),
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+        NavBar::begin([
+            'brandLabel' => Html::img('/img/logo.png'),
+            'brandUrl' => Yii::$app->homeUrl,
+            'options' => [
+                'class' => 'navbar-inverse navbar-fixed-top',
+            ],
+        ]);
+    ?>
+	<?php
+    echo Nav::widget([
+		'options' => ['class' => 'navbar-nav navbar-left'],
+		'items' => [
+			['label' => 'Товары', 'url' => ['/catalog']],
+			['label' => 'О компании', 'url' => ['/about']],
+			['label' => 'Оплата и доставка', 'url' => ['/delivery']],
+			['label' => 'Отзывы', 'url' => ['/reviews']],
         ],
-    ]);
-    $menuItems = [
-        ['label' => 'Корзина', 'url' => ['/cart']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
-    if (Yii::$app->user->isGuest) {
+	]);
+	?>
+	<?php
+
+    /*if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
@@ -51,13 +60,26 @@ AppAsset::register($this);
             )
             . Html::endForm()
             . '</li>';
-    }
+    }*/
     echo Nav::widget([
+		'encodeLabels' => false,
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
-    ?>
+        'items' => [
+			['label' => Html::icon('search'), 'url' => ['/search']],
+			['label' => Html::icon('shopping-cart'), 'url' => ['/cart']],
+			['label' => Html::icon('user'), 'url' => ['/user']],
+		],
+    ]);?>
+
+    <div class="nav-contacts">
+        <div class="nav-phone">
+            <span>+7 (800) </span>00-00-00
+        </div>
+        <div class="nav-email">
+            <a href="#">support@uaz.store</a>
+        </div>
+    </div>
+    <?php NavBar::end();?>
 
     <div class="container">
         <?= Breadcrumbs::widget([

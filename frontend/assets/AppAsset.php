@@ -15,13 +15,11 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
-    	'js/velocity.min.js',
-    	'js/velocity.ui.min.js',
-    	'js/sectors.js',
     	'js/main.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+		'yii\jui\JuiAsset',
     ];
 }
