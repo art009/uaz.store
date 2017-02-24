@@ -2,6 +2,8 @@
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+/* @var $controllerId string */
+/* @var $actionId string */
 
 use yii\bootstrap\Html;
 use yii\bootstrap\Nav;
@@ -11,6 +13,9 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+
+$controllerId = Yii::$app->controller->id;
+$actionId = Yii::$app->controller->action->id;
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -66,7 +71,10 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
 			['label' => Html::icon('search'), 'url' => ['/search']],
-			['label' => Html::icon('shopping-cart'), 'url' => ['/cart']],
+			['label' => Html::icon('shopping-cart'), 'url' => ['/cart'], 'linkOptions' => [
+                'class' => 'cart-link',
+			    'data-count' => Yii::$app->cart->getQuantity() ? : null,
+            ], 'active' => ($controllerId == 'cart')],
 			['label' => Html::icon('user'), 'url' => ['/user']],
 		],
     ]);?>
