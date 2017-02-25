@@ -39,6 +39,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+				'<action:(login|logout|error|about|delivery)>' => 'site/<action>',
+				'<action:(search|manual|price-list)>' => 'catalog/<action>',
             ],
         ],
 		'redis' => [

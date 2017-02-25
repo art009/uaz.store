@@ -131,6 +131,11 @@ function initAnimatedSections() {
  */
 $(document).ready(function($){
 
+	/**
+	 * Bootstrap tooltips
+	 */
+	$('[data-toggle="tooltip"]').tooltip();
+
 	initAnimatedSections();
 
 	$(window).on('resize', function(){

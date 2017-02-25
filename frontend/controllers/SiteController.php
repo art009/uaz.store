@@ -210,4 +210,15 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+
+	/**
+	 * Страница оплаты и доставки
+	 *
+	 * @return mixed
+	 */
+	public function actionDelivery()
+	{
+		return $this->render('delivery');
+	}
 }

@@ -31,51 +31,61 @@ $actionId = Yii::$app->controller->action->id;
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-    <?php
-        NavBar::begin([
-            'brandLabel' => Html::img('/img/logo.png'),
-            'brandUrl' => Yii::$app->homeUrl,
-            'options' => [
-                'class' => 'navbar-inverse navbar-fixed-top',
-            ],
-        ]);
-    ?>
-	<?php
-    echo Nav::widget([
+    <?php NavBar::begin([
+        'brandLabel' => Html::img('/img/logo.png'),
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar-inverse navbar-fixed-top',
+        ],
+    ]);?>
+	<?php echo Nav::widget([
 		'options' => ['class' => 'navbar-nav navbar-left'],
 		'items' => [
-			['label' => 'Товары', 'url' => ['/catalog']],
-			['label' => 'О компании', 'url' => ['/about']],
-			['label' => 'Оплата и доставка', 'url' => ['/delivery']],
-			['label' => 'Отзывы', 'url' => ['/reviews']],
+			[
+                'label' => 'Товары',
+                'url' => ['/catalog'],
+				'active' => ($controllerId == 'catalog' && $actionId == 'index'),
+            ],
+			[
+                'label' => 'О компании',
+                'url' => ['/about'],
+				'active' => ($controllerId == 'site' && $actionId == 'about'),
+            ],
+			[
+                'label' => 'Оплата и доставка',
+                'url' => ['/delivery'],
+				'active' => ($controllerId == 'site' && $actionId == 'delivery'),
+            ],
+			[
+                'label' => 'Отзывы',
+                'url' => ['/reviews'],
+				'active' => ($controllerId == 'reviews'),
+            ],
         ],
-	]);
-	?>
-	<?php
-
-    /*if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->name . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
-    }*/
-    echo Nav::widget([
+	]); ?>
+	<?php echo Nav::widget([
 		'encodeLabels' => false,
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-			['label' => Html::icon('search'), 'url' => ['/search']],
-			['label' => Html::icon('shopping-cart'), 'url' => ['/cart'], 'linkOptions' => [
-                'class' => 'cart-link',
-			    'data-count' => Yii::$app->cart->getQuantity() ? : null,
-            ], 'active' => ($controllerId == 'cart')],
-			['label' => Html::icon('user'), 'url' => ['/user']],
+			[
+                'label' => Html::icon('search'),
+                'url' => ['/search'],
+				'active' => ($controllerId == 'catalog' && $actionId == 'search'),
+            ],
+			[
+                'label' => Html::icon('shopping-cart'),
+                'url' => ['/cart'],
+                'linkOptions' => [
+                    'class' => 'cart-link',
+                    'data-count' => Yii::$app->cart->getQuantity() ? : null,
+                ],
+                'active' => ($controllerId == 'cart'),
+            ],
+			[
+                'label' => Html::icon('user'),
+                'url' => ['/user'],
+				'active' => ($controllerId == 'user'),
+            ],
 		],
     ]);?>
 
@@ -100,9 +110,46 @@ $actionId = Yii::$app->controller->action->id;
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <div class="col-xs-12 col-sm-6 footer-left">
+            <p class="pull-left">
+                <span class="icon-link-outer">
+                    <?php echo Html::a(Html::icon('earphone'), '#', [
+						'class' => 'link-icon',
+						'data-toggle' => 'tooltip',
+						'data-placement' => 'top',
+						'title' => 'Заказать обратный звонок',
+					]); ?>
+                </span>
+                <span class="icon-link-outer">
+                    <?php echo Html::a(Html::icon('envelope'), '#', [
+                        'class' => 'link-icon',
+                        'data-toggle' => 'tooltip',
+                        'data-placement' => 'top',
+                        'title' => 'Задать вопрос',
+                    ]); ?>
+                </span>
+            </p>
+            <p class="pull-right">
+                <?php echo Html::icon('map-marker'); ?>г. Пенза, ул. Пугачева, 3
+            </p>
+        </div>
+        <div class="col-xs-12 col-sm-6 footer-right">
+            <p class="pull-left">
+				<a href="/price-list"><?php echo Html::icon('download-alt'); ?>Прайс-лист <i>от  <?= date('d.m.Y') ?>г.</i></a>
+            </p>
+            <p class="pull-right">
+                <span class="icon-link-outer">
+				    <?php echo Html::a('В', 'https://vk.com/uaz_zapchasty', [
+						'target' => '_blank',
+                        'rel' => 'nofollow',
+						'class' => 'link-icon social',
+						'data-toggle' => 'tooltip',
+						'data-placement' => 'top',
+						'title' => 'Перейти в группу ВКонтакте',
+					]); ?>
+                </span>
+            </p>
+        </div>
     </div>
 </footer>
 
