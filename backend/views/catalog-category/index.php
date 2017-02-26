@@ -30,8 +30,8 @@ if ($parentModel) {
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить категорию', ['create', 'id' => $parentModel->id], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Добавить товар', ['catalog-product/create', 'id' => $parentModel->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Добавить категорию', ['create', 'id' => $parentModel ? $parentModel->id : null], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить товар', ['catalog-product/create', 'id' => $parentModel ? $parentModel->id : null], ['class' => 'btn btn-primary']) ?>
         <?php if ($parentModel == null): ?>
         <?= Html::a('Импорт товаров', ['catalog-product/import'], ['class' => 'btn btn-warning']) ?>
         <?php endif; ?>

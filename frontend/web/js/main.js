@@ -55,6 +55,7 @@ function initAnimatedSections() {
 
 			$(self.option('bullets')).on('click', function () {
 				self.to($(this).index('.nav-bullet'));
+				return false;
 			});
 
 			$(window).on('DOMMouseScroll mousewheel', self.scroll);
