@@ -12,6 +12,8 @@ use Yii;
  * @property string $title
  * @property string $link
  * @property integer $hide
+ * @property string $controller_id
+ * @property string $action_id
  * @property integer $sort_order
  *
  * @property Menu $parent
@@ -19,6 +21,8 @@ use Yii;
  */
 class Menu extends \yii\db\ActiveRecord
 {
+	const CACHE_TAG = 'menu-model-cache-tag';
+
     /**
      * @inheritdoc
      */
@@ -35,7 +39,7 @@ class Menu extends \yii\db\ActiveRecord
         return [
             [['parent_id', 'hide', 'sort_order'], 'integer'],
             [['title', 'link'], 'required'],
-            [['title', 'link'], 'string', 'max' => 255],
+            [['title', 'link', 'controller_id', 'action_id'], 'string', 'max' => 255],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(), 'targetAttribute' => ['parent_id' => 'id']],
         ];
     }
@@ -51,6 +55,8 @@ class Menu extends \yii\db\ActiveRecord
             'title' => 'Заголовок',
             'link' => 'Ссылка',
             'hide' => 'Скрывать?',
+            'controller_id' => 'Контроллер',
+            'action_id' => 'Действие',
             'sort_order' => 'Порядок сортировки',
         ];
     }

@@ -2,9 +2,14 @@
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-        ],
+	    'redis' => [
+		    'class' => 'yii\redis\Connection',
+		    'hostname' => 'localhost',
+		    'port' => 6379,
+	    ],
+	    'cache' => [
+		    'class' => 'yii\redis\Cache',
+	    ],
 		'mailer' => [
 			'class' => 'yii\swiftmailer\Mailer',
 			'viewPath' => '@common/mail',

@@ -4,6 +4,7 @@ namespace backend\models;
 
 use common\behaviors\SortableBehavior;
 use Yii;
+use yii\caching\TagDependency;
 
 /**
  * Class Menu
@@ -43,5 +44,7 @@ class Menu extends \common\models\Menu
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
+
+	    TagDependency::invalidate(Yii::$app->cache, self::CACHE_TAG);
     }
 }

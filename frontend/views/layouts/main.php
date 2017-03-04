@@ -11,6 +11,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use frontend\widgets\NavMenu;
 
 AppAsset::register($this);
 
@@ -38,31 +39,7 @@ $actionId = Yii::$app->controller->action->id;
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);?>
-	<?php echo Nav::widget([
-		'options' => ['class' => 'navbar-nav navbar-left'],
-		'items' => [
-			[
-                'label' => 'Товары',
-                'url' => ['/catalog'],
-				'active' => ($controllerId == 'catalog' && $actionId == 'index'),
-            ],
-			[
-                'label' => 'О компании',
-                'url' => ['/about'],
-				'active' => ($controllerId == 'site' && $actionId == 'about'),
-            ],
-			[
-                'label' => 'Оплата и доставка',
-                'url' => ['/delivery'],
-				'active' => ($controllerId == 'site' && $actionId == 'delivery'),
-            ],
-			[
-                'label' => 'Отзывы',
-                'url' => ['/reviews'],
-				'active' => ($controllerId == 'reviews'),
-            ],
-        ],
-	]); ?>
+	<?php echo NavMenu::widget(); ?>
 	<?php echo Nav::widget([
 		'encodeLabels' => false,
         'options' => ['class' => 'navbar-nav navbar-right'],

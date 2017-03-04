@@ -30,6 +30,10 @@ JS
 
     <?= $form->field($model, 'hide')->checkbox() ?>
 
+	<?= $form->field($model, 'controller_id')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'action_id')->textInput(['maxlength' => true]) ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
