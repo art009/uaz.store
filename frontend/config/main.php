@@ -22,6 +22,7 @@ return [
             'identityClass' => 'frontend\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+	        'loginUrl' => '/login',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -39,8 +40,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-				'<action:(login|logout|error|about|delivery)>' => 'site/<action>',
+				'<action:(error|about|delivery)>' => 'site/<action>',
 				'<action:(search|manual|price-list)>' => 'catalog/<action>',
+	            '<action:(login|logout|signup|password-reset|set-password)>' => 'user/<action>',
             ],
         ],
 		'redis' => [

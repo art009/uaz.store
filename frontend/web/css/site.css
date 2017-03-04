@@ -44,6 +44,8 @@ h1 { font-size: 24px; text-transform: uppercase; }
 h2 { font-size: 22px; text-transform: uppercase; }
 h3 { font-size: 20px; text-transform: uppercase; }
 div.separator { width: 45px; height: 2px; background-color: #c6c6c6; margin: 15px auto; border-bottom: 1px solid #a9a9a9; }
+a { color: #ecb52d; }
+a:hover { color: #ecb52d; }
 
 a.link-icon { display: inline-block; width: 38px; line-height: 38px; padding: 0; border: 1px solid; text-align: center;
 	margin-right: 8px; color: #979797; font-size: 15px; }
@@ -94,7 +96,7 @@ footer .footer-right .pull-left a:hover { text-decoration: underline; }
 	background-color: transparent;
 }
 
-.navbar-toggle { margin-top: 15px; padding: 10px 11px; }
+.navbar-toggle { margin-top: 15px; padding: 10px 11px; border-radius: 0; }
 .navbar-toggle .icon-bar { height: 3px; }
 
 /* align the logout "link" (button in form) of the navbar */
@@ -133,6 +135,42 @@ footer .footer-right .pull-left a:hover { text-decoration: underline; }
 .breadcrumb > li a { color: #fff; }
 .breadcrumb > li.active { color: #ecb52d; }
 
+.site-btn { background-color: #ecb52d; line-height: 30px; color: #000; font-weight: bold; cursor: pointer;
+	text-align: center; border: none; padding: 5px; display: inline-block;
+}
+.site-btn:focus { outline: 0; box-shadow: none; }
+a.site-btn:hover { color: #000; }
+
+form { width: 370px; background-color: #424242; }
+form .form-group { margin: 7px 22px 7px 22px; }
+form div.form-group:first-of-type { margin-top: 20px; }
+form .form-group:last-of-type { margin-bottom: 15px; }
+form .site-btn { width: 100%; }
+form .form-control { border: 1px solid #5a5a5a; border-radius: 0; height: 32px; color: #000; }
+form .form-control:focus { border-color: #ecb52d; box-shadow: none; }
+form .help-block { margin: 0; font-size: 0.9em; }
+form .form-header { margin-bottom: 20px; min-height:36px; line-height: 36px; }
+form .form-header > div { border: 1px solid transparent; }
+form .form-header > div:first-child { border-top-color: #ecb52d; border-right-color: #ecb52d; color: #ecb52d; }
+form .form-header > div:last-child { border-bottom-color: #ecb52d;  color: #999999; }
+form .form-header > div:last-child a { color: #fff; }
+
+.has-error .help-block,
+.has-error .control-label,
+.has-error .radio,
+.has-error .checkbox,
+.has-error .radio-inline,
+.has-error .checkbox-inline,
+.has-error.radio label,
+.has-error.checkbox label,
+.has-error.radio-inline label,
+.has-error.checkbox-inline label { color: #d65c5a; }
+
+input[type='text']::-webkit-input-placeholder { color: #999999; }
+input[type='text']::-moz-placeholder { color: #999999; }
+input[type='text']:-ms-input-placeholder { color: #999999; }
+input[type='text']:-moz-placeholder { color: #999999; }
+
 /* Main page */
 main.site-index { margin: -85px -15px -20px; text-align: center; }
 main.site-index section { width: 100%; min-height: 100vh; background: url("/img/main1.jpg") no-repeat center center;
@@ -165,7 +203,6 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .blocks-list > div:last-child a { background-image: url("/img/block3.jpg"); }
 .blocks-list > div a .icon { height: 50%; }
 
-.site-btn { background-color: #ecb52d; line-height: 40px; color: #000; font-weight: bold; cursor: pointer; text-align: center; }
 
 .products-list { width: 90%; margin: 0 auto; padding-top: 20px; }
 
@@ -197,6 +234,10 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .main-about { width: 80%; margin: 10px auto 65px; border: 1px solid #edba3b; padding: 15px; text-align: left; }
 /* Main page END */
 
+/* User */
+
+/* User END */
+
 @media (max-width: 767px ) {
 
 	body { font-size: 16px; }
@@ -217,7 +258,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 	.navbar-nav.navbar-left > li > a { font-weight: normal; line-height: 20px; }
 	.navbar-nav.navbar-left > li:nth-child(even).active a:after { left: initial; right: 15px; }
 
-	.navbar-nav.navbar-right { padding: 0; padding-left: 15px; }
+	.navbar-nav.navbar-right { padding: 10px 0; margin: 10px; border-top: 1px solid #999; border-bottom: 1px solid #999; }
 
 	main.site-index section p { font-size: 16px; }
 
