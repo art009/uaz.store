@@ -23,6 +23,11 @@ class SortableBehavior extends Behavior
      */
     public $sortAttribute = 'sort_order';
 
+	/**
+	 * @var callable
+	 */
+    public $callback = null;
+
     /**
      * @inheritdoc
      */
@@ -81,6 +86,10 @@ class SortableBehavior extends Behavior
             $previous->updateAttributes([$this->sortAttribute => $model->{$this->sortAttribute}]);
             $model->updateAttributes([$this->sortAttribute => $sortOrder]);
         }
+
+	    if (is_callable($this->callback)) {
+		    call_user_func($this->callback);
+	    }
     }
 
     /**
@@ -99,6 +108,10 @@ class SortableBehavior extends Behavior
             $sortOrder = $next->{$this->sortAttribute};
             $next->updateAttributes([$this->sortAttribute => $model->{$this->sortAttribute}]);
             $model->updateAttributes([$this->sortAttribute => $sortOrder]);
+        }
+
+        if (is_callable($this->callback)) {
+	        call_user_func($this->callback);
         }
     }
 }

@@ -21,6 +21,9 @@ class Menu extends \common\models\Menu
         return [
             [
                 'class' => SortableBehavior::className(),
+	            'callback' => function() {
+		            self::invalidateCache();
+	            },
             ],
         ];
     }
@@ -45,6 +48,14 @@ class Menu extends \common\models\Menu
     {
         parent::afterSave($insert, $changedAttributes);
 
+	    self::invalidateCache();
+    }
+
+	/**
+	 * Сброс кеша модели
+	 */
+    public static function invalidateCache()
+    {
 	    TagDependency::invalidate(Yii::$app->cache, self::CACHE_TAG);
     }
 }
