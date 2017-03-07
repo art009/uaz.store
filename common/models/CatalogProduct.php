@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -47,6 +46,8 @@ class CatalogProduct extends \yii\db\ActiveRecord
     const FOLDER = 'catalog-product';
     const FOLDER_SMALL = self::FOLDER . '/s';
     const FOLDER_MEDIUM = self::FOLDER . '/m';
+
+    const ON_MAIN_CACHE_TAG = 'catalog-product-on-main-tag';
 
     /**
      * @inheritdoc

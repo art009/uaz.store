@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use common\models\CatalogProduct;
 use yii\web\Controller;
 use Yii;
+use yii\web\Response;
 
 /**
  * Class CartController
@@ -35,24 +36,38 @@ class CartController extends Controller
 	 */
 	public function actionAdd($productId, $quantity = 1)
 	{
+		$result = [
+			'type' => 'danger',
+			'message' => 'Неизвестная ошибка',
+			'count' => Yii::$app->cart->getQuantity() + $quantity,
+		];
+
 		$product = CatalogProduct::findOne((int)$productId);
 		if ($product) {
 			$quantity = (int)$quantity;
 			if ($quantity > 0 && $quantity < 100) {
 				if (Yii::$app->cart->add($product->id, $quantity)) {
-					Yii::$app->session->addFlash('success', 'Товар добавлен в корзину');
+					$result['type'] = 'success';
+					$result['message'] = 'Успешное добавление в корзину: <b>' . $product->title . '</b>';
 				} else {
-					Yii::$app->session->addFlash('danger', 'Неудачная попытка добавления товара в корзину');
+					$result['message'] = 'Неудачная попытка добавления товара в корзину';
 				}
 			} else {
-				Yii::$app->session->addFlash('danger', 'Недопустимое количество товара. Можно от 1 до 99.');
+				$result['message'] = 'Недопустимое количество товара. Можно от 1 до 99.';
 			}
 		} else {
-			Yii::$app->session->addFlash('danger', 'Товар не найден');
+			$result['message'] = 'Товар не найден';
 		}
 
-		//$this->goBack();
-		return $this->redirect('index');
+		if (Yii::$app->request->isAjax) {
+			$response = new Response();
+			$response->data = $result;
+			$response->format = Response::FORMAT_JSON;
+			return Yii::$app->end(0, $response);
+		} else {
+			Yii::$app->session->addFlash($result['type'], $result['message']);
+			return $this->redirect(Yii::$app->request->referrer);
+		}
 	}
 
 	/**

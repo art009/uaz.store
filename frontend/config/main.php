@@ -71,7 +71,6 @@ return [
 			'forceCharset' => 'UTF-8', // charset forcibly assign, otherwise will use all of the files found charset
 			'expandImports' => true, // whether to change @import on content
 			'compressOptions' => ['extra' => true], // options for compress
-			'jsOptions' => ['async' => true],
 		],
 		'mailer' => [
 			'class' => 'yii\swiftmailer\Mailer',

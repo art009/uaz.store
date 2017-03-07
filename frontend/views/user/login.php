@@ -12,7 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-login">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php $form = ActiveForm::begin(['id' => 'user-form', 'options' => ['autocomplete' => 'off']]); ?>
+    <?php $form = ActiveForm::begin([
+	    'id' => 'user-form',
+	    'options' => ['autocomplete' => 'off'],
+	    'enableClientValidation' => false,
+    ]); ?>
 
 		<div class="form-header">
 			<div class="col-xs-6 text-center">Вход</div>

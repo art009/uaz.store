@@ -12,7 +12,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-reset-password">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php $form = ActiveForm::begin(['id' => 'user-reset-password-form']); ?>
+    <?php $form = ActiveForm::begin([
+	    'id' => 'user-reset-password-form',
+	    'enableClientValidation' => false,
+    ]); ?>
 		<div class="form-header">
 			<div class="col-xs-7 text-center">Восстановление доступа</div>
 			<div class="col-xs-5 text-center"><a href="/login">Вход</a></div>

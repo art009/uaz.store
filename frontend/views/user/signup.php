@@ -13,12 +13,18 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-signup">
     <h1><?= Html::encode($this->title) ?></h1>
 
-	<?php $form = ActiveForm::begin(['id' => 'user-signup-form']); ?>
+	<?php $form = ActiveForm::begin(['id' => 'user-signup-form', 'options' => ['autocomplete' => 'off']]); ?>
 	<div class="form-header">
 		<div class="col-xs-6 text-center">Регистрация</div>
 		<div class="col-xs-6 text-center"><a href="/login">Вход</a></div>
 	</div>
 	<div class="clearfix"></div>
+
+	<!-- >>> Avoid Chrome autofill >>> -->
+	<?php echo Html::activeTextInput($model, 'username', ['class' => 'hidden']); ?>
+	<?php echo Html::activeTextInput($model, 'email', ['class' => 'hidden']); ?>
+	<?php echo Html::activePasswordInput($model, 'password', ['class' => 'hidden']); ?>
+	<!-- <<< Avoid Chrome autofill <<< -->
 
 	<?= $form->field($model, 'username', [
 		'template' => '{input}{error}{hint}'

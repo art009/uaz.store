@@ -2,7 +2,9 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'UAZ.STORE';
+use frontend\widgets\ProductOnMain;
+
+$this->title = 'Интернет магазин автозапчастей УАЗ - UAZ.STORE';
 ?>
 <main class="site-index">
     <section>
@@ -35,69 +37,7 @@ $this->title = 'UAZ.STORE';
         <h1>Популярные товары</h1>
         <div class="separator"></div>
         <p>Большой спрос среди покупателей</p>
-        <div class="products-list">
-            <div class="product-item">
-                <div class="title">
-                    Диск сцепления (комплект) ведомый и нажимной Patriot с двигателем IVECO (STARCO) SPK 24210/2D
-                </div>
-                <div class="image">
-                    <img src="/img/product.jpg"/>
-                </div>
-                <div class="code">Артикул 0001</div>
-                <div class="price">
-                    Цена: <b>1000 руб</b>
-                </div>
-                <div class="site-btn">
-                    Добавить в корзину
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="title">
-                    Диск сцепления (комплект) ведомый и нажимной Patriot с двигателем IVECO (STARCO) SPK 24210/2D
-                </div>
-                <div class="image">
-                    <img src="/img/product.jpg"/>
-                </div>
-                <div class="code">Артикул 0001</div>
-                <div class="price">
-                    Цена: <b>1000 руб</b>
-                </div>
-                <div class="site-btn">
-                    Добавить в корзину
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="title">
-                    Диск сцепления (комплект) ведомый и нажимной Patriot с двигателем IVECO (STARCO) SPK 24210/2D
-                </div>
-                <div class="image">
-                    <img src="/img/product.jpg"/>
-                </div>
-                <div class="code">Артикул 0001</div>
-                <div class="price">
-                    Цена: <b>1000 руб</b>
-                </div>
-                <div class="site-btn">
-                    Добавить в корзину
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="title">
-                    Диск сцепления (комплект) ведомый и нажимной Patriot с двигателем IVECO (STARCO) SPK 24210/2D
-                </div>
-                <div class="image">
-                    <img src="/img/product.jpg"/>
-                </div>
-                <div class="code">Артикул 0001</div>
-                <div class="price">
-                    Цена: <b>1000 руб</b>
-                </div>
-                <div class="site-btn">
-                    Добавить в корзину
-                </div>
-            </div>
-        </div>
-        <div class="clearfix"></div>
+        <?php echo ProductOnMain::widget(); ?>
     </section>
     <section>
         <h1>О нас</h1>

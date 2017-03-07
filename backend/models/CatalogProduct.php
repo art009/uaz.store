@@ -4,9 +4,9 @@ namespace backend\models;
 
 use common\components\AppHelper;
 use Yii;
+use yii\caching\TagDependency;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\Html;
-use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 /**
@@ -23,6 +23,13 @@ class CatalogProduct extends \common\models\CatalogProduct
 
     const MEDIUM_IMAGE_WIDTH = 100;
     const MEDIUM_IMAGE_HEIGHT = 100;
+
+	/**
+	 * Нужно ли сбросить кеш для виджета на главной
+	 *
+	 * @var bool
+	 */
+    protected $invalidateOnMainCache = false;
 
     /**
      * @var UploadedFile[]
@@ -92,6 +99,25 @@ class CatalogProduct extends \common\models\CatalogProduct
         }
     }
 
+	/**
+	 * @inheritdoc
+	 */
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+
+			if (($this->isAttributeChanged('hide') && $this->on_main == AppHelper::YES) ||
+				$this->isAttributeChanged('on_main')
+			) {
+				$this->invalidateOnMainCache = true;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
     /**
      * @param bool $insert
      *
@@ -127,6 +153,10 @@ class CatalogProduct extends \common\models\CatalogProduct
 		$categories = CatalogCategory::findAll(array_diff($this->category_ids, $actualCategoryIds));
 		foreach ($categories as $category) {
 			$this->link('categories', $category);
+		}
+
+		if ($this->invalidateOnMainCache) {
+			TagDependency::invalidate(Yii::$app->cache, self::ON_MAIN_CACHE_TAG);
 		}
     }
 
