@@ -137,7 +137,11 @@ function showAlert(type, text) {
 
 	var cont = $('#alert-container'),
 		k = $(cont).children().length,
-		output = Mustache.render(document.getElementById('alert-template').innerHTML, {
+		template = document.getElementById('alert-template').innerHTML;
+
+	Mustache.parse(template);
+
+	var	output = Mustache.render(template, {
 			type: type,
 			body: text,
 			k: k++

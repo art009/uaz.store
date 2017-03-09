@@ -13,3 +13,12 @@ RewriteRule . index.php
 
 RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
 RewriteRule .* http://%1/$0 [L,R=301]
+
+RewriteCond %{HTTPS} on
+RewriteCond %{HTTP_USER_AGENT} MSIE\s6 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} Windows\sNT\s5 [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} Windows\sXP [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} Android.*(Mobile)?\ [0-3] [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^(.*.symbian.*) [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} ^(.*.blackberry.*)
+RewriteRule ^ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

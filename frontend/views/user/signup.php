@@ -6,6 +6,8 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\widgets\MaskedInput;
+use common\models\User;
 
 $this->title = 'Регистрация';
 $this->params['breadcrumbs'][] = $this->title;
@@ -13,7 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-signup">
     <h1><?= Html::encode($this->title) ?></h1>
 
-	<?php $form = ActiveForm::begin(['id' => 'user-signup-form', 'options' => ['autocomplete' => 'off']]); ?>
+	<?php $form = ActiveForm::begin([
+		'id' => 'user-signup-form',
+		'options' => ['autocomplete' => 'off'],
+	    'enableClientValidation' => false,
+	]); ?>
 	<div class="form-header">
 		<div class="col-xs-6 text-center">Регистрация</div>
 		<div class="col-xs-6 text-center"><a href="/login">Вход</a></div>
@@ -21,17 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="clearfix"></div>
 
 	<!-- >>> Avoid Chrome autofill >>> -->
-	<?php echo Html::activeTextInput($model, 'username', ['class' => 'hidden']); ?>
+	<?php echo Html::activeTextInput($model, 'name', ['class' => 'hidden']); ?>
 	<?php echo Html::activeTextInput($model, 'email', ['class' => 'hidden']); ?>
 	<?php echo Html::activePasswordInput($model, 'password', ['class' => 'hidden']); ?>
 	<!-- <<< Avoid Chrome autofill <<< -->
 
-	<?= $form->field($model, 'username', [
+	<?php echo $form->field($model, 'legal', [
 		'template' => '{input}{error}{hint}'
-	])->textInput([
-		'autofocus' => true,
-		'placeholder' => $model->getAttributeLabel('username'),
-	]) ?>
+	])->dropDownList(User::$legalList) ?>
 
 	<?= $form->field($model, 'email', [
 		'template' => '{input}{error}{hint}'
@@ -40,6 +43,25 @@ $this->params['breadcrumbs'][] = $this->title;
 		'placeholder' => $model->getAttributeLabel('email'),
 	]) ?>
 
+	<?= $form->field($model, 'phone', [
+		'template' => '{input}{error}{hint}'
+	])->widget(MaskedInput::className(), [
+		'mask' => '+7(999)999-99-99',
+		'options' => [
+			'class' => 'form-control tel_input',
+			'placeholder' => $model->getAttributeLabel('phone'),
+		],
+		'clientOptions' => [
+			'clearIncomplete' => false
+		],
+	]);?>
+
+	<?= $form->field($model, 'name', [
+		'template' => '{input}{error}{hint}'
+	])->textInput([
+		'placeholder' => $model->getAttributeLabel('name'),
+	]) ?>
+	
 	<?= $form->field($model, 'password', [
 		'template' => '{input}{error}{hint}'
 	])->passwordInput([

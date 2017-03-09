@@ -1,6 +1,7 @@
 <?php
 namespace frontend\models;
 
+use codeonyii\yii2validators\AtLeastValidator;
 use yii\base\Model;
 use common\models\User;
 
@@ -9,10 +10,12 @@ use common\models\User;
  */
 class SignupForm extends Model
 {
-    public $username;
+    public $name;
+    public $phone;
     public $email;
     public $password;
-
+    public $legal;
+    public $offer_accepted;
 
     /**
      * @inheritdoc
@@ -20,21 +23,61 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['name', 'trim'],
+            ['name', 'required'],
+            ['name', 'string', 'min' => 2, 'max' => 255],
+
+	        [['phone', 'email'], AtLeastValidator::className(), 'in' => ['phone', 'email'],
+		        'message' => 'Необходимо заполнить E-mail или Телефон'],
+
+	        ['phone', 'trim'],
+	        ['phone', 'unique', 'targetClass' => '\common\models\User',
+		        'message' => 'Пользователь с таким телефоном уже существует.'],
 
             ['email', 'trim'],
-            ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User',
+	            'message' => 'Пользователь с таким E-mail уже существует.'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
+
+	        ['legal', 'required'],
+
+	        [['offer_accepted'], 'safe'],
         ];
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'email' => 'E-mail',
+			'phone' => 'Телефон',
+			'legal' => 'Физ/Юр лицо',
+			'name' => 'ФИО/Название компании',
+			'offer_accepted' => 'Согласие с офертой',
+			'password' => 'Пароль',
+		];
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function beforeValidate()
+	{
+		if (parent::beforeValidate()) {
+
+			$this->phone = mb_substr(preg_replace('/[^0-9]/', '', $this->phone), -10);
+
+			return true;
+		}
+
+		return false;
+	}
 
     /**
      * Signs user up.
@@ -48,8 +91,11 @@ class SignupForm extends Model
         }
         
         $user = new User();
-        $user->username = $this->username;
+        $user->legal = $this->legal;
+        $user->phone = $this->phone;
+        $user->name = $this->name;
         $user->email = $this->email;
+        $user->offer_accepted = $this->offer_accepted;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         

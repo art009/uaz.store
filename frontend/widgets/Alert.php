@@ -20,7 +20,7 @@ class Alert extends \common\widgets\Alert
 		parent::init();
 		echo Html::endTag('div');
 
-		echo Html::beginTag('script', ['id' => 'alert-template', 'type' => 'text/x-handlebars-template']);
+		echo Html::beginTag('script', ['id' => 'alert-template', 'type' => 'text/x-tmpl-mustache']);
 		$buttonHtml = Html::tag('button', '&times;', [
 			'type' => 'button',
 			'class' => 'close',

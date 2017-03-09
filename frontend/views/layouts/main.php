@@ -30,7 +30,16 @@ $actionId = Yii::$app->controller->action->id;
 </head>
 <body>
 <?php $this->beginBody() ?>
-
+<?php if ($GATrackingID = (Yii::$app->params['GATrackingID'] ?? null)): ?>
+	<!-- Google Analytics -->
+	<script>
+		window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+		//ga('create', 'UA-93217412-1', 'auto')
+		//ga('send', 'pageview');
+	</script>
+	<script async src="https://www.google-analytics.com/analytics.js"></script>
+	<!-- End Google Analytics -->
+<?php endif; ?>
 <div class="wrap">
     <?php NavBar::begin([
         'brandLabel' => Html::img('/img/logo.png'),
@@ -129,7 +138,17 @@ $actionId = Yii::$app->controller->action->id;
         </div>
     </div>
 </footer>
-
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Organization",
+  "name" : "UAZ.STORE",
+  "url" : "https://uaz.store",
+  "sameAs" : [
+    "https://vk.com/uaz_zapchasty",
+  ]
+}
+</script>
 <?php $this->endBody() ?>
 </body>
 </html>
