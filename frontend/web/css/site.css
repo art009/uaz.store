@@ -125,7 +125,7 @@ footer .footer-right .pull-left a:hover { text-decoration: underline; }
 }
 
 .nav-contacts { display: inline-block; width: 100%; text-align: center; padding-bottom: 10px;  }
-.nav-contacts .nav-phone { font-weight: bold; font-size: 18px; }
+.nav-contacts .nav-phone { font-weight: bold; font-size: 18px; color: #ecb52d; }
 .nav-contacts .nav-phone span { font-size: 14px; }
 .nav-contacts .nav-email { font-size: 14px; color: #b3b3b3; }
 .nav-contacts .nav-email a { color: #b3b3b3; }

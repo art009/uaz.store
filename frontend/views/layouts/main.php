@@ -37,7 +37,7 @@ $actionId = Yii::$app->controller->action->id;
 		//ga('create', 'UA-93217412-1', 'auto')
 		//ga('send', 'pageview');
 	</script>
-	<script async src="https://www.google-analytics.com/analytics.js"></script>
+	<script async src="/js/analytics.js"></script>
 	<!-- End Google Analytics -->
 <?php endif; ?>
 <div class="wrap">
