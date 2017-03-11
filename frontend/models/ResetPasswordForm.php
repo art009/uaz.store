@@ -28,11 +28,11 @@ class ResetPasswordForm extends Model
     public function __construct($token, $config = [])
     {
         if (empty($token) || !is_string($token)) {
-            throw new InvalidParamException('Password reset token cannot be blank.');
+            throw new InvalidParamException('Токен сброса пароля не может быть пустым.');
         }
         $this->_user = User::findByPasswordResetToken($token);
         if (!$this->_user) {
-            throw new InvalidParamException('Wrong password reset token.');
+            throw new InvalidParamException('Неверный токен сброса пароля.');
         }
         parent::__construct($config);
     }
@@ -47,6 +47,16 @@ class ResetPasswordForm extends Model
             ['password', 'string', 'min' => 6],
         ];
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'password' => 'Пароль',
+		];
+	}
 
     /**
      * Resets password.

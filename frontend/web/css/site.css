@@ -155,6 +155,19 @@ form .form-header > div:first-child { border-top-color: #ecb52d; border-right-co
 form .form-header > div:last-child { border-bottom-color: #ecb52d;  color: #999999; }
 form .form-header > div:last-child a { color: #fff; }
 
+form input[type='checkbox'], form input[type='radio'] { opacity: 0; display: none; }
+form input[type='checkbox'] + label, form input[type='radio'] + label { cursor: pointer; font-weight: normal; margin-bottom: 0; }
+form input[type='checkbox'] + label:before, form input[type='radio'] + label:before { content: ""; display: inline-block; vertical-align: middle;
+	width: 15px; height: 15px; border: 1px solid #ecb52d; background-color: #fff; color: #000;
+	margin-right: 5px; text-align: center; font-size: 15px; line-height: 15px; margin-bottom: 3px;
+}
+form input[type='checkbox']:checked + label:before { content: "\2714"; }
+form .has-error input[type='checkbox'] + label:before { border-color: #a94442; }
+
+form span.radio-inline { padding: 0; }
+form input[type='radio'] + label:before { border-radius: 100%; }
+form input[type='radio']:checked + label:before { background-color: black; border-width: 3px; }
+
 .has-error .help-block,
 .has-error .control-label,
 .has-error .radio,

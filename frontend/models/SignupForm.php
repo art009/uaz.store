@@ -45,7 +45,7 @@ class SignupForm extends Model
 
 	        ['legal', 'required'],
 
-	        [['offer_accepted'], 'safe'],
+	        ['offer_accepted', 'required', 'requiredValue' => 1, 'message' => 'Необходимо согласие с условиями'],
         ];
     }
 
@@ -59,7 +59,7 @@ class SignupForm extends Model
 			'phone' => 'Телефон',
 			'legal' => 'Физ/Юр лицо',
 			'name' => 'ФИО/Название компании',
-			'offer_accepted' => 'Согласие с офертой',
+			'offer_accepted' => 'Согласие с условиями',
 			'password' => 'Пароль',
 		];
 	}

@@ -32,9 +32,22 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php echo Html::activePasswordInput($model, 'password', ['class' => 'hidden']); ?>
 	<!-- <<< Avoid Chrome autofill <<< -->
 
-	<?php echo $form->field($model, 'legal', [
-		'template' => '{input}{error}{hint}'
-	])->dropDownList(User::$legalList) ?>
+	<?php echo $form
+		->field($model, 'legal')
+		->inline()
+		->radioList(User::$legalList, [
+			'item' => function($index, $label, $name, $checked, $value) {
+
+				$html = Html::beginTag('span', ['class' => 'radio-inline']);
+				$html .= Html::radio($name, $checked, ['value' => $value, 'id' => 'radio_' . $index, 'checked' => $checked]);
+				$html .= Html::label($label, 'radio_' . $index);
+				$html .= Html::endTag('span');
+
+				return $html;
+			}
+		])
+		->label(false);
+	?>
 
 	<?= $form->field($model, 'email', [
 		'template' => '{input}{error}{hint}'
@@ -67,6 +80,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	])->passwordInput([
 		'placeholder' => $model->getAttributeLabel('password')
 	]) ?>
+
+	<?= $form->field($model, 'offer_accepted', [
+		'template' => '{input}{error}{hint}'
+	])->checkbox([
+		'template' => '{input} {label}{error}',
+	])->label('Согласие с условиями <a href="/offer" target="_blank">оферты</a>') ?>
 
 	<?= Html::submitButton('Зарегистрироваться', ['class' => 'site-btn', 'name' => 'signup-button']) ?>
 

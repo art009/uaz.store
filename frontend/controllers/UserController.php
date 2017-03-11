@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\LoginForm;
+use common\models\User;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -102,10 +103,12 @@ class UserController extends Controller
 	public function actionSignup()
 	{
 		$model = new SignupForm();
+		$model->legal = User::LEGAL_NO;
 		if ($model->load(Yii::$app->request->post())) {
 			if ($user = $model->signup()) {
+				Yii::$app->session->setFlash('success', 'Вы успешно зарегистрировались на сайте.');
 				if (Yii::$app->getUser()->login($user)) {
-					return $this->goHome();
+					return $this->redirect(['/user']);
 				}
 			}
 		}
@@ -125,11 +128,10 @@ class UserController extends Controller
 		$model = new PasswordResetRequestForm();
 		if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 			if ($model->sendEmail()) {
-				Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
-				return $this->goHome();
+				Yii::$app->session->setFlash('success', 'Вам отправлено <b>письмо</b> с инструкциями по восстановлению доступа.');
+				return $this->redirect(['/login']);
 			} else {
-				Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+				Yii::$app->session->setFlash('error', 'В данный момент вы не можете сбросить пароль для указанного E-mail');
 			}
 		}
 
@@ -154,9 +156,8 @@ class UserController extends Controller
 		}
 
 		if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-			Yii::$app->session->setFlash('success', 'New password was saved.');
-
-			return $this->goHome();
+			Yii::$app->session->setFlash('success', 'Новый пароль <b>успешно</b> установлен.');
+			return $this->redirect(['/login']);
 		}
 
 		return $this->render('setPassword', [

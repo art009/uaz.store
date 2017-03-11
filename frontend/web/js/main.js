@@ -53,7 +53,7 @@ function initAnimatedSections() {
 			self.option('animatedEl', self.element.find('.sections-inner'));
 			self.option('bullets', self.element.find('nav ul li a'));
 
-			$(self.option('bullets')).on('click', function () {
+			$(self.option('bullets')).on('click touchend', function () {
 				self.to($(this).index('.nav-bullet'));
 				return false;
 			});
@@ -77,7 +77,7 @@ function initAnimatedSections() {
 		{
 			$(window).off('DOMMouseScroll mousewheel', self.scroll);
 			$(window).off('scroll', self.scroll);
-			$(self.option('bullets')).off('click');
+			$(self.option('bullets')).off('click touchend');
 			$(document).off('keydown');
 
 			self.element.find('section').unwrap().unwrap();

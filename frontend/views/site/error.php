@@ -3,11 +3,11 @@
 /* @var $this yii\web\View */
 /* @var $name string */
 /* @var $message string */
-/* @var $exception Exception */
+/* @var $exception \yii\web\HttpException */
 
 use yii\helpers\Html;
 
-$this->title = $name;
+$this->title = 'Ошибка ' . $exception->statusCode;
 ?>
 <div class="site-error">
 
@@ -18,10 +18,7 @@ $this->title = $name;
     </div>
 
     <p>
-        The above error occurred while the Web server was processing your request.
-    </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
+	    Вернуться <a href="/">на главную</a> страницу.
     </p>
 
 </div>
