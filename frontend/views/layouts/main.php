@@ -12,6 +12,7 @@ use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
 use frontend\widgets\NavMenu;
+use frontend\widgets\CallbackWidget;
 
 AppAsset::register($this);
 
@@ -99,17 +100,21 @@ $actionId = Yii::$app->controller->action->id;
         <div class="col-xs-12 col-sm-6 footer-left">
             <p class="pull-left">
                 <span class="icon-link-outer">
-                    <?php echo Html::a(Html::icon('earphone'), '#', [
+                    <?php echo Html::a(Html::icon('earphone'), '#callback-form-modal', [
 						'class' => 'link-icon',
-						'data-toggle' => 'tooltip',
+						'data-toggle' => 'modal',
+						'data-tooltip' => 'tooltip',
+						'data-trigger' => 'hover',
 						'data-placement' => 'top',
 						'title' => 'Заказать обратный звонок',
+	                    'data-target' => '#callback-form-modal',
 					]); ?>
                 </span>
                 <span class="icon-link-outer">
                     <?php echo Html::a(Html::icon('envelope'), '#', [
                         'class' => 'link-icon',
-                        'data-toggle' => 'tooltip',
+                        'data-tooltip' => 'tooltip',
+	                    'data-trigger' => 'hover',
                         'data-placement' => 'top',
                         'title' => 'Задать вопрос',
                     ]); ?>
@@ -129,7 +134,8 @@ $actionId = Yii::$app->controller->action->id;
 						'target' => '_blank',
                         'rel' => 'nofollow',
 						'class' => 'link-icon social',
-						'data-toggle' => 'tooltip',
+						'data-tooltip' => 'tooltip',
+					    'data-trigger' => 'hover',
 						'data-placement' => 'top',
 						'title' => 'Перейти в группу ВКонтакте',
 					]); ?>
@@ -138,6 +144,7 @@ $actionId = Yii::$app->controller->action->id;
         </div>
     </div>
 </footer>
+<?php echo CallbackWidget::widget(); ?>
 <script type="application/ld+json">
 {
   "@context" : "http://schema.org",

@@ -194,7 +194,7 @@ $(document).ready(function($){
 	/**
 	 * Bootstrap tooltips
 	 */
-	$('[data-toggle="tooltip"]').tooltip();
+	$('[data-tooltip="tooltip"]').tooltip();
 
 	initAnimatedSections();
 
@@ -210,4 +210,43 @@ $(document).ready(function($){
 		}
 		return false;
 	});
+
+	$(document).on('submit', 'form.modal-form', function () {
+		var form = $(this),
+			modal = '#' + $(form).prop('id') + '-modal';
+
+		$.ajax($(form).prop('action'), {
+			data: $(form).serialize(),
+			type: 'post',
+			dataType: 'json',
+			beforeSend: function(){
+				$(form).find(':input').prop('disabled', true);
+			},
+			success: function (data) {
+				if (data.errors) {
+					$(form).find(':input').prop('disabled', false);
+					$.each(data.errors, function (attribute, error) {
+						var el = $(form).find('[name $= "[' + attribute + ']"]');
+						if (el.length) {
+							var parent = $(el).closest('.form-group');
+							$(parent).addClass('has-error');
+							$(parent).find('.help-block-error').html(error);
+						}
+					});
+				} else {
+					$(form).find('.form-group').removeClass('has-error');
+					$(form).find('.help-block-error').html('');
+				}
+				if (data.success) {
+					$(modal).modal('hide');
+					showAlert('success', data.success);
+				}
+			},
+			error: function (error) {
+				showAlert('danger', 'Ошибка отправки формы: ' + error.responseText);
+			}
+		});
+
+		return false;
+	})
 });

@@ -50,10 +50,17 @@ a:hover { color: #ecb52d; }
 a.link-icon { display: inline-block; width: 38px; line-height: 38px; padding: 0; border: 1px solid; text-align: center;
 	margin-right: 8px; color: #979797; font-size: 15px; }
 a.link-icon:hover { color: #fff; }
+a.link-icon:focus { outline: none; }
 .icon-link-outer { position: relative; display: inline-block; }
 
 .tooltip .tooltip-inner { border: 1px solid #b78e29; color: #ecb52d; background-color: #424242; border-radius: 0; line-height: 19px; }
 .tooltip.top .tooltip-arrow { border-top-color: #b78e29; }
+
+.modal-header { text-transform: uppercase; }
+.modal-header .close { opacity: 0.7; color: #ffffff; outline: none; }
+.modal-header .close:hover { opacity: 1; }
+.modal-content { border-radius: 0; background-color: rgba(66,66,66,1); }
+.modal-fm { width: 400px; margin: 45px auto; }
 
 footer { height: 68px; position: relative; bottom: 0; width: 100%; }
 footer > .container { height: 100%; padding-top: 14px; background-color: rgba(0,0,0,0.5);
