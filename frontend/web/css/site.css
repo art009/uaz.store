@@ -202,6 +202,9 @@ main.site-index section { width: 100%; min-height: 100vh; background: url("/img/
 	background-size: cover; padding-top: 100px; position: relative;
 }
 main.site-index section h1 { text-align: center; font-size: 2.4rem; }
+main.site-index section h2, main.site-index section h3 { font-size: 24px; }
+main.site-index section h4 { font-size: 22px; text-transform: uppercase; margin-bottom: 15px; }
+main.site-index section h5 { font-size: 20px; text-transform: uppercase; margin-top: 20px; margin-bottom: 15px; }
 main.site-index section p { font-size: 14px; }
 main.site-index section:nth-of-type(2) { background-image: url("/img/main2.jpg"); }
 main.site-index section:nth-of-type(3) { background-image: url("/img/main3.jpg"); }
