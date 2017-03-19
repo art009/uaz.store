@@ -7,6 +7,10 @@ $this->title = 'Административная панель';
 <div class="site-index text-center">
     <h1>Система управления сайтом</h1>
     <p class="lead">Выберите необходимый раздел</p>
+	<p>
+		<a class="btn btn-md btn-default btn-block" href="/notice">Уведомления</a>
+	</p>
+	<br/>
     <p>
         <a class="btn btn-md btn-info btn-block" href="/menu">Меню</a>
     </p>

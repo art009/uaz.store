@@ -2,14 +2,16 @@
 namespace frontend\models;
 
 use common\models\MailQueue;
+use common\models\Notice;
 use yii\base\Model;
+use JsonSerializable;
 
 /**
  * Class CallbackForm
  *
  * @package frontend\models
  */
-class CallbackForm extends Model
+class CallbackForm extends Model implements JsonSerializable
 {
     public $phone;
 
@@ -47,6 +49,16 @@ class CallbackForm extends Model
 	}
 
 	/**
+	 * @return array
+	 */
+	public function jsonSerialize()
+	{
+		return [
+			'phone' => $this->phone,
+		];
+	}
+
+	/**
 	 * Создание письма для администратора
 	 *
 	 * @return bool
@@ -56,7 +68,8 @@ class CallbackForm extends Model
         if (!$this->validate()) {
             return false;
         }
-        
-        return MailQueue::create('support@uaz.store', 'Заказ обратного звонка', 'callback', ['phone' => $this->phone]);
+
+        //MailQueue::create('support@uaz.store', 'Заказ обратного звонка', 'callback', ['phone' => $this->phone]);
+        return Notice::create(json_encode($this), Notice::TYPE_CALLBACK);
     }
 }
