@@ -19,6 +19,7 @@ Yii::$container = new yii\di\Container();
  *
  * @property \common\components\ImageHandler $ih
  * @property \frontend\components\Cart $cart
+ * @property \yii\redis\Cache $cache
  */
 class WebApplication extends yii\web\Application
 {

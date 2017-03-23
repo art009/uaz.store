@@ -1,6 +1,6 @@
 <?php
 
-/* @var $this \frontend\widgets\CallbackForm */
+/* @var $this \frontend\controllers\FormController */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \frontend\models\CallbackForm */
 

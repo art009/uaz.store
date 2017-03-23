@@ -4,7 +4,7 @@
 
 use frontend\widgets\ProductOnMain;
 
-$this->title = 'Интернет магазин автозапчастей УАЗ - UAZ.STORE';
+$this->title = 'Интернет магазин автозапчастей УАЗ';
 $this->registerMetaTag([
 	'name' => 'description',
 	'content' => 'Продажа запчастей для автомобилей УАЗ всех моделей с доставкой по всей России. У нас Вы сможете купить запчасти УАЗ по лучшим ценам.'
