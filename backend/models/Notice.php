@@ -30,6 +30,7 @@ class Notice extends \common\models\Notice
 	static $typeList = [
 		self::TYPE_NONE => 'Без типа',
 		self::TYPE_CALLBACK => 'Обратный звонок',
+		self::TYPE_QUESTION => 'Вопрос',
 	];
 
 	/**

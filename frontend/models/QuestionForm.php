@@ -6,18 +6,28 @@ use yii\base\Model;
 use JsonSerializable;
 
 /**
- * Class CallbackForm
+ * Class QuestionForm
  *
  * @package frontend\models
  */
-class CallbackForm extends Model implements JsonSerializable
+class QuestionForm extends Model implements JsonSerializable
 {
 	const CACHE_DURATION = 600;
 
 	/**
 	 * @var string
 	 */
-	public $phone;
+	public $email;
+
+	/**
+	 * @var string
+	 */
+	public $name;
+
+	/**
+	 * @var string
+	 */
+	public $text;
 
 	/**
 	 * @inheritdoc
@@ -25,8 +35,10 @@ class CallbackForm extends Model implements JsonSerializable
 	public function rules()
 	{
 		return [
-			['phone', 'required'],
-			['phone', 'trim'],
+			[['email', 'text'], 'required'],
+			['email', 'trim'],
+			['email', 'email'],
+			['name', 'safe'],
 		];
 	}
 
@@ -36,7 +48,9 @@ class CallbackForm extends Model implements JsonSerializable
 	public function attributeLabels()
 	{
 		return [
-			'phone' => 'Телефон',
+			'email' => 'E-mail',
+			'name' => 'Имя',
+			'text' => 'Вопрос',
 		];
 	}
 
@@ -45,11 +59,8 @@ class CallbackForm extends Model implements JsonSerializable
 	 */
 	public function afterValidate()
 	{
-		if (mb_strlen(preg_replace('/[^0-9]/', '', $this->phone)) < 11) {
-			$this->addError('phone', 'Необходим 10-значный номер телефона.');
-		}
 		if (\Yii::$app->cache->exists($this->getCacheKey())) {
-			$this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте позже.');
+			$this->addError('email', 'Вы недавно задавали вопрос! Попробуйте позже.');
 		}
 
 
@@ -62,23 +73,25 @@ class CallbackForm extends Model implements JsonSerializable
 	public function jsonSerialize()
 	{
 		return [
-			'phone' => $this->phone,
+			'email' => $this->email,
+			'name' => $this->name,
+			'text' => $this->text,
 		];
 	}
 
 	/**
-	 * Создание уведомления для администратора
+	 * Создание письма для администратора
 	 *
 	 * @return bool
 	 */
-	public function callback()
+	public function send()
 	{
 		if (!$this->validate()) {
 			return false;
 		}
 		\Yii::$app->cache->add($this->getCacheKey(), 1, self::CACHE_DURATION);
 
-		return Notice::create(json_encode($this), Notice::TYPE_CALLBACK);
+		return Notice::create(json_encode($this), Notice::TYPE_QUESTION);
 	}
 
 	/**
@@ -88,6 +101,6 @@ class CallbackForm extends Model implements JsonSerializable
 	 */
 	public function getCacheKey()
 	{
-		return 'Callback' . preg_replace('/[^0-9]/', '', $this->phone);
+		return 'Question' . $this->email;
 	}
 }

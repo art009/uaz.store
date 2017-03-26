@@ -41,4 +41,11 @@ $data = $model->getData();
 		</p>
 	<?php endif; ?>
 
+	<?php if ($model->type == Notice::TYPE_QUESTION): ?>
+		<p>
+			Поступил вопрос от <b><?php echo $data['name'] ?? 'Неизвестного'; ?></b> <a href="mailto:<?php echo $data['email'] ?? null; ?>"><?php echo $data['email'] ?? null; ?></a>:<br/>
+			<?php echo $data['text'] ?? ''; ?>
+		</p>
+	<?php endif; ?>
+
 </div>

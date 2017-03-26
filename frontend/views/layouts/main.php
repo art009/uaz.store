@@ -13,6 +13,7 @@ use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
 use frontend\widgets\NavMenu;
 use frontend\widgets\CallbackWidget;
+use frontend\widgets\QuestionWidget;
 
 AppAsset::register($this);
 
@@ -65,12 +66,22 @@ $actionId = Yii::$app->controller->action->id;
                 'linkOptions' => [
                     'class' => 'cart-link',
                     'data-count' => Yii::$app->cart->getQuantity() ? : null,
+	                'data-tooltip' => 'tooltip',
+	                'data-trigger' => 'hover',
+	                'data-placement' => 'bottom',
+	                'title' => 'Корзина',
                 ],
                 'active' => ($controllerId == 'cart'),
             ],
 			[
                 'label' => Html::icon('user'),
                 'url' => ['/user'],
+				'linkOptions' => [
+					'data-tooltip' => 'tooltip',
+					'data-trigger' => 'hover',
+					'data-placement' => 'bottom',
+					'title' => 'Личный кабинет',
+				],
 				'active' => ($controllerId == 'user'),
             ],
 		],
@@ -81,7 +92,7 @@ $actionId = Yii::$app->controller->action->id;
             <span>+7 (800) </span>00-00-00
         </div>
         <div class="nav-email">
-            <a href="#">support@uaz.store</a>
+            <a href="mailto:support@uaz.store">support@uaz.store</a>
         </div>
     </div>
     <?php NavBar::end();?>
@@ -113,10 +124,12 @@ $actionId = Yii::$app->controller->action->id;
                 <span class="icon-link-outer">
                     <?php echo Html::a(Html::icon('envelope'), '#', [
                         'class' => 'link-icon',
+	                    'data-toggle' => 'modal',
                         'data-tooltip' => 'tooltip',
 	                    'data-trigger' => 'hover',
                         'data-placement' => 'top',
                         'title' => 'Задать вопрос',
+	                    'data-target' => '#question-form-modal',
                     ]); ?>
                 </span>
             </p>
@@ -145,6 +158,7 @@ $actionId = Yii::$app->controller->action->id;
     </div>
 </footer>
 <?php echo CallbackWidget::widget(); ?>
+<?php echo QuestionWidget::widget(); ?>
 <script type="application/ld+json">
 {
   "@context" : "http://schema.org",

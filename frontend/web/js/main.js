@@ -244,6 +244,7 @@ $(document).ready(function($){
 			},
 			error: function (error) {
 				showAlert('danger', 'Ошибка отправки формы: ' + error.responseText);
+				$(form).find(':input').prop('disabled', false);
 			}
 		});
 

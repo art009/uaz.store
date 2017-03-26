@@ -55,6 +55,7 @@ a.link-icon:focus { outline: none; }
 
 .tooltip .tooltip-inner { border: 1px solid #b78e29; color: #ecb52d; background-color: #424242; border-radius: 0; line-height: 19px; }
 .tooltip.top .tooltip-arrow { border-top-color: #b78e29; }
+.tooltip.bottom .tooltip-arrow { border-bottom-color: #b78e29; }
 
 .modal-header { text-transform: uppercase; }
 .modal-header .close { opacity: 0.7; color: #ffffff; outline: none; }
@@ -155,6 +156,7 @@ form .form-group:last-of-type { margin-bottom: 15px; }
 form .site-btn { width: 100%; }
 form .form-control { border: 1px solid #5a5a5a; border-radius: 0; height: 32px; color: #000; }
 form .form-control:focus { border-color: #ecb52d; box-shadow: none; }
+form textarea.form-control { height: auto; resize: none; }
 form .help-block { margin: 0; font-size: 0.9em; }
 form .form-header { margin-bottom: 20px; min-height:36px; line-height: 36px; }
 form .form-header > div { border: 1px solid transparent; }
