@@ -38,7 +38,7 @@ body::after { content: 'mobile'; display: none; }
 .wrap > nav > .container { background-color: rgba(0,0,0,0.65); min-height: 70px; border-top: 1px solid rgba(0,0,0,0.2);
     border-bottom: 1px solid rgba(0,0,0,0.2); }
 
-.wrap > .container { padding: 85px 15px 20px; min-height: 100vh; background: url("/img/main1.jpg") no-repeat center center; background-size: cover; }
+.wrap > .container { padding: 85px 15px 126px; min-height: 100vh; background: url("/img/main1.jpg") no-repeat center center; background-size: cover; }
 
 h1 { font-size: 24px; text-transform: uppercase; }
 h2 { font-size: 22px; text-transform: uppercase; }
@@ -198,6 +198,12 @@ input[type='text']:-moz-placeholder { color: #999999; }
 .alert .close { position: absolute; right: 0; top: 0; font-size: 30px; line-height: 52px; padding: 0 15px; outline: none; }
 .alert .close:hover, .alert .close:focus { opacity: 0.8; }
 
+table { width: 100%; border-collapse: collapse; background-color: #424242; border: 1px solid #5b5b5b; }
+table thead th, table tbody td { padding: 5px; text-align: center; border: 1px solid #5b5b5b; }
+table thead th { color: #ecb52d; white-space: nowrap; }
+table tbody td { padding: 5px 8px; }
+table tbody tr:nth-child(odd) { background-color: #333333; }
+
 /* Main page */
 main.site-index { margin: -85px -15px -20px; text-align: center; }
 main.site-index section { width: 100%; min-height: 100vh; background: url("/img/main1.jpg") no-repeat center center;
@@ -268,6 +274,18 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 
 /* User END */
 
+/* Order cart */
+.cart-index table tbody td.title { text-align: left; }
+.cart-index table tbody td.price { color: #ecb52d; }
+.cart-index table tbody td.total { color: #ecb52d; }
+.cart-index table tbody td.image span { color: #b3b3b3; }
+
+.cart-index .summary { margin-top: 20px; line-height: 40px; }
+.cart-index .summary .site-btn { border-radius: 0; padding: 5px 35px; }
+.cart-index .summary span { margin-right: 45px; }
+.cart-index .summary b { font-size: 21px; }
+/* Order cart END */
+
 @media (max-width: 767px ) {
 
 	body { font-size: 16px; }
@@ -293,6 +311,11 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 	main.site-index section p { font-size: 16px; }
 
 	.main-about { margin-bottom: 135px; }
+
+	.cart-index table tbody td:nth-child(1),
+	.cart-index table thead th:nth-child(1),
+	.cart-index table tbody td:nth-child(2),
+	.cart-index table thead th:nth-child(2) { display: none; }
 }
 
 @media(min-width:768px) {

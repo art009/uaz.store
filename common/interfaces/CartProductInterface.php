@@ -30,6 +30,34 @@ interface CartProductInterface
 	public function getPrice();
 
 	/**
+	 * Возвращает название товара
+	 *
+	 * @return integer
+	 */
+	public function getTitle();
+
+	/**
+	 * Возвращает картинку товара
+	 *
+	 * @return integer
+	 */
+	public function getImage();
+
+	/**
+	 * Возвращает артикул товара
+	 *
+	 * @return integer
+	 */
+	public function getCode();
+
+	/**
+	 * Возвращает стоимость позиции
+	 *
+	 * @return integer
+	 */
+	public function getTotal();
+
+	/**
 	 * Обновление количества товаров
 	 *
 	 * @param integer $quantity

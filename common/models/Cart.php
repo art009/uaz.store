@@ -93,7 +93,7 @@ class Cart extends \yii\db\ActiveRecord implements CartProductInterface
 	 */
 	public function getQuantity()
 	{
-		return $this->quantity;
+		return (int)$this->quantity;
 	}
 
 	/**
@@ -116,5 +116,37 @@ class Cart extends \yii\db\ActiveRecord implements CartProductInterface
 		$this->quantity = (int)$quantity;
 
 		return (int)$this->update();
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getTitle()
+	{
+		return $this->product ? $this->product->title : null;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getImage()
+	{
+		return $this->product ? $this->product->image : null;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getCode()
+	{
+		return $this->product ? $this->product->id : null;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getTotal()
+	{
+		return round($this->getPrice() * $this->getQuantity(), 2);
 	}
 }
