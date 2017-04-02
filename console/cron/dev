@@ -1,5 +1,4 @@
-# Dev cron commands
+# DEV cron commands
 # m h  dom mon dow   command
 
 #0 5 * * 1 php yii empty  2>&1
-#0 5 * * 1 php yii empty  2>&1 >> $PATH_TO_CRON_LOG/google_bq_rabbit_common.log

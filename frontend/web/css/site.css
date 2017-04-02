@@ -225,12 +225,12 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .blocks-list { width: 90%; margin: 0 auto; padding-top: 20px; }
 .blocks-list > div { padding: 0 30px; }
 .blocks-list > div a { display: block; max-width: 290px; height: 290px; border: 3px solid #e8e8e8; margin: 0 auto 25px;
-	background: url("/img/block2.jpg") no-repeat center center; background-size: cover; font-size: 18px;
+	background: url("/img/block2.png") no-repeat center center; background-size: cover; font-size: 18px;
 	color: #fff; font-weight: bold; text-decoration: none;
 }
 .blocks-list > div a:hover { border-color: #d8a937; color: #d8a937; }
-.blocks-list > div:first-child a { background-image: url("/img/block1.jpg"); }
-.blocks-list > div:last-child a { background-image: url("/img/block3.jpg"); }
+.blocks-list > div:first-child a { background-image: url("/img/block1.png"); }
+.blocks-list > div:last-child a { background-image: url("/img/block3.png"); }
 .blocks-list > div a .icon { height: 50%; }
 
 

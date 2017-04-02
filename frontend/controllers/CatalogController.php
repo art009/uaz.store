@@ -2,6 +2,8 @@
 
 namespace frontend\controllers;
 
+use Yii;
+use common\components\PriceList;
 use yii\web\Controller;
 
 /**
@@ -47,11 +49,15 @@ class CatalogController extends Controller
 
 	/**
 	 * Генерация и выдача прайс-листа
-	 *
-	 * @return string
 	 */
 	public function actionPriceList()
 	{
-		return $this->redirect('/');
+		if (PriceList::check()) {
+			return Yii::$app->response->sendFile(PriceList::filename(), 'uaz-store-price-list.xls');
+		} else {
+			Yii::$app->session->addFlash('warning', 'В данный момент прайс-лист недоступен! Попробуйте позже.');
+
+			return $this->redirect(Yii::$app->request->referrer);
+		}
 	}
 }
