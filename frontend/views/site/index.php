@@ -22,19 +22,19 @@ $this->registerMetaTag([
         <div class="blocks-list">
             <div class="col-md-4">
                 <a href="/manual">
-                    <div class="icon"></div>
+                    <div class="icon"><div class="image"></div></div>
                     Поиск<br/>по справочнику
                 </a>
             </div>
             <div class="col-md-4">
                 <a href="/catalog">
-                    <div class="icon"></div>
+                    <div class="icon"><div class="image"></div></div>
                     Поиск<br/>по группам
                 </a>
             </div>
             <div class="col-md-4">
                 <a href="#">
-                    <div class="icon"></div>
+                    <div class="icon"><div class="image"></div></div>
                     Быстрый<br/>заказ
                 </a>
             </div>

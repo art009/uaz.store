@@ -195,6 +195,11 @@ $(document).ready(function($){
 	 * Bootstrap tooltips
 	 */
 	$('[data-tooltip="tooltip"]').tooltip();
+	$('[data-tooltip="tooltip-image"]').tooltip({
+		animated: 'fade',
+		placement: 'bottom',
+		html: true
+	});
 
 	initAnimatedSections();
 

@@ -4,6 +4,7 @@
 /* @var $cart \frontend\components\Cart */
 
 use yii\bootstrap\Html;
+use common\models\CatalogProduct;
 
 $this->title = 'Корзина';
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,7 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
 		        <?php foreach($items as $item): ?>
 		        <tr>
 			        <td><?php echo $item->getCode(); ?></td>
-			        <td class="image"><?php echo $item->getImage() ?: Html::icon('camera'); ?></td>
+			        <td class="image">
+				        <?php
+				            if ($item->getImage()) {
+					            echo Html::a(Html::icon('camera'), null, [
+						            'data-tooltip' => 'tooltip-image',
+						            'title' => Html::img($item->getImage()),
+					            ]);
+				            } else {
+					            echo Html::icon('camera');
+				            }
+				        ?>
+			        </td>
 			        <td class="title"><?php echo $item->getTitle(); ?></td>
 			        <td class="price"><?php echo $item->getPrice(); ?></td>
 			        <td><?php echo $item->getQuantity(); ?></td>

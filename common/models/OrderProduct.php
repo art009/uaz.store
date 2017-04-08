@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\AppHelper;
 use common\interfaces\CartProductInterface;
 use Yii;
 
@@ -173,7 +174,11 @@ class OrderProduct extends \yii\db\ActiveRecord implements CartProductInterface
 	 */
 	public function getImage()
 	{
-		return $this->product ? $this->product->image : null;
+		if ($this->product && $this->product->image) {
+			return AppHelper::uploadsPath() . '/' . CatalogProduct::FOLDER_MEDIUM . '/' . $this->product->image;
+		} else {
+			return null;
+		}
 	}
 
 	/**
