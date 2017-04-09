@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
             'meta_keywords:ntext',
             'meta_description:ntext',
-            'description:html',
+            'year',
 			[
 				'attribute' => 'hide',
 				'value' => AppHelper::$yesNoList[$model->hide],

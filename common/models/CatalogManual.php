@@ -14,7 +14,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $image
  * @property string $meta_keywords
  * @property string $meta_description
- * @property string $description
+ * @property integer $year
  * @property integer $hide
  * @property string $created_at
  * @property string $updated_at
@@ -26,8 +26,8 @@ class CatalogManual extends \yii\db\ActiveRecord
 	const FOLDER = 'catalog-manual';
 	const FOLDER_MEDIUM = self::FOLDER . '/m';
 
-	const MEDIUM_IMAGE_WIDTH = 100;
-	const MEDIUM_IMAGE_HEIGHT = 100;
+	const MEDIUM_IMAGE_WIDTH = 186;
+	const MEDIUM_IMAGE_HEIGHT = 124;
 
     /**
      * @inheritdoc
@@ -44,8 +44,8 @@ class CatalogManual extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'link'], 'required'],
-            [['meta_keywords', 'meta_description', 'description'], 'string'],
-            [['hide'], 'integer'],
+            [['meta_keywords', 'meta_description'], 'string'],
+            [['hide', 'year'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['title', 'link', 'image'], 'string', 'max' => 255],
             [['link'], 'unique'],
@@ -64,7 +64,7 @@ class CatalogManual extends \yii\db\ActiveRecord
             'image' => 'Картинка',
             'meta_keywords' => 'Текст метатега keywords',
             'meta_description' => 'Текст метатега description',
-            'description' => 'Текст для справочника',
+            'year' => 'Год выпуска',
             'hide' => 'Скрывать?',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',

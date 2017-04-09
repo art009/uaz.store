@@ -13,7 +13,7 @@ class m170126_175656_catalog_manual extends Migration
 			'image' => $this->string()->null()->comment('Картинка'),
 			'meta_keywords' => $this->text()->null()->comment('Текст метатега keywords'),
 			'meta_description' => $this->text()->null()->comment('Текст метатега description'),
-			'description' => $this->text()->null()->comment('Текст для справочника'),
+			'year' => $this->smallInteger()->null()->comment('Год выпуска'),
 			'hide' => $this->boolean()->notNull()->defaultValue(0)->comment('Скрывать?'),
 			'created_at' => $this->timestamp()->defaultValue('0000-00-00 00:00:00')->notNull()->comment('Время создания'),
 			'updated_at' => $this->timestamp()->defaultValue('0000-00-00 00:00:00')->notNull()->comment('Время обновления'),

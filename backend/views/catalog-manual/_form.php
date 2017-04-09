@@ -44,7 +44,7 @@ JS
 
     <?= $form->field($model, 'meta_description')->textarea(['rows' => 6]) ?>
 
-	<?= $form->field($model, 'description')->widget(TinyMce::className());?>
+	<?= $form->field($model, 'year')->input('number');?>
 
     <?= $form->field($model, 'hide')->checkbox() ?>
 

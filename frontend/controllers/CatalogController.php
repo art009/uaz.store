@@ -38,16 +38,6 @@ class CatalogController extends Controller
 	}
 
 	/**
-	 * Страница справочников
-	 *
-	 * @return string
-	 */
-	public function actionManual()
-	{
-		return $this->render('manual');
-	}
-
-	/**
 	 * Генерация и выдача прайс-листа
 	 */
 	public function actionPriceList()
