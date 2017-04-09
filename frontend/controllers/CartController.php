@@ -116,7 +116,7 @@ class CartController extends Controller
 
 		if ($cart->inc((int)$productId)) {
 			$result['type'] = 'success';
-			$result['message'] = 'Успешное изменение количества в корзину!';
+			$result['message'] = 'Успешное изменение количества в корзине!';
 			$cart->reload();
 			$result['count'] = $cart->getQuantity();
 			$result['total'] = number_format($cart->getSum(), 2, '.', ' ');
@@ -148,7 +148,7 @@ class CartController extends Controller
 
 		if ($cart->dec((int)$productId)) {
 			$result['type'] = 'success';
-			$result['message'] = 'Успешное изменение количества в корзину!';
+			$result['message'] = 'Успешное изменение количества в корзине!';
 			$cart->reload();
 			$result['count'] = $cart->getQuantity();
 			$result['total'] = number_format($cart->getSum(), 2, '.', ' ');
@@ -156,6 +156,38 @@ class CartController extends Controller
 			$result['sum'] = $cart->getSum($productId);
 		} else {
 			$result['message'] = 'Неудачная попытка изменения количества товара в корзине';
+		}
+
+		return $this->cartResponse($result);
+	}
+
+	/**
+	 * Удаление товара
+	 *
+	 * @param int $productId
+	 *
+	 * @return \yii\web\Response
+	 */
+	public function actionDel($productId)
+	{
+		$cart = Yii::$app->cart;
+
+		$result = [
+			'type' => 'danger',
+			'message' => 'Неизвестная ошибка',
+			'count' => $cart->getQuantity(),
+		];
+
+		if ($cart->remove((int)$productId)) {
+			$result['type'] = 'success';
+			$result['message'] = 'Успешное удаление товара в корзине!';
+			$cart->reload();
+			$result['count'] = $cart->getQuantity();
+			$result['total'] = number_format($cart->getSum(), 2, '.', ' ');
+			$result['quantity'] = $cart->getQuantity($productId);
+			$result['sum'] = $cart->getSum($productId);
+		} else {
+			$result['message'] = 'Неудачная попытка удаления товара из корзины';
 		}
 
 		return $this->cartResponse($result);

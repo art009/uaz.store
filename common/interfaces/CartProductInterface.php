@@ -65,4 +65,11 @@ interface CartProductInterface
 	 * @return boolean
 	 */
 	public function updateQuantity($quantity);
+
+	/**
+	 * Удаление товара
+	 *
+	 * @return boolean
+	 */
+	public function remove();
 }

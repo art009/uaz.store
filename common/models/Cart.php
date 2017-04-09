@@ -154,4 +154,12 @@ class Cart extends \yii\db\ActiveRecord implements CartProductInterface
 	{
 		return round($this->getPrice() * $this->getQuantity(), 2);
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function remove()
+	{
+		return $this->delete();
+	}
 }

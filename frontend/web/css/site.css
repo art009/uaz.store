@@ -45,7 +45,7 @@ h2 { font-size: 22px; text-transform: uppercase; }
 h3 { font-size: 20px; text-transform: uppercase; }
 div.separator { width: 45px; height: 2px; background-color: #c6c6c6; margin: 15px auto; border-bottom: 1px solid #a9a9a9; }
 a { color: #ecb52d; }
-a:hover { color: #ecb52d; }
+a:hover, a:focus { color: #ecb52d; }
 
 a.link-icon { display: inline-block; width: 38px; line-height: 38px; padding: 0; border: 1px solid; text-align: center;
 	margin-right: 8px; color: #979797; font-size: 15px; }

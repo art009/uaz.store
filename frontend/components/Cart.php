@@ -187,4 +187,23 @@ class Cart extends Component
 
 		return $this;
 	}
+
+	/**
+	 * Удаление товара из корзины
+	 *
+	 * @param $productId
+	 *
+	 * @return bool
+	 */
+	public function remove($productId)
+	{
+		$result = false;
+		$cartProduct = $this->getCart()->getCartProduct($productId);
+		if ($cartProduct && $cartProduct->remove()) {
+			$result = true;
+		}
+
+		return $result;
+	}
+
 }

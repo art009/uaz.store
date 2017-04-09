@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	    </table>
 	    <div class="summary">
 		    <div class="pull-left">
-			    <a href="/cart/clear">Очистить корзину</a>
+			    <a href="/cart/clear" data-confirm="Вы действительно хотите очистить корзину?">Очистить корзину</a>
 		    </div>
 		    <div class="pull-right">
 			    <span class="total">Итого: <b><?php echo number_format($cart->sum, 2, '.', ' '); ?></b> руб</span>
