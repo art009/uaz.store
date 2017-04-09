@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		    </thead>
 		    <tbody>
 		        <?php foreach($items as $item): ?>
-		        <tr>
+		        <tr data-id="<?php echo $item->getProductId(); ?>">
 			        <td><?php echo $item->getCode(); ?></td>
 			        <td class="image">
 				        <?php
@@ -44,7 +44,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			        </td>
 			        <td class="title"><?php echo $item->getTitle(); ?></td>
 			        <td class="price"><?php echo $item->getPrice(); ?></td>
-			        <td><?php echo $item->getQuantity(); ?></td>
+			        <td class="quantity">
+				        <?php echo Html::icon('minus', ['class' => 'dec-cart-product', 'data-id' => $item->getProductId()]); ?><div>
+					        <?php echo $item->getQuantity(); ?>
+				        </div><?php echo Html::icon('plus', ['class' => 'inc-cart-product', 'data-id' => $item->getProductId()]); ?>
+			        </td>
 			        <td class="total"><?php echo $item->getTotal(); ?></td>
 		        </tr>
 		        <?php endforeach; ?>
@@ -55,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			    <a href="/cart/clear">Очистить корзину</a>
 		    </div>
 		    <div class="pull-right">
-			    <span>Итого: <b><?php echo number_format($cart->sum, 2, '.', ' '); ?></b> руб</span>
+			    <span class="total">Итого: <b><?php echo number_format($cart->sum, 2, '.', ' '); ?></b> руб</span>
 			    <a href="/order/create" class="btn site-btn">Оформить заказ</a>
 		    </div>
 	    </div>

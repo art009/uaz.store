@@ -303,6 +303,10 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .cart-index table tbody td.image a { display: block; }
 .cart-index table tbody td.image a span { color: #ecb52d; }
 .cart-index table tbody td.image span { color: #b3b3b3; }
+.cart-index table tbody td.quantity { white-space: nowrap; padding: 5px; }
+.cart-index table tbody td.quantity > div {  display: inline-block; min-width: 24px; }
+.cart-index table tbody td.quantity span { font-size: 12px;  padding: 3px; background-color: #fff; color: #333; cursor: pointer; }
+.cart-index table tbody td.quantity .glyphicon-plus:before { position: relative; left: 1px; }
 
 .cart-index .summary { margin-top: 20px; line-height: 40px; }
 .cart-index .summary .site-btn { border-radius: 0; padding: 5px 35px; }

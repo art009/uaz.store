@@ -180,13 +180,19 @@ abstract class AbstractCart
 	/**
 	 * Возвращает количество товаров в корзине
 	 *
+	 * @param int|null $productId
+	 *
 	 * @return int
 	 */
-	public function getQuantity()
+	public function getQuantity($productId = null)
 	{
 		$result = 0;
-		foreach ($this->getProducts() as $product) {
-			$result += $product->getQuantity();
+		if ($productId && $cartProduct = $this->getCartProduct($productId)) {
+			$result = $cartProduct->getQuantity();
+		} else {
+			foreach ($this->getProducts() as $product) {
+				$result += $product->getQuantity();
+			}
 		}
 
 		return $result;
@@ -195,13 +201,19 @@ abstract class AbstractCart
 	/**
 	 * Возвращает стоимость товаров в корзине
 	 *
+	 * @param int|null $productId
+	 *
 	 * @return int
 	 */
-	public function getSum()
+	public function getSum($productId = null)
 	{
 		$result = 0;
-		foreach ($this->getProducts() as $product) {
-			$result += ($product->getPrice() * $product->getQuantity());
+		if ($productId && $cartProduct = $this->getCartProduct($productId)) {
+			$result = round($cartProduct->getPrice() * $cartProduct->getQuantity(), 2);
+		} else {
+			foreach ($this->getProducts() as $product) {
+				$result += round($product->getPrice() * $product->getQuantity(), 2);
+			}
 		}
 
 		return $result;

@@ -115,20 +115,76 @@ class Cart extends Component
 	/**
 	 * Возвращает количество товаров в корзине
 	 *
+	 * @param int|null $productId
+	 *
 	 * @return int
 	 */
-	public function getQuantity()
+	public function getQuantity($productId = null)
 	{
-		return $this->getCart()->getQuantity();
+		return $this->getCart()->getQuantity($productId);
 	}
 
 	/**
 	 * Возвращает стоимость товаров в корзине
 	 *
+	 * @param int|null $productId
+	 *
 	 * @return int
 	 */
-	public function getSum()
+	public function getSum($productId = null)
 	{
-		return $this->getCart()->getSum();
+		return $this->getCart()->getSum($productId);
+	}
+
+	/**
+	 * Добавление единицы товара в корзине
+	 *
+	 * @param $productId
+	 *
+	 * @return bool
+	 */
+	public function inc($productId)
+	{
+		$result = 0;
+		$cartProduct = $this->getCart()->getCartProduct($productId);
+		if ($cartProduct && $cartProduct->getQuantity() < 99) {
+			$quantity = $cartProduct->getQuantity() + 1;
+			if ($cartProduct->updateQuantity($quantity)) {
+				$result = $quantity;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Убавление единицы товара в корзине
+	 *
+	 * @param $productId
+	 *
+	 * @return bool
+	 */
+	public function dec($productId)
+	{
+		$result = 0;
+		$cartProduct = $this->getCart()->getCartProduct($productId);
+		if ($cartProduct && $cartProduct->getQuantity() > 1) {
+			$quantity = $cartProduct->getQuantity() - 1;
+			if ($cartProduct->updateQuantity($quantity)) {
+				$result = $quantity;
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Перезагрузка корзины
+	 */
+	public function reload()
+	{
+		$this->getCart()->reload();
+
+		return $this;
 	}
 }
