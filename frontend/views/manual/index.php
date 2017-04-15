@@ -4,13 +4,10 @@
 /* @var $models \common\models\CatalogManual[] */
 
 use yii\helpers\Html;
-use common\components\AppHelper;
-use common\models\CatalogManual;
 
 $this->title = 'Справочники';
 $this->params['breadcrumbs'][] = $this->title;
 
-$imgPath = AppHelper::uploadsPath() . '/' . CatalogManual::FOLDER_MEDIUM . '/';
 ?>
 <div class="manual-index">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -18,9 +15,13 @@ $imgPath = AppHelper::uploadsPath() . '/' . CatalogManual::FOLDER_MEDIUM . '/';
 		<div class="manual-list">
 			<?php foreach ($models as $model): ?>
 				<div class="manual-item">
-					<a href="#" title="<?php echo $model->title; ?>">
+					<a href="/manual/<?php echo $model->link;?>" title="<?php echo $model->title; ?>">
 						<div class="title"><?php echo $model->title; ?></div>
-						<div class="image" style="background-image: url('<?php echo $imgPath . $model->image;?>')"></div>
+						<?php $image = $model->getImagePath(); ?>
+						<?php echo Html::tag('div', '', [
+							'class' => 'image',
+							'style' => $image ? "background-image:url('" . $image . "')" : null,
+						]); ?>
 						<div class="year"><?php echo $model->year; ?></div>
 					</a>
 				</div>

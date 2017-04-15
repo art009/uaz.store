@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\CatalogManual;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class ManualController
@@ -29,11 +30,18 @@ class ManualController extends Controller
 	/**
 	 * Страница справочника
 	 *
+	 * @param $id
+	 *
 	 * @return string
+	 *
+	 * @throws NotFoundHttpException
 	 */
-	public function actionView()
+	public function actionView($id)
 	{
-		$model = CatalogManual::find()->all();
+		$model = CatalogManual::findOne($id);
+		if (!$model) {
+			throw new NotFoundHttpException('Каталог не найден.');
+		}
 
 		return $this->render('view', [
 			'model' => $model,

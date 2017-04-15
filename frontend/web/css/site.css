@@ -315,14 +315,15 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 /* Order cart END */
 
 /* Manual */
+.manual-index h1 { text-align: center; }
 .manual-list { text-align: center; }
 .manual-item { display: inline-block; vertical-align: top; width: 190px; height: 160px; border: 2px solid #fff;
-	margin: 0 9px 10px; position: relative;
+	margin: 0 5px 10px 5px; position: relative;
 }
 .manual-item > a { display: block; color: #ecb52d; text-decoration: none; font-weight: bold; }
-.manual-item .title { height: 32px; background-color: #424242; line-height: 32px;     text-overflow: ellipsis;
-	white-space: nowrap; overflow: hidden; padding: 0 5px; }
-.manual-item .image { height: 124px; background: no-repeat center center; background-size: cover; }
+.manual-item .title { height: 32px; background-color: #424242; line-height: 32px; text-overflow: ellipsis;
+	white-space: nowrap; overflow: hidden; padding: 0 5px; text-align: center; }
+.manual-item .image { height: 124px; background: #ffffff url("/img/empty-s.png")  no-repeat center center; }
 .manual-item .year { position: absolute; right: 10px; bottom: 5px; font-size: 12px; }
 .manual-item:hover { border-color: #ecb52d; }
 .manual-item:hover .title { color: #000; background-color: #ecb52d; }
@@ -384,7 +385,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
     body::after { content: 'desktop';}
 
     .wrap { width: 970px; padding: 0 0 68px; }
-	.wrap > .container { padding-top: 85px; }
+	.wrap > .container { padding-top: 85px; padding-bottom: 78px; }
 
     footer { position: fixed; }
 
@@ -403,6 +404,10 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 
 	.main-about { position: absolute; left: 10%; top: 50%; margin-top: -150px; }
 	/* Main page END */
+
+	.manual-index h1 { text-align: left; }
+	.manual-list { text-align: left; }
+	.manual-item { margin: 0 35px 10px 0; }
 }
 
 @media(min-width:1200px) {

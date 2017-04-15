@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\AppHelper;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -29,47 +30,47 @@ class CatalogManual extends \yii\db\ActiveRecord
 	const MEDIUM_IMAGE_WIDTH = 186;
 	const MEDIUM_IMAGE_HEIGHT = 124;
 
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'catalog_manual';
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public static function tableName()
+	{
+		return 'catalog_manual';
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['title', 'link'], 'required'],
-            [['meta_keywords', 'meta_description'], 'string'],
-            [['hide', 'year'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['title', 'link', 'image'], 'string', 'max' => 255],
-            [['link'], 'unique'],
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function rules()
+	{
+		return [
+			[['title', 'link'], 'required'],
+			[['meta_keywords', 'meta_description'], 'string'],
+			[['hide', 'year'], 'integer'],
+			[['created_at', 'updated_at'], 'safe'],
+			[['title', 'link', 'image'], 'string', 'max' => 255],
+			[['link'], 'unique'],
+		];
+	}
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'title' => 'Заголовок',
-            'link' => 'Ссылка',
-            'image' => 'Картинка',
-            'meta_keywords' => 'Текст метатега keywords',
-            'meta_description' => 'Текст метатега description',
-            'year' => 'Год выпуска',
-            'hide' => 'Скрывать?',
-            'created_at' => 'Время создания',
-            'updated_at' => 'Время обновления',
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function attributeLabels()
+	{
+		return [
+			'id' => 'ID',
+			'title' => 'Заголовок',
+			'link' => 'Ссылка',
+			'image' => 'Картинка',
+			'meta_keywords' => 'Текст метатега keywords',
+			'meta_description' => 'Текст метатега description',
+			'year' => 'Год выпуска',
+			'hide' => 'Скрывать?',
+			'created_at' => 'Время создания',
+			'updated_at' => 'Время обновления',
+		];
+	}
 
 	/**
 	 * @inheritdoc
@@ -84,11 +85,25 @@ class CatalogManual extends \yii\db\ActiveRecord
 		];
 	}
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategories()
-    {
-        return $this->hasMany(CatalogManualPage::className(), ['manual_id' => 'id']);
-    }
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCategories()
+	{
+		return $this->hasMany(CatalogManualPage::className(), ['manual_id' => 'id']);
+	}
+
+	/**
+	 * Возвращает путь до картинки
+	 *
+	 * @return null|string
+	 */
+	public function getImagePath()
+	{
+		if ($this->image && file_exists(AppHelper::uploadsFolder() . '/' . CatalogManual::FOLDER_MEDIUM . '/' . $this->image)) {
+			return AppHelper::uploadsPath() . '/' . CatalogManual::FOLDER_MEDIUM . '/' . $this->image;
+		} else {
+			return null;
+		}
+	}
 }
