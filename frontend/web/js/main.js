@@ -307,5 +307,17 @@ $(document).ready(function($){
 		});
 
 		return false;
-	})
+	});
+
+	$(document).on('click', '.category-tree .toggle-area', function () {
+		var li = $(this).closest('li');
+
+		if ($(li).hasClass('expanded')) {
+			$(li).removeClass('expanded');
+		} else {
+			$(li).addClass('expanded');
+		}
+
+		return false;
+	});
 });
