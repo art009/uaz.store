@@ -2,8 +2,8 @@
 
 namespace frontend\components;
 
-use common\models\CatalogCategory;
-use common\models\CatalogManual;
+use common\models\Manual;
+use common\models\ManualCategory;
 
 /**
  * Class ManualUrlRule
@@ -31,11 +31,15 @@ class ManualUrlRule extends \yii\base\Object implements \yii\web\UrlRuleInterfac
         if (count($pathParts) > 1 && $pathParts[0] == 'manual') {
             $manualLink = $pathParts[1];
             $categoryLink = count($pathParts) > 2 ? end($pathParts) : null;
-	        $manual = $manualLink ? CatalogManual::findOne(['link' => $manualLink]) : null;
+	        $manual = $manualLink ? Manual::findOne(['link' => $manualLink]) : null;
             if ($manual) {
-				$category = $categoryLink ? CatalogCategory::findOne(['link' => $categoryLink]) : null;
+				$category = $categoryLink ? ManualCategory::findOne(['manual_id' => $manual->id, 'link' => $categoryLink]) : null;
 				if ($category) {
-					return ['manual/view', ['id' => $manual->id, 'categoryId' => $category->id]];
+					if ($category->image) {
+						return ['manual/image', ['id' => $manual->id, 'categoryId' => $category->id]];
+					} else {
+						return ['manual/category', ['id' => $manual->id, 'categoryId' => $category->id]];
+					}
 				} else {
 					return ['manual/view', ['id' => $manual->id]];
 				}

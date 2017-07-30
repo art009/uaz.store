@@ -21,7 +21,7 @@ $this->title = 'Административная панель';
         <a class="btn btn-md btn-danger btn-block" href="/catalog">Каталог</a>
     </p>
     <p>
-        <a class="btn btn-md btn-warning btn-block" href="/catalog-manual">Справочники</a>
+        <a class="btn btn-md btn-warning btn-block" href="/manual">Справочники</a>
     </p>
     <p>
         <a class="btn btn-md btn-success btn-block" href="/user">Пользователи</a>

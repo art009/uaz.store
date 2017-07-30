@@ -24,6 +24,11 @@ class AppHelper
         self::YES => 'Да',
     ];
 
+	/**
+	 * @var array
+	 */
+    public static $transliterationLinks = [];
+
     /**
      * Путь к папке картинок
      *
@@ -96,21 +101,27 @@ class AppHelper
             'Ш' => 'Sh', 'ш' => 'sh',
             'Щ' => 'Sch', 'щ' => 'sch',
             'Ъ' => '', 'ъ' => '',
-            'Ы' => 'E', 'ы' => 'e',
+            'Ы' => 'Y', 'ы' => 'y',
             'Ь' => '', 'ь' => '',
             'Э' => 'E', 'э' => 'e',
             'Ю' => 'Ju', 'ю' => 'ju',
-            'Я' => 'Ja', 'я' => 'ja',
+            'Я' => 'Ya', 'я' => 'ya',
             'і' => 'i', 'є' => 'je',
             'ї' => 'ji', 'ґ' => 'g',
         );
 
         $str = strtr($str, $transliteration);
         $str = mb_strtolower($str, 'UTF-8');
-        $str = preg_replace('/[^0-9a-z\-\s]/', '', $str);
+        $str = preg_replace('/[^0-9a-z\-\s\/]/', '', $str);
         $str = preg_replace('|([-]+)|s', '-', $str);
-        $str = preg_replace('/\s/', '-', $str);
+        $str = preg_replace('/[\s\/]/', '-', $str);
         $str = trim($str, '-');
+        if (array_key_exists($str, self::$transliterationLinks)) {
+	        self::$transliterationLinks[$str]++;
+	        $str .= '-' . self::$transliterationLinks[$str];
+        } else {
+	        self::$transliterationLinks[$str] = 1;
+        }
 
         return $str;
     }

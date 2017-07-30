@@ -208,6 +208,210 @@ function initAnimatedSections() {
 
 })(jQuery);
 
+(function($) {
+	/**
+	 * Image view widget
+	 */
+	$.widget('main.imageViewer', {
+
+		scale: 1,
+		minScale: 0.25,
+		maxScale: 2,
+		offsetX: 0,
+		offsetY: 0,
+		maxOffsetX: 0,
+		maxOffsetY: -100,
+		container: null,
+		drag: false,
+		coordinates: {
+			x: null,
+			y: null
+		},
+
+		_create: function() {
+
+			self = this;
+			self.container = $(this.element).parent();
+
+			self.resolveOffset();
+			//self.initScale();
+
+			$(self.container).on('mousedown touchstart', function(event){
+				self.drag = true;
+				self.coordinates = self.getCoordinates(event);
+			}).on('mousemove touchmove', function(event){
+				event.preventDefault();
+				event.stopPropagation();
+				if (self.drag && self.coordinates.x !== null && self.coordinates.y !== null) {
+					var c = self.getCoordinates(event),
+						offsetX = self.offsetX + Math.round(c.x - self.coordinates.x),
+						offsetY = self.offsetY + Math.round(c.y - self.coordinates.y)
+					;
+					if (offsetX < self.maxOffsetX) {
+						offsetX = self.maxOffsetX;
+					}
+					if (offsetX > 0) {
+						offsetX = 0;
+					}
+					if (offsetY < self.maxOffsetY) {
+						offsetY = self.maxOffsetY;
+					}
+					if (offsetY > 0) {
+						offsetY = 0;
+					}
+					if (self.offsetX !== offsetX || self.offsetY !== offsetY) {
+						self.offsetX = offsetX;
+						self.offsetY = offsetY;
+						self.move();
+
+					}
+					self.coordinates = c;
+				}
+			}).on('mouseup touchend mouseleave', function(event){
+				self.drag = false;
+				self.coordinates = { x: null, y: null };
+			});
+
+			$(document).on('click touchend', '.tool-zoom-minus', function () {
+				self.zoomOut();
+				return false;
+			}).on('click touchend', '.tool-zoom-original', function () {
+				self.zoom(1);
+				return false;
+			}).on('click touchend', '.tool-zoom-plus', function () {
+				self.zoomIn();
+				return false;
+			}).on('keydown', function(event){
+				if (event.which === 37) {
+					self.left();
+					event.preventDefault();
+				} else if(event.which === 38) {
+					self.top();
+					event.preventDefault();
+				} else if(event.which === 39) {
+					self.right();
+					event.preventDefault();
+				} else if(event.which === 40) {
+					self.bottom();
+					event.preventDefault();
+				}
+			});
+		},
+
+		_destroy: function ()
+		{
+			$(document).off('click touchend', '.tool-zoom-minus');
+			$(document).off('click touchend', '.tool-zoom-original');
+			$(document).off('click touchend', '.tool-zoom-plus');
+		},
+
+		zoomIn: function () {
+			self.zoom((this.scale * 10 + 2) / 10);
+		},
+
+		zoomOut: function () {
+			self.zoom((this.scale * 10 - 2) / 10);
+		},
+
+		zoom: function (scale) {
+			if (scale >= self.minScale && scale <= self.maxScale) {
+				self.center();
+				self.scale = scale;
+				$('.tool-zoom-label b').html(scale * 100);
+				$(self.element).parent().css({
+					'-webkit-transform' : 'scale(' + scale + ')',
+					'-moz-transform'    : 'scale(' + scale + ')',
+					'-ms-transform'     : 'scale(' + scale + ')',
+					'-o-transform'      : 'scale(' + scale + ')',
+					'transform'         : 'scale(' + scale + ')'
+				});
+				self.resolveOffset();
+			}
+		},
+
+		resolveOffset: function () {
+			var contRect = $(self.container)[0].getBoundingClientRect();
+			self.maxOffsetX = -1 * (contRect.width - $(self.container).parent().outerWidth() + 10);
+			self.maxOffsetY = -1 * (contRect.height - $(self.container).parent().outerHeight() + 60);
+		},
+
+		initScale: function () {
+			var scale = $(self.container).parent().outerWidth() / $(self.container).outerWidth();
+			if (scale < 1) {
+				if (scale > 0.8) {
+					scale = 0.8;
+				} else if (scale > 0.6) {
+					scale = 0.6;
+				} else if (scale > 0.4) {
+					scale = 0.4;
+				} else {
+					scale = self.minScale;
+				}
+				self.zoom(scale);
+			}
+		},
+
+		left: function () {
+			if (self.offsetX > self.maxOffsetX) {
+				self.offsetX -= 10;
+				self.move();
+			}
+		},
+
+		right: function () {
+			self.offsetX += 10;
+			if (self.offsetX > 0) {
+				self.offsetX = 0;
+			}
+			self.move();
+		},
+
+		top: function () {
+			if (self.offsetY > self.maxOffsetY) {
+				self.offsetY -= 10;
+				self.move();
+			}
+		},
+
+		bottom: function () {
+			self.offsetY += 10;
+			if (self.offsetY > 0) {
+				self.offsetY = 0;
+			}
+			self.move();
+		},
+
+		center: function () {
+			self.offsetX = 0;
+			self.offsetY = 0;
+			self.move();
+		},
+
+		move: function() {
+			var cont = $(self.element).parent();
+			return $(cont).css({
+				'left': self.offsetX + 'px',
+				'top': self.offsetY + 'px'
+			});
+		},
+
+		getCoordinates: function (event) {
+			if (typeof event.originalEvent.touches !== 'undefined' && event.originalEvent.touches.length) {
+				return {
+					x: event.originalEvent.touches[0].pageX,
+					y: event.originalEvent.touches[0].pageY
+				}
+			} else {
+				return {
+					x: (event.pageX || event.clientX),
+					y: (event.pageY || event.clientY)
+				}
+			}
+		}
+
+	});
+})(jQuery);
+
 /**
  * Вывод сообщения
  *
@@ -320,4 +524,8 @@ $(document).ready(function($){
 
 		return false;
 	});
+});
+
+$(window).load(function() {
+	$('.manual-page-image img').imageViewer();
 });

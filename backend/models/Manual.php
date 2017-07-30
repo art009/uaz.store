@@ -11,13 +11,13 @@ use common\components\AppHelper;
 use common\components\ImageHandler;
 
 /**
- * Class CatalogManual
+ * Class Manual
  *
  * @property UploadedFile $imageFile
  *
  * @package backend\models
  */
-class CatalogManual extends \common\models\CatalogManual
+class Manual extends \common\models\Manual
 {
 	/**
 	 * @var UploadedFile
@@ -68,6 +68,31 @@ class CatalogManual extends \common\models\CatalogManual
 	}
 
 	/**
+	 * Сохранение картинки
+	 *
+	 * @param string $file
+	 * @param string $hashName
+	 */
+	public function saveImage($file, $hashName = null)
+	{
+		if (file_exists($file)) {
+			$uploadsFolder = AppHelper::uploadsFolder();
+
+			$this->deleteImages();
+			$this->image = $hashName ?: basename($file);
+
+			$imageHandler = new ImageHandler();
+			$imageHandler
+				->load($file)
+				->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
+				->save($uploadsFolder . '/' . self::FOLDER . '/' . $this->image)
+				->reload()
+				->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
+				->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $this->image);
+		}
+	}
+
+	/**
 	 * @param bool $insert
 	 *
 	 * @return bool
@@ -77,21 +102,10 @@ class CatalogManual extends \common\models\CatalogManual
 		$result = true;
 		if (parent::beforeSave($insert)) {
 			if ($this->imageFile) {
-				$name = md5(time()) . '.' . $this->imageFile->extension;
+				$name = md5(time() . $this->imageFile->baseName) . '.' . $this->imageFile->extension;
 				$uploadsFolder = AppHelper::uploadsFolder();
 				if ($this->imageFile->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
-					$this->deleteImages();
-					$this->image = $name;
-
-					/* @var $imageHandler ImageHandler */
-					$imageHandler = Yii::$app->ih;
-					$imageHandler
-						->load($uploadsFolder . '/' . self::FOLDER . '/' . $name)
-						->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
-						->save($uploadsFolder . '/' . self::FOLDER . '/' . $name)
-						->reload()
-						->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
-						->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $name);
+					$this->saveImage($uploadsFolder . '/' . self::FOLDER . '/' . $name);
 				} else {
 					$this->addError('imageFile', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
 					$result = false;
@@ -204,7 +218,7 @@ class CatalogManual extends \common\models\CatalogManual
 	public function getCategoryTree()
 	{
 		$nodes = self::categoryNodes();
-		$existedIds = $this->getCategories()->select('category_id')->column();
+		$existedIds = $this->getPages()->select('category_id')->column();
 		$this->processCategoryNodes($nodes, $existedIds);
 
 		return $nodes;

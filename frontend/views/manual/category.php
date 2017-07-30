@@ -2,22 +2,22 @@
 
 /* @var $this yii\web\View */
 /* @var $model \common\models\Manual */
+/* @var $category \common\models\ManualCategory */
 /* @var $categories \common\models\ManualCategory[] */
 
 use yii\helpers\Html;
 use frontend\widgets\ManualCategoryTreeWidget;
 
-$this->title = 'Справочник ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Справочники', 'url' => ['/manual']];
-$this->params['breadcrumbs'][] = $model->title;
+$this->title = 'Справочник';
+$this->params['breadcrumbs'] = $category->createBreadcrumbs();
 
 ?>
 <div class="manual-view">
-    <h1><?= Html::encode($model->title) ?></h1>
+    <h1><?= Html::encode($category->title) ?></h1>
 	<?php echo ManualCategoryTreeWidget::widget([
 		'baseLink' => '/manual/' . $model->link . '/',
 		'manualId' => $model->id,
-		'categoryId' => null,
+		'categoryId' => $category->id,
 		'toggleableParent' => true,
 	]); ?>
 	<div class="manual-view-content manual-list">

@@ -3,7 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\CatalogCategory;
-use common\models\CatalogManual;
+use common\models\Manual;
+use common\models\ManualCategory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -21,7 +22,7 @@ class ManualController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$models = CatalogManual::find()->all();
+		$models = Manual::find()->all();
 
 		return $this->render('index', [
 			'models' => $models,
@@ -32,21 +33,79 @@ class ManualController extends Controller
 	 * Страница справочника
 	 *
 	 * @param int $id
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	public function actionView($id)
+	{
+		$model = Manual::findOne((int)$id);
+		if (!$model) {
+			throw new NotFoundHttpException('Каталог не найден.');
+		}
+		$categories = ManualCategory::findAll(['manual_id' => $model->id, 'parent_id' => null]);
+
+		return $this->render('view', [
+			'model' => $model,
+			'categories' => $categories,
+		]);
+	}
+
+	/**
+	 * Страница категории справочника
+	 *
+	 * @param int $id
 	 * @param int|null $categoryId
 	 *
 	 * @return string
 	 *
 	 * @throws NotFoundHttpException
 	 */
-	public function actionView($id, $categoryId = null)
+	public function actionCategory($id, $categoryId = null)
 	{
-		$model = CatalogManual::findOne((int)$id);
+		$model = Manual::findOne((int)$id);
 		if (!$model) {
 			throw new NotFoundHttpException('Каталог не найден.');
 		}
-		$category = $categoryId ? CatalogCategory::findOne((int)$categoryId) : null;
+		$category = ManualCategory::findOne((int)$categoryId);
+		if (!$model) {
+			throw new NotFoundHttpException('Категория не найдена.');
+		}
+		$categories = $category->manualCategories;
 
-		return $this->render('view', [
+		return $this->render('category', [
+			'model' => $model,
+			'category' => $category,
+			'categories' => $categories,
+		]);
+	}
+
+	/**
+	 * Страница категории справочника с картинкой
+	 *
+	 * @param int $id
+	 * @param int|null $categoryId
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	public function actionImage($id, $categoryId = null)
+	{
+		$model = Manual::findOne((int)$id);
+		if (!$model) {
+			throw new NotFoundHttpException('Каталог не найден.');
+		}
+		$category = ManualCategory::findOne((int)$categoryId);
+		if (!$model) {
+			throw new NotFoundHttpException('Категория не найдена.');
+		}
+		if (!$model->image) {
+			throw new NotFoundHttpException('Категория без чертежа.');
+		}
+
+		return $this->render('image', [
 			'model' => $model,
 			'category' => $category,
 		]);

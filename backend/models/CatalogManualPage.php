@@ -9,7 +9,7 @@ use common\components\AppHelper;
 use common\components\ImageHandler;
 
 /**
- * Class CatalogManualPage
+ * Class ManualPage
  *
  * @property UploadedFile $imageFile
  *

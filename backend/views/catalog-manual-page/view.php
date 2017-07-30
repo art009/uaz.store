@@ -6,7 +6,7 @@ use common\components\AppHelper;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\CatalogManualPage */
-/* @var $manual backend\models\CatalogManual|null */
+/* @var $manual backend\models\Manual|null */
 /* @var $category backend\models\CatalogCategory|null */
 
 

@@ -6,7 +6,7 @@ use common\components\AppHelper;
 use common\widgets\TreeView;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\CatalogManual */
+/* @var $model backend\models\Manual */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Справочники', 'url' => ['index']];

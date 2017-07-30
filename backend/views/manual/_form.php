@@ -6,14 +6,14 @@ use common\widgets\TinyMce;
 use common\components\AppHelper;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\CatalogManual */
+/* @var $model common\models\Manual */
 /* @var $form yii\widgets\ActiveForm */
 
 if ($model->isNewRecord) {
 
 $this->registerJs(<<<JS
 
-    $('#catalogmanual-title').syncTranslit({destination: 'catalogmanual-link'});
+    $('#Manual-title').syncTranslit({destination: 'Manual-link'});
 
 JS
 	, yii\web\View::POS_READY);
@@ -40,11 +40,11 @@ JS
 		<?= $form->field($model, 'imageFile', ['template' => '{input}{error}'])->fileInput(['accept' => 'image/*']) ?>
     </div>
 
+	<?= $form->field($model, 'year')->input('number');?>
+
     <?= $form->field($model, 'meta_keywords')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'meta_description')->textarea(['rows' => 6]) ?>
-
-	<?= $form->field($model, 'year')->input('number');?>
 
     <?= $form->field($model, 'hide')->checkbox() ?>
 

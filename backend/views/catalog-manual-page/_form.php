@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 use common\widgets\TinyMce;
 use common\models\CatalogCategory;
 use common\widgets\ChosenSelect;
-use backend\models\CatalogManual;
+use backend\models\Manual;
 use common\components\AppHelper;
 
 /* @var $this yii\web\View */
@@ -17,7 +17,7 @@ use common\components\AppHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'manual_id')->dropDownList(CatalogManual::getListed(), [
+    <?= $form->field($model, 'manual_id')->dropDownList(Manual::getListed(), [
         'prompt' => 'Выберите справочник',
         'disabled' => true,
     ]) ?>

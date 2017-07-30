@@ -17,14 +17,6 @@ use yii\caching\TagDependency;
  */
 class CategoryTreeWidget extends Widget
 {
-	const VIEW_CATALOG = 0;
-	const VIEW_MANUAL = 1;
-
-	/**
-	 * @var int
-	 */
-	public $view = self::VIEW_CATALOG;
-
 	/**
 	 * @var string
 	 */
@@ -34,6 +26,11 @@ class CategoryTreeWidget extends Widget
 	 * @var
 	 */
 	public $categoryId = null;
+
+	/**
+	 * @var bool
+	 */
+	public $toggleableParent = false;
 
 	/**
 	 * @var TreeItem[]
@@ -113,6 +110,7 @@ class CategoryTreeWidget extends Widget
 		foreach ($items as $id => $item) {
 			if ($item->id == $child->parentId) {
 				$item->addChild($child);
+				$item->toggleable = $this->toggleableParent;
 				return $item->expanded;
 			} elseif ($item->items) {
 				$item->expanded |= $this->addChildItem($item->items, $child);

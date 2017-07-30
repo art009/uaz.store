@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\CatalogCategory;
-use backend\models\CatalogManual;
+use backend\models\Manual;
 use Yii;
 use backend\models\CatalogManualPage;
 use yii\data\ActiveDataProvider;
@@ -167,12 +167,12 @@ class CatalogManualPageController extends Controller
      * Finds the CatalogManualPage model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return CatalogManual the loaded model
+     * @return Manual the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findManualModel($id)
     {
-        if (($model = CatalogManual::findOne($id)) !== null) {
+        if (($model = Manual::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('Справочник не найден.');

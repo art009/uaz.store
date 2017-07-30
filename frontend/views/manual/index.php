@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $models \common\models\CatalogManual[] */
+/* @var $models \common\models\Manual[] */
 
 use yii\helpers\Html;
 

@@ -8,7 +8,7 @@ if ($item) {
 	echo Html::beginTag('li', [
 		'class' => ($item->active ? 'active ' : null) . ($item->expanded ? 'expanded' : null)
 	]);
-	echo $item->link ? Html::a($item->title, $item->link) : $item->title;
+	echo $item->link ? Html::a($item->title, $item->link, ['class' => $item->toggleable ? 'toggle-area' : '']) : $item->title;
 	if ($item->items) {
 		echo Html::tag('span', '', ['class' => 'toggle-area']);
 		echo Html::beginTag('ul');

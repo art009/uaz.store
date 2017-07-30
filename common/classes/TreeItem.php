@@ -15,6 +15,7 @@ class TreeItem
 	public $link;
 	public $active = false;
 	public $expanded = false;
+	public $toggleable = false;
 	public $items = [];
 
 	/**
