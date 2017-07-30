@@ -20,13 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
         2. В каждом столбце должен соответствующий атрибут<br/>
         <code><b>A</b> - Код синхронизации</code><br/>
         <code><b>B</b> - Название на сайте</code><br/>
-        <code><b>C</b> - Название в магазине</code><br/>
+	    <code><b>C</b> - Цена на сайте</code><br/>
+        <!--code><b>C</b> - Название в магазине</code><br/>
         <code><b>D</b> - Название у поставщика</code><br/>
         <code><b>E</b> - Артикул в магазине</code><br/>
         <code><b>F</b> - Артикул на сайте</code><br/>
         <code><b>G</b> - Цена на сайте</code><br/>
         <code><b>H</b> - Единица измерения</code><br/>
-        <code><b>I</b> - Производитель</code>
+        <code><b>I</b> - Производитель</code-->
     </div>
     <br/>
     <div class="catalog-product-import-form">

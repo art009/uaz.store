@@ -37,16 +37,19 @@ class ImportForm extends Model
      * @var array
      */
     static $columnMap = [
-        0 => 'external_id', //A
-        1 => 'title',       //B
-        2 => 'shop_title',
-        3 => 'provider_title',
-        4 => 'shop_code',
-        5 => 'provider_code',
-        6 => 'price',
-        7 => 'unit',
-        8 => 'manufacturer',
+        0 => 'external_id',     //A
+        1 => 'title',           //B
+	    2 => 'price',           //C
+	    3 => 'link',
+	    /*2 => 'shop_title',      //C
+        3 => 'provider_title',  //D
+        4 => 'shop_code',       //E
+        5 => 'provider_code',   //F
+        6 => 'price',           //G
+        7 => 'unit',            //H
+        8 => 'manufacturer',    //I
         9 => 'link',
+	    */
     ];
 
     /**
@@ -107,16 +110,8 @@ class ImportForm extends Model
                         $item[$attribute] = array_key_exists($key, $row) ? $row[$key] : null;
                     }
                     if ($item['external_id'] && $item['title']) {
-                        $item['unit'] = trim($item['unit'], '.');
+                        //$item['unit'] = trim($item['unit'], '.');
                         $item['link'] = AppHelper::transliteration($item['title']);
-                        $k = 1;
-                        $link = md5($item['link']);
-                        while (in_array($link, $links)) {
-                            $k++;
-                            $item['link'] .= '-' . $k;
-                            $link = md5($item['link']);
-                        }
-                        $links[] = $link;
                         $items[$item['external_id']] = $item;
                     }
                 }
