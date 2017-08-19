@@ -35,6 +35,7 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
+        ['label' => 'PMS', 'url' => ['/pms'],  'linkOptions' => ['class' => 'text-success']],
         ['label' => 'Главная страница', 'url' => Yii::$app->params['frontendUrl'], 'linkOptions' => ['target' => '_blank']],
     ];
     if (Yii::$app->user->isGuest) {

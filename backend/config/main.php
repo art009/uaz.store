@@ -16,7 +16,11 @@ return [
     'bootstrap' => ['log'],
     'language' => 'ru-RU',
     'sourceLanguage' => 'ru-RU',
-    'modules' => [],
+    'modules' => [
+	    'pms' => [
+		    'class' => 'app\modules\pms\Module',
+	    ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
