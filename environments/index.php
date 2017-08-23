@@ -54,7 +54,6 @@ return [
 			'frontend/web/uploads/catalog-manual-page/m',
 			'frontend/web/uploads/user',
 			'frontend/web/uploads/user/s',
-	        'backend/modules',
 		],
         'setExecutable' => [
             'yii',
@@ -86,7 +85,6 @@ return [
 			'frontend/web/uploads/catalog-manual-page/m',
 			'frontend/web/uploads/user',
 			'frontend/web/uploads/user/s',
-	        'backend/modules',
         ],
         'setExecutable' => [
             'yii',
