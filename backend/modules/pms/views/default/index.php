@@ -9,5 +9,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?php echo $this->title; ?></h1>
     <p>
         <a href="/pms/shop-item" class="btn btn-primary">Товары магазина</a>
+        <a href="/pms/provider" class="btn btn-primary">Поставщики</a>
     </p>
 </div>
