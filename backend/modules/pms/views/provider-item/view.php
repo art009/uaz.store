@@ -7,7 +7,10 @@ use yii\widgets\DetailView;
 /* @var $model app\modules\pms\models\ProviderItem */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Provider Items', 'url' => ['index']];
+
+$this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
+$this->params['breadcrumbs'][] = ['label' => 'Товары поставщика', 'url' => ["index?providerId=$model->provider_id"]];
+
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="provider-item-view">
@@ -15,11 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены?',
                 'method' => 'post',
             ],
         ]) ?>

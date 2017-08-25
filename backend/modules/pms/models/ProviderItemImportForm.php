@@ -62,6 +62,7 @@ class ProviderItemImportForm extends ImportForm
 		return parent::rules() + [
 			[['code', 'title', 'unit', 'vendor_code', 'price', 'rest', 'manufacturer', 'provider_id'], 'required'],
 			[['code', 'title', 'unit', 'vendor_code', 'price', 'rest', 'manufacturer'], 'string', 'max' => 255],
+			[['provider_id'],'integer']
 		];
 	}
 
@@ -159,6 +160,7 @@ class ProviderItemImportForm extends ImportForm
 					$part = array_splice($insertItems, 0, 100);
 				}
 			}
+
 			// Обновление товаров
 			if ($updateItems) {
 				foreach ($updateItems as $code => $price) {
@@ -166,6 +168,7 @@ class ProviderItemImportForm extends ImportForm
 						->update(ProviderItem::tableName(), ['price' => $price, 'updated_at' => $date], [
 							'code' => $code,
 							'ignored' => AppHelper::NO,
+							'provider_id' => $this->provider_id
 						])
 						->execute();
 
@@ -175,14 +178,14 @@ class ProviderItemImportForm extends ImportForm
 
 			// Подтверждение обновления товаров
 			if ($acceptItems) {
-				// TODO положить в кеш и использовать в подтверждающей таблице!
+				\Yii::$app->cache->set('accept' . $this->provider_id, json_encode($acceptItems));
 			}
 
 			// Скрытие товаров
 			if ($existed) {
 				$part = array_splice($existed, 0, 50);
 				while (!empty($part)) {
-					$deleted = ProviderItem::updateAll(['ignored' => AppHelper::YES], ['code' => $part]);
+					$deleted = ProviderItem::updateAll(['ignored' => AppHelper::YES], ['code' => $part, 'provider_id' => $this->provider_id]);
 
 					$this->addCounterValue(self::COUNTER_DELETE, $deleted);
 					$part = array_splice($existed, 0, 50);

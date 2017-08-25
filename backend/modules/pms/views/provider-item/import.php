@@ -5,10 +5,14 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model \backend\modules\pms\models\ShopImportForm */
+/* @var int $providerId */
+
+$providerId = (isset ($_GET['providerId'])? $_GET['providerId'] : null);
 
 $this->title = 'Импорт товаров';
 $this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
-$this->params['breadcrumbs'][] = ['label' => 'Товары поставщика', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Товары поставщика', 'url' => ["index?providerId=$providerId"]];
+
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="catalog-product-create">
@@ -21,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'file')->fileInput(['accept' => '.xls,.xlsx,.csv']) ?>
+		<?= $form->field($model, 'provider_id')->hiddenInput(['value' => $providerId])->label(false) ?>
 	    <?= $form->field($model, 'title')->textInput() ?>
 	    <?= $form->field($model, 'rest')->textInput() ?>
 	    <?= $form->field($model, 'unit')->textInput() ?>

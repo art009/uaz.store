@@ -5,10 +5,12 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\pms\models\ProviderItem */
 
-$this->title = 'Update Provider Item: ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Provider Items', 'url' => ['index']];
+$this->title = 'Редактирование товара поставщика: ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
+$this->params['breadcrumbs'][] = ['label' => 'Товары поставщика', 'url' => ["index?providerId=$model->provider_id"]];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Редактировать';
+
 ?>
 <div class="provider-item-update">
 

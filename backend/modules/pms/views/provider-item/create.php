@@ -6,8 +6,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\modules\pms\models\ProviderItem */
 
-$this->title = 'Create Provider Item';
-$this->params['breadcrumbs'][] = ['label' => 'Provider Items', 'url' => ['index']];
+$this->title = 'Добавление товара поставщика';
+$this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
+
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="provider-item-create">

@@ -7,6 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\modules\pms\models\Provider */
 
 $this->title = 'Добавление поставщика';
+
 $this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
 $this->params['breadcrumbs'][] = ['label' => 'Поставщики', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;

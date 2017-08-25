@@ -34,8 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			[
 				'class' => 'yii\grid\ActionColumn',
-				'template' => '{view}{update}'
+				'template' => '{view}  {update}  {link}',
 			],
-        ],
+			[
+				'label' => 'Ссылки к товарам поставщика',
+				'format' => 'raw',
+				'value' => function($model){
+					return Html::a(
+						'Перейти',
+						"/pms/provider-item?providerId=$model->id"
+					);
+				}
+			],
+		],
     ]); ?>
 </div>

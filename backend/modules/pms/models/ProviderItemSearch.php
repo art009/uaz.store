@@ -61,7 +61,7 @@ class ProviderItemSearch extends ProviderItem
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'provider_id' => $this->provider_id,
+            'provider_id' => (isset ($_GET['providerId'])? $_GET['providerId'] : $this->provider_id),
             'price' => $this->price,
             'rest' => $this->rest,
             'ignored' => $this->ignored,
