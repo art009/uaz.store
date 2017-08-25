@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 use yii\grid\GridView;
 use app\modules\pms\models\ShopItem;
 
@@ -36,7 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
 	            'class' => 'yii\grid\ActionColumn',
-	            'template' => '{view}{update}'
+	            'template' => '{view}{update}{bind}',
+	            'buttons' => [
+		            'bind' => function ($url) {
+			            return Html::a(Html::icon('transfer'), $url, ['title' => 'Связать']);
+		            },
+	            ],
             ],
         ],
     ]); ?>

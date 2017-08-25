@@ -1,12 +1,81 @@
-// Common function
+(function () {
+	function PopupWindow() {
 
-// ...
+		this.window = null;
+		this.name = "popup-window";
+		this.messageData = null;
+
+		var MAX_WIDTH = 980;
+		var MAX_HEIGHT = 600;
+
+		this.customWidth = null;
+		this.customHeight = null;
+
+		this.getWidth = function () {
+			var width = this.customWidth ? this.customWidth : window.innerWidth;
+			return width > MAX_WIDTH ? MAX_WIDTH : width;
+		};
+
+		this.getHeight = function () {
+			var height = this.customHeight ? this.customHeight : window.innerWidth * 0.8;
+			return height > MAX_HEIGHT ? MAX_HEIGHT : height;
+		};
+
+		this.getOptions = function () {
+			var width = this.getWidth(),
+				height = this.getHeight(),
+				centerWidth = (window.screen.width - width) / 2,
+				centerHeight = (window.screen.height - height) / 2;
+
+			return "width=" + width + ",height=" + height + ",left=" + centerWidth + ",top=" + centerHeight + ",resizable=yes,scrollbars=no,toolbar=no,menubar=no,location=no,directories=no,status=yes";
+		};
+
+		this.open = function (url) {
+			this.window = window.open('', this.name, this.getOptions());
+			if (this.window.document.location.href !== url) {
+				this.window = window.open(url, this.name, this.getOptions());
+			} else {
+				this.window.postMessage(this.messageData, url);
+				this.messageData = null;
+			}
+
+			this.window.focus();
+		};
+
+		this.message = function (url, data) {
+			if (this.window && !this.window.closed) {
+				this.window.postMessage(data, url);
+				this.window.focus();
+			} else {
+				this.messageData = data;
+				this.open(url);
+			}
+		};
+
+		this.receiveMessage = function(event) {
+			if (event.source.name === this.name && event.data === 'ready' && this.messageData) {
+				this.window.postMessage(this.messageData, event.source.location.href);
+				this.messageData = null;
+			}
+		}
+	}
+
+	window.popup = new PopupWindow();
+	window.addEventListener("message", function(event) {
+		window.popup.receiveMessage(event);
+	}, false);
+})();
+
+function showProviderPosition(providerId, key) {
+	var url = 'https://manage.uaz.dvmpnz.ru/pms/shop-item/list?providerId=' + providerId;
+	window.popup.message(url, {goTo: key});
+}
 
 // READY
 jQuery(document).ready(function () {
 
     $("[data-fancybox]").fancybox({
-        'padding': 0,
+        'padding': 0
     });
 
     $(document).on('click', 'div.product-image a.set-image', function(){
@@ -18,8 +87,9 @@ jQuery(document).ready(function () {
             url: url,
             success: function (data) {
                 if (data) {
-                    $('#product-main-image').prop('src', data);
-                    $('#product-main-image').parent().prop('href', data.replace('/m/', '/'));
+                	var mainImage = $('#product-main-image');
+                    $(mainImage).prop('src', data);
+                    $(mainImage).parent().prop('href', data.replace('/m/', '/'));
                 }
                 $('div.product-image').removeClass('main');
                 $(parent).addClass('main');
@@ -40,8 +110,9 @@ jQuery(document).ready(function () {
                 url: url,
                 success: function (data) {
                     if (data) {
-                        $('#product-main-image').prop('src', data);
-                        $('#product-main-image').parent().prop('href', data.replace('/m/', '/'));
+	                    var mainImage = $('#product-main-image');
+                        $(mainImage).prop('src', data);
+                        $(mainImage).parent().prop('href', data.replace('/m/', '/'));
                         var addImage = $('div.product-image').find('img[src="' + data + '"]');
                         if (addImage.length) {
                             $(addImage).closest('div.product-image').addClass('main');
@@ -58,6 +129,21 @@ jQuery(document).ready(function () {
         }
 
         return false;
+    }).on('click', 'a.btn-show-in-list', function () {
+    	var row = $(this).closest('tr'),
+		    table = $(row).closest('table'),
+		    providerId = $(table).data('provider-id'),
+		    key = $(row).data('key');
+
+	    showProviderPosition(providerId, key);
+
+    	return false;
+    }).on('pjax:beforeSend', '#shop-item-bind-search', function () {
+    	$(this).find('form input, form button').prop('disabled', true);
+    	$(this).find('table').css('opacity', 0.4);
+    }).on('pjax:error', '#shop-item-bind-search', function () {
+	    $(this).find('form input, form button').prop('disabled', false);
+	    $(this).find('table').css('opacity', 1);
     });
 
 });

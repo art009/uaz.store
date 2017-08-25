@@ -2,13 +2,16 @@
 
 namespace app\modules\pms\controllers;
 
+use app\modules\pms\models\Provider;
+use app\modules\pms\models\ProviderItem;
+use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
 use Yii;
 use app\modules\pms\models\ShopItem;
 use app\modules\pms\models\ShopItemSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ShopItemController implements the CRUD actions for ShopItem model.
@@ -96,5 +99,65 @@ class ShopItemController extends Controller
 		return $this->render('import', [
 			'model' => $model,
 		]);
+	}
+
+	/**
+	 * Страница связей
+	 *
+	 * @param int $id
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	public function actionBind(int $id)
+	{
+		$model = $this->findModel($id);
+
+		/* @var $provider Provider */
+		$provider = Provider::find()->one();
+		if ($provider === null) {
+			throw new NotFoundHttpException('Нет ни одного поставщика.');
+		}
+
+		$searchQuery = Yii::$app->request->post('search', $model->title);
+		$resolver = new SimilarPositionResolver($provider->id, $searchQuery, $searchQuery != $model->title ? $model->vendor_code : null);
+
+		$dataProvider = new ActiveDataProvider([
+			'query' => ProviderItem::find()->where(['id' => $resolver->getIds()])->limit(30),
+			'sort' => false,
+			'pagination' => false,
+		]);
+
+		return $this->render('bind', [
+			'model' => $model,
+			'provider' => $provider,
+			'dataProvider' => $dataProvider,
+			'searchQuery' => $searchQuery,
+		]);
+	}
+
+	/**
+	 * Для окна с позициями поставщика
+	 *
+	 * @param int $providerId
+	 *
+	 * @return string
+	 */
+	public function actionList(int $providerId)
+	{
+		$provider = Provider::findOne($providerId);
+
+		$dataProvider = new ActiveDataProvider([
+			'query' => ProviderItem::find()->where(['provider_id' => $providerId])->orderBy('code'),//->limit(100),
+			'sort' => false,
+			'pagination' => false,
+		]);
+
+		return $this->renderPartial('list', [
+			'provider' => $provider,
+			'dataProvider' => $dataProvider,
+		]);
+
 	}
 }
