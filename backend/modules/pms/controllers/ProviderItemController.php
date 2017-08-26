@@ -115,15 +115,10 @@ class ProviderItemController extends Controller
 
 		$model = new ProviderItemAcceptForm(['providerId' => $provider->id]);
 
-		if ($model->load(Yii::$app->request->post())) {
-			$providerId = $model->process($providerId);
-			if ($providerId > 0){
-				return $this->redirect(["index?providerId=$providerId"]);
-			} else {
-				throw new NotFoundHttpException('Ошибка подтвержедния импорта товаров');
-			}
+		if ($model->load(Yii::$app->request->post()) && $model->process()) {
+			return $this->redirect(['index', 'providerId' => $provider->id]);
 		};
-		$dataProvider = $model->getDataProvider($providerId);
+		$dataProvider = $model->getDataProvider();
 
 		return $this->render('accept', [
 			'providerId' => $providerId,
