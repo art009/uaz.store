@@ -3,6 +3,7 @@
 namespace backend\modules\pms\models;
 
 use app\modules\pms\models\ProviderItem;
+use backend\modules\pms\components\ProviderItemAcceptCache;
 use common\components\AppHelper;
 use common\models\ImportForm;
 use yii\helpers\ArrayHelper;
@@ -107,11 +108,14 @@ class ProviderItemImportForm extends ImportForm
 		if (empty($data)) {
 			$this->addError('file', 'Данные не получены из файла.');
 		} else {
-			$existed = ArrayHelper::map(
-				ProviderItem::find()->select(['code', 'price'])->where(['provider_id' => $this->provider_id])->asArray()->all(),
-				'code',
-				'price'
-			);
+			$storedData = ProviderItem::find()
+				->select(['code', 'price', 'ignored'])
+				->where(['provider_id' => $this->provider_id])
+				->asArray()
+				->all();
+
+			$existed = ArrayHelper::map($storedData, 'code', 'price');
+			$ignored = ArrayHelper::map($storedData, 'code', 'ignored');
 			$insertItems = $updateItems = $acceptItems = $deleteItems = [];
 			$names = $this->getAttributeNames();
 			$date = date('Y-m-d H:i:s');
@@ -129,7 +133,7 @@ class ProviderItemImportForm extends ImportForm
 				if ($item['code']) {
 					$item['price'] = round($item['price'], 2);
 					if (array_key_exists($item['code'], $existed)) {
-						if ($item['price'] != $existed[$item['code']]) {
+						if ($item['price'] != $existed[$item['code']] && !$ignored[$item['code']]) {
 							if ($existed[$item['code']] < $item['price']) {
 								$item['old_price'] = $existed[$item['code']];
 								$acceptItems[$item['code']] = $item;
@@ -178,7 +182,8 @@ class ProviderItemImportForm extends ImportForm
 
 			// Подтверждение обновления товаров
 			if ($acceptItems) {
-				\Yii::$app->cache->set('accept' . $this->provider_id, json_encode($acceptItems));
+				$cache = new ProviderItemAcceptCache($this->provider_id);
+				$cache->set($acceptItems);
 			}
 
 			// Скрытие товаров

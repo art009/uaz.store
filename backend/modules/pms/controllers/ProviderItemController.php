@@ -2,6 +2,8 @@
 
 namespace app\modules\pms\controllers;
 
+use app\modules\pms\models\Provider;
+use backend\modules\pms\components\ProviderItemAcceptCache;
 use backend\modules\pms\models\ProviderItemAcceptForm;
 use backend\modules\pms\models\ProviderItemImportForm;
 use Yii;
@@ -9,40 +11,32 @@ use app\modules\pms\models\ProviderItem;
 use app\modules\pms\models\ProviderItemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProviderItemController implements the CRUD actions for ProviderItem model.
  */
 class ProviderItemController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
+	/**
+	 * Список товаров поставщика
+	 *
+	 * @param int $providerId
+	 *
+	 * @return string
+	 */
+    public function actionIndex(int $providerId)
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+    	$provider = $this->findProviderModel($providerId);
 
-    /**
-     * Lists all ProviderItem models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
         $searchModel = new ProviderItemSearch();
+        $searchModel->provider_id = $provider->id;
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'provider' => $provider,
         ]);
     }
 
@@ -59,24 +53,6 @@ class ProviderItemController extends Controller
     }
 
     /**
-     * Creates a new ProviderItem model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new ProviderItem();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
      * Updates an existing ProviderItem model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -87,27 +63,12 @@ class ProviderItemController extends Controller
         $model = $this->findModel($id);
 
 		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id, 'provider_id' => $model->provider_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
 			return $this->render('update', [
 				'model' => $model,
 			]);
 		}
-    }
-
-    /**
-     * Deletes an existing ProviderItem model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-		$model = $this->findModel($id);
-
-		$model->delete();
-
-        return $this->redirect(["index?provider_id=$model->provider_id"]);
     }
 
     /**
@@ -122,7 +83,23 @@ class ProviderItemController extends Controller
         if (($model = ProviderItem::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Товар не найден.');
+        }
+    }
+
+    /**
+     * Finds the ProviderItem model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Provider the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findProviderModel(int $id)
+    {
+        if (($model = Provider::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Поставщик не найден.');
         }
     }
 
@@ -132,8 +109,11 @@ class ProviderItemController extends Controller
 	 * @return mixed
 	 * @throws NotFoundHttpException if the model cannot be found
 	 */
-	public function actionAccept($providerId) {
-		$model = new ProviderItemAcceptForm();
+	public function actionAccept(int $providerId)
+	{
+		$provider = $this->findProviderModel($providerId);
+
+		$model = new ProviderItemAcceptForm(['providerId' => $provider->id]);
 
 		if ($model->load(Yii::$app->request->post())) {
 			$providerId = $model->process($providerId);
@@ -148,7 +128,8 @@ class ProviderItemController extends Controller
 		return $this->render('accept', [
 			'providerId' => $providerId,
 			'dataProvider' => $dataProvider,
-			'model'=>$model
+			'model' => $model,
+			'provider' => $provider,
 		]);
 	}
 	/**
@@ -156,12 +137,14 @@ class ProviderItemController extends Controller
 	 * @param int $providerId
 	 * @return string|\yii\web\Response
 	 */
-	public function actionImport($providerId)
+	public function actionImport(int $providerId)
 	{
-		if (Yii::$app->cache->exists('accept' . $providerId)) {
+		$provider = $this->findProviderModel($providerId);
+		$cache = $this->getAcceptCache($provider->id);
+		if ($cache->exists()) {
 			return $this->actionAccept($providerId);
 		} else {
-			$model = new ProviderItemImportForm();
+			$model = new ProviderItemImportForm(['provider_id' => $provider->id]);
 			if ($model->load(Yii::$app->request->post()) && $model->import()) {
 				Yii::$app->session->setFlash('success',
 					'Добавлено позиций: ' . $model->getCounterValue($model::COUNTER_INSERT));
@@ -174,21 +157,33 @@ class ProviderItemController extends Controller
 			}
 			return $this->render('import', [
 				'model' => $model,
+				'provider' => $provider,
 			]);
 		}
 	}
 
 	/**
 	 * Чистит кеш ожидающих подтверждения товаров.
+	 *
 	 * @param int $providerId
+	 *
 	 * @return mixed
 	 */
-	public function actionCancel($providerId)
+	public function actionCancel(int $providerId)
 	{
-		$model = new ProviderItemAcceptForm();
+		$cache = $this->getAcceptCache($providerId);
+		$cache->clear();
 
-		$model->clearCache($providerId);
+		return $this->redirect(['index', 'providerId' => $providerId]);
+	}
 
-		return $this->redirect(["index?providerId=$providerId"]);
+	/**
+	 * @param int $providerId
+	 *
+	 * @return ProviderItemAcceptCache
+	 */
+	protected function getAcceptCache(int $providerId)
+	{
+		return new ProviderItemAcceptCache($providerId);
 	}
 }

@@ -8,13 +8,16 @@ use yii\widgets\ActiveForm;
 /* @var $dataProvider yii\data\ArrayDataProvider */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $model \backend\modules\pms\models\ProviderItemAcceptForm */
-/* @var $poviderId \app\modules\pms\models\ProviderItem*/
+/* @var $provider \app\modules\pms\models\Provider */
 
 
-$this->title = 'Товары, требующие подтверждения';
+$this->title = 'Импорт товаров - подтверждение';
 $this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
 $this->params['breadcrumbs'][] = ['label' => 'Поставщики', 'url' => ['/pms/provider']];
-$this->params['breadcrumbs'][] = ['label' => 'Товары поставщика', 'url' => ["index?providerId=$providerId"]];
+$this->params['breadcrumbs'][] = [
+	'label' => 'Товары поставщика ' . $provider->name,
+	'url' => ['index', 'providerId' => $provider->id]
+];
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -24,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<h1><?= Html::encode($this->title) ?></h1>
 	<?php $form = ActiveForm::begin([
 		'method' => 'post',
-		'action' => ["provider-item/accept?providerId=$providerId"],
+		'action' => ['accept', 'providerId' => $provider->id],
     ]); ?>
 	<?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -33,54 +36,56 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($item) {
-					return ['value' => $item['code'],'label' => "Обновить"];
+					return ['value' => $item['code'], 'checked' => true];
 				},
+				'header' => 'Подтвердить',
 				'name' => $model->formName() . '[accept][]',
 			],
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($item) {
-					return ['value' => $item['code'],'label' => "Игнорировать"];
+					return ['value' => $item['code']];
 				},
+				'header' => 'Игнорировать в будущем',
 				'name' => $model->formName() . '[ignored][]',
 			],
             [
-                'label'=>'Код',
+                'label' => 'Код',
                 'value' => 'code'
             ],
 			[
-				'label'=>'Код у поставщика',
+				'label' => 'Код у поставщика',
 				'value' => 'vendor_code'
 			],
 			[
-				'label'=>'Наименование',
+				'label' => 'Наименование',
 				'value' => 'title'
 			],
 			[
-				'label'=>'Ед. измерения',
+				'label' => 'Ед. измерения',
 				'value' => 'unit'
 			],
 			[
-				'label'=>'Остаток',
+				'label' => 'Остаток',
 				'value' => 'rest'
 			],
 			[
-				'label'=>'Производитель',
+				'label' => 'Производитель',
 				'value' => 'manufacturer'
 			],
 			[
-				'label'=>'Старая цена',
+				'label' => 'Старая цена',
 				'value' => 'old_price'
 			],
 			[
-				'label'=>'Новая цена',
+				'label' => 'Новая цена',
 				'value' => 'price'
 			],
         ],
 	]); ?>
     <div class="form-group">
 		<?= Html::submitButton('Принять', ['class' => 'btn btn-success']) ?>
-		<?= Html::a('Отмена', ['cancel', 'providerId' => $providerId], [
+		<?= Html::a('Отмена', ['cancel', 'providerId' => $provider->id], [
 			'class' => 'btn btn-danger',
 			'data' => [
 				'confirm' => 'Вы уверены?',

@@ -2,7 +2,9 @@
 
 namespace backend\modules\pms\models;
 
+use app\modules\pms\models\Provider;
 use app\modules\pms\models\ProviderItem;
+use backend\modules\pms\components\ProviderItemAcceptCache;
 use common\components\AppHelper;
 use yii\base\Model;
 use yii\data\ArrayDataProvider;
@@ -14,6 +16,10 @@ use yii\data\ArrayDataProvider;
  */
 class ProviderItemAcceptForm extends Model
 {
+	/**
+	 * @var int
+	 */
+	public $providerId;
 
 	/**
  	* @var array
@@ -30,9 +36,9 @@ class ProviderItemAcceptForm extends Model
 	 */
 	public function rules()
 	{
-		return parent::rules() + [
-				[['accept','ignored'], 'required'],
-			];
+		return [
+			[['accept','ignored'], 'safe'],
+		];
 	}
 
 	/**
@@ -40,28 +46,46 @@ class ProviderItemAcceptForm extends Model
 	 */
 	public function attributeLabels()
 	{
-		return parent::attributeLabels() + [
-				'accept' => 'Массив подтверждённых товаров',
-				'ignored' => 'Массив игнорируемых товаров'
-			];
+		return [
+			'accept' => 'Массив подтверждённых товаров',
+			'ignored' => 'Массив игнорируемых товаров'
+		];
 	}
+
+	/**
+	 * @return ProviderItemAcceptCache
+	 */
+	protected function getAcceptCache()
+	{
+		return new ProviderItemAcceptCache($this->providerId);
+	}
+
+	/**
+	 * Данные из кеша для текущего поставщика
+	 *
+	 * @return array
+	 */
+	protected function getData(): array
+	{
+		return $this->getAcceptCache()->get();
+	}
+
 	/**
 	 * @param array $items
-	 * @param int $providerId
+	 *
 	 * @return int
 	 */
-	public function acceptUpdate($items, $providerId)
+	protected function acceptUpdate(array $items): int
 	{
+		$accepted = 0;
 		$date = date('Y-m-d H:i:s');
-		$accepted = null;
-
 		$db = \Yii::$app->getDb();
 		foreach ($items as $item) {
-			$accepted = $db->createCommand()
+			$accepted += $db->createCommand()
 				->update(ProviderItem::tableName(), ['price' => $item['price'], 'updated_at' => $date], [
 					'code' => $item['code'],
 					'ignored' => AppHelper::NO,
-					'provider_id' => $providerId
+					'provider_id' => $this->providerId
 				])
 				->execute();
 		}
@@ -70,70 +94,99 @@ class ProviderItemAcceptForm extends Model
 
 	/**
 	 * @param array $items
-	 * @param int $providerId
 	 * @return int
 	 */
-	public function acceptIgnore($items, $providerId)
+	protected function acceptIgnore(array $items): int
 	{
-		$ignored = null;
-
+		$ignored = 0;
 		foreach ($items as $item) {
-			$ignored = ProviderItem::updateAll(['ignored' => AppHelper::YES], ['code' => $item['code'], 'provider_id' => $providerId]);
+			$ignored += ProviderItem::updateAll(['ignored' => AppHelper::YES], [
+				'code' => $item['code'], 'provider_id' => $this->providerId
+			]);
 		}
+
 		return $ignored;
 	}
+
 	/**
-	 * @param int $providerId
 	 * @return ArrayDataProvider
 	 */
-	public function getDataProvider($providerId){
-		$acceptItems = json_decode(\Yii::$app->cache->get('accept' . $providerId), true);
+	public function getDataProvider()
+	{
 		$dataProvider = new ArrayDataProvider([
-			'allModels' => $acceptItems,
-			'pagination' => [
-				'pageSize' => 10,
-			],
+			'allModels' => $this->getData(),
+			'pagination' => false,
 		]);
+
 		return $dataProvider;
 	}
-	/**
-	 * @param int $providerId
-	 */
-	public function clearCache($providerId)
-	{
-		\Yii::$app->cache->delete('accept' . $providerId);
-	}
-	/**
-	 * @param int $providerId
-	 * @return int
-	 */
-	public function process($providerId)
-	{
-		$acceptItems = [];
-		$ignoreItems = [];
 
-		$items = json_decode(\Yii::$app->cache->get('accept' . $providerId), true);
-
-		foreach ($items as $item) {
-			if ($this->accept) {
-				foreach ($this->accept as $acceptCode) {
-					if ($item['code'] == $acceptCode) {
-						$acceptItems[$acceptCode] = $item;
-					}
-				}
-			}
-			if ($this->ignored) {
-				foreach ($this->ignored as $ignoredCode) {
-					if ($item['code'] == $ignoredCode) {
-						$ignoreItems[$ignoredCode] = $item;
-					}
-				}
-			}
+	/**
+	 * @param null $attributeNames
+	 * @param bool $clearErrors
+	 *
+	 * @return bool
+	 */
+	public function validate($attributeNames = null, $clearErrors = true)
+	{
+		if (Provider::findOne($this->providerId) === null) {
+			$this->addError('accept', 'Некорректный поставщик');
 		}
-		$this->acceptUpdate($acceptItems, $providerId);
-		$this->acceptIgnore($ignoreItems, $providerId);
-		$this->clearCache($providerId);
 
-		return $providerId;
+		if (empty($this->getData())) {
+			$this->addError('accept', 'Нет данных для указанного поставщика');
+		}
+
+		if (!is_array($this->accept)) {
+			$this->accept = [];
+		}
+		if (!is_array($this->ignored)) {
+			$this->ignored = [];
+		}
+
+		if (empty($this->accept) && empty($this->ignored)) {
+			$this->addError('accept', 'Не выбрано ни одного действия');
+		}
+
+		return parent::validate($attributeNames, $clearErrors);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function process()
+	{
+		if ($this->validate()) {
+			$items = $this->getData();
+			$acceptItems = $ignoreItems = [];
+			foreach ($items as $item) {
+				if (in_array($item['code'], $this->accept)) {
+					$acceptItems[] = $item;
+				}
+				if (in_array($item['code'], $this->ignored)) {
+					$ignoreItems[] = $item;
+				}
+			}
+			$updated = $this->acceptUpdate($acceptItems);
+			if ($updated) {
+				\Yii::$app->session->addFlash('success', 'Обновлено позиций: ' . $updated);
+			}
+			$ignored = $this->acceptIgnore($ignoreItems);
+			if ($ignored) {
+				\Yii::$app->session->addFlash('info', 'Добавлено в игнор: ' . $ignored);
+			}
+
+			$this->getAcceptCache()->clear();
+
+			return true;
+		} else {
+			foreach ($this->errors as $attribute => $errors) {
+				foreach ($errors as $error) {
+					\Yii::$app->session->addFlash('warning', $error);
+				}
+			}
+
+			return false;
+		}
 	}
 }

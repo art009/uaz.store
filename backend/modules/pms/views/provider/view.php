@@ -38,7 +38,4 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
         ],
     ]) ?>
-    <p>
-	    <?= Html::a('Перейти к товарам поставщика', ['/pms/provider-item', 'provider_id' => $model->id], ['class' => 'btn btn-primary']) ?>
-    </p>
 </div>

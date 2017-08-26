@@ -22,6 +22,7 @@ use Yii;
  *
  * @property ProviderShopItem[] $providerShopItems
  * @property ShopItem[] $shopItems
+ * @property Provider $provider
  */
 class ProviderItem extends \yii\db\ActiveRecord
 {
@@ -83,6 +84,14 @@ class ProviderItem extends \yii\db\ActiveRecord
     public function getShopItems()
     {
         return $this->hasMany(ShopItem::className(), ['id' => 'shop_item_id'])->viaTable('provider_item_to_shop_item', ['provider_item_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProvider()
+    {
+	    return $this->hasOne(Provider::className(), ['id' => 'provider_id']);
     }
 
     /**

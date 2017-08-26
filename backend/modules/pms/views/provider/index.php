@@ -24,27 +24,29 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'name',
 			[
 				'attribute' => 'deleted',
-				'value' => function($model){ return AppHelper::$yesNoList[$model->deleted]; } ,
+				'value' => function($model) {
+    	            return AppHelper::$yesNoList[$model->deleted];
+				},
+				'filter' => AppHelper::$yesNoList,
 			],
-
+	        [
+		        'label' => 'Товары',
+		        'format' => 'raw',
+		        'value' => function($model) {
+    	            /* @var $model \app\modules\pms\models\Provider */
+    	            $count = $model->getItems()->count();
+			        return $count . ' ' . Html::a(
+			        		($count > 0 ? 'Список' : 'Импорт') . ' товаров',
+					        ['provider-item/' . ($count > 0 ? 'index' : 'import') , 'providerId' => $model->id]
+				        );
+		        }
+	        ],
 			[
 				'class' => 'yii\grid\ActionColumn',
-				'template' => '{view}  {update}  {link}',
-			],
-			[
-				'label' => 'Ссылки к товарам поставщика',
-				'format' => 'raw',
-				'value' => function($model){
-					return Html::a(
-						'Перейти',
-						"/pms/provider-item?providerId=$model->id"
-					);
-				}
+				'template' => '{view} {update}',
 			],
 		],
     ]); ?>

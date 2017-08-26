@@ -7,7 +7,11 @@ use yii\helpers\Html;
 
 $this->title = 'Редактирование товара поставщика: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
-$this->params['breadcrumbs'][] = ['label' => 'Товары поставщика', 'url' => ["index?providerId=$model->provider_id"]];
+$this->params['breadcrumbs'][] = ['label' => 'Поставщики', 'url' => ['/pms/provider']];
+$this->params['breadcrumbs'][] = [
+	'label' => 'Товары поставщика ' . ($model->provider ? $model->provider->name : ''),
+	'url' => ['index', 'providerId' => $model->provider_id]
+];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Редактировать';
 

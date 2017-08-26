@@ -11,6 +11,8 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property integer $deleted
+ *
+ * @property ProviderItem[] $items
  */
 class Provider extends \yii\db\ActiveRecord
 {
@@ -44,4 +46,12 @@ class Provider extends \yii\db\ActiveRecord
             'deleted' => 'Удалён',
         ];
     }
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getItems()
+	{
+		return $this->hasMany(ProviderItem::className(), ['provider_id' => 'id']);
+	}
 }
