@@ -10,6 +10,7 @@ use Yii;
 use app\modules\pms\models\ShopItem;
 use app\modules\pms\models\ShopItemSearch;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -114,10 +115,11 @@ class ShopItemController extends Controller
 	{
 		$model = $this->findModel($id);
 
+		$providerId = (int)Yii::$app->request->post('providerId', Provider::find()->select(['id'])->scalar());
 		/* @var $provider Provider */
-		$provider = Provider::find()->one();
+		$provider = Provider::findOne($providerId);
 		if ($provider === null) {
-			throw new NotFoundHttpException('Нет ни одного поставщика.');
+			throw new NotFoundHttpException('Не найден поставщик.');
 		}
 
 		$searchQuery = Yii::$app->request->post('search', $model->title);
@@ -135,12 +137,15 @@ class ShopItemController extends Controller
 			'pagination' => false,
 		]);
 
+		$providerList = ArrayHelper::map(Provider::find()->all(), 'id', 'name');
+
 		return $this->render('bind', [
 			'model' => $model,
 			'provider' => $provider,
 			'dataProvider' => $dataProvider,
 			'searchQuery' => $searchQuery,
-			'linkDataProvider' => $linkDataProvider
+			'linkDataProvider' => $linkDataProvider,
+			'providerList' => $providerList,
 		]);
 	}
 
@@ -190,7 +195,7 @@ class ShopItemController extends Controller
 	 * @param int $id
 	 * @param int $shopItemId
 	 *
-	 * @return string
+	 * @return bool
 	 */
 	public function actionLink(int $id, int $shopItemId)
 	{
@@ -199,6 +204,8 @@ class ShopItemController extends Controller
 		$providerItem = $this->findProviderItemModel($id);
 
 		$shopItem->link('providerItems', $providerItem);
+
+		return true;
 	}
 
 	/**
@@ -207,7 +214,7 @@ class ShopItemController extends Controller
 	 * @param int $id
 	 * @param int $shopItemId
 	 *
-	 * @return string
+	 * @return bool
 	 */
 	public function actionUnlink(int $id, int $shopItemId)
 	{
@@ -216,5 +223,7 @@ class ShopItemController extends Controller
 		$providerItem = $this->findProviderItemModel($id);
 
 		$shopItem->unlink('providerItems', $providerItem, true);
+
+		return true;
 	}
 }

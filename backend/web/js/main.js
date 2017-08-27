@@ -67,7 +67,7 @@
 })();
 
 function showProviderPosition(providerId, key) {
-	var url = 'https://manage.uaz.dvmpnz.ru/pms/shop-item/list?providerId=' + providerId;
+	var url = window.location.origin + '/pms/shop-item/list?providerId=' + providerId;
 	window.popup.message(url, {goTo: key});
 }
 
@@ -147,33 +147,62 @@ jQuery(document).ready(function () {
 
     }).on('click', 'a.btn-link-item', function () {
     	var url = $(this).prop('href'),
-        	row = $(this).closest('tr').clone(),
-    		table = $('#shop-item-link-table');
+		    currentRow = $(this).closest('tr'),
+        	row = $(currentRow).clone(),
+    		table = $('#shop-item-link-table'),
+		    exists = $(table).find('tr[data-key="' + $(row).data('key') + '"]').length,
+	        rowsCount = $(table).find('tr[data-key]').length,
+		    link = $(row).find('a.btn-link-item'),
+		    query = $(link).prop('href').split('?')[1];
 
-      /* 	$.ajax({
-            url: url,
-            success: function () {
-                alert('Hello');
-            },
-            error: function(error) {
-                alert(error.responseText);
-            }
-        });*/
-        $(table).find('tbody').append(row);
+	    if (!exists) {
+		    $.ajax({
+				url: url,
+			    success: function () {
+				    $(row).find('td').first().html(rowsCount + 1);
+				    $(row).find('td').last().html(
+					    '<a class="btn-unlink-item" href="/pms/shop-item/unlink?' + query + '" title="Отвязать">' +
+					    '<span class="glyphicon glyphicon-remove-sign"></span>' +
+					    '</a>'
+				    );
+				    $(currentRow).find('a.btn-link-item').addClass('hidden');
+				    if (rowsCount === 0) {
+					    $(table).find('tbody').html(row);
+				    } else {
+					    $(table).find('tbody').append(row);
+				    }
+			    },
+			    error: function(error) {
+					alert('Невозможно установить связь: ' + error.responseText);
+			    }
+		    });
+	    }
 
         return false;
     }).on('click', 'a.btn-unlink-item', function () {
-        var url = $(this).prop('href');
+        var url = $(this).prop('href'),
+	        currentRow = $(this).closest('tr'),
+	        table = $('#shop-item-link-table'),
+	        rowsCount = $(table).find('tr[data-key]').length,
+	        key = $(currentRow).data('key'),
+	        row = $('#shop-item-provider-item-table').find('tr[data-key="' + key + '"]');
 
         $.ajax({
             url: url,
             success: function () {
-                alert('Hello');
+            	$(currentRow).remove();
+                if (row) {
+                	$(row).find('a.btn-link-item').removeClass('hidden');
+                }
+                if (rowsCount <= 1) {
+	                $(table).find('tbody').html('<tr><td colspan="6"><div class="empty">Ничего не найдено.</div></td></tr>');
+                }
             },
             error: function(error) {
-                alert(error.responseText);
+	            alert('Невозможно разорвать связь: ' + error.responseText);
             }
         });
+
         return false;
     });
 });

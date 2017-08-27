@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 /* @var $linkDataProvider \yii\data\ActiveDataProvider */
 /* @var $searchQuery string */
+/* @var $providerList array */
 
 $this->title = $model->title . ' [ ' . $model->vendor_code . ' ]';
 $this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
@@ -22,6 +23,9 @@ $shopItemId = $model->id;
 ?>
 <div class="shop-item-bind">
 	<h1><?= Html::encode($this->title) ?></h1>
+	<p>
+		Установленные связи:
+	</p>
     <?php echo GridView::widget([
         'dataProvider' => $linkDataProvider,
         'tableOptions' => [
@@ -39,7 +43,7 @@ $shopItemId = $model->id;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{unlink}',
                 'buttons' => [
-					'unlink' => function ($url, $model, $key) use ($shopItemId) {
+					'unlink' => function ($url) use ($shopItemId) {
 						return Html::a(Html::icon('remove-sign'), $url . '&shopItemId=' . $shopItemId, ['title' => 'Отвязать', 'class' => 'btn-unlink-item']);
 					},
                 ],
@@ -48,6 +52,17 @@ $shopItemId = $model->id;
     ]); ?>
 	<?php Pjax::begin(['id' => 'shop-item-bind-search']) ?>
 	<?php $form = ActiveForm::begin(['options' => ['data-pjax' => true]]); ?>
+	<div class="row">
+		<div class="col-xs-12">
+			Поставщик:
+			<?php echo Html::dropDownList(
+					'providerId',
+					$provider->id,
+					$providerList,
+					['class' => 'form-control', 'style' => 'width: auto; display: inline-block; margin-bottom: 5px;']
+			); ?>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-xs-8">
 			<?php echo Html::textInput('search', $searchQuery, ['placeholder' => 'Введите поисковые запрос', 'class' => 'form-control']); ?>
@@ -62,6 +77,7 @@ $shopItemId = $model->id;
 		'tableOptions' => [
 			'class' => 'table table-striped table-bordered',
 			'data-provider-id' => $provider->id,
+			'id' => 'shop-item-provider-item-table'
 		],
 		'summary' => "Найдено позиций: <b>{count}</b>",
 		'columns' => [
@@ -74,10 +90,12 @@ $shopItemId = $model->id;
 				'class' => 'yii\grid\ActionColumn',
 				'template' => '{link} {unlink} {list}',
 				'buttons' => [
-					'link' => function ($url, $model, $key) use ($shopItemId) {
-						return Html::a(Html::icon('ok-sign'), $url . '&shopItemId=' . $shopItemId, ['title' => 'Связать', 'class' => 'btn-link-item']);
+					'link' => function ($url, $model) use ($shopItemId) {
+						/* @var $model \app\modules\pms\models\ProviderItem */
+						return Html::a(Html::icon('ok-sign'), $url . '&shopItemId=' . $shopItemId,
+							['title' => 'Связать', 'class' => 'btn-link-item' . ($model->checkShopItemLink($shopItemId) ? ' hidden' : '')]);
 					},
-					'list' => function ($url, $model, $key) {
+					'list' => function ($url) {
 						return Html::a(Html::icon('list'), $url, ['title' => 'Показать в прайсе', 'class' => 'btn-show-in-list']);
 					},
 				],

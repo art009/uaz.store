@@ -102,4 +102,16 @@ class ProviderItem extends \yii\db\ActiveRecord
     {
         return new ProviderItemQuery(get_called_class());
     }
+
+	/**
+	 * @param $id
+	 *
+	 * @return bool
+	 */
+    public function checkShopItemLink($id)
+    {
+    	$existedIds = $this->getShopItems()->select(['id'])->column();
+
+    	return in_array($id, $existedIds);
+    }
 }
