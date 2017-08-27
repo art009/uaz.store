@@ -4,6 +4,7 @@ namespace app\modules\pms\controllers;
 
 use app\modules\pms\models\Provider;
 use app\modules\pms\models\ProviderItem;
+use backend\modules\pms\components\PriceExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
 use Yii;
@@ -158,6 +159,29 @@ class ShopItemController extends Controller
 			'provider' => $provider,
 			'dataProvider' => $dataProvider,
 		]);
+	}
 
+	/**
+	 * Пересчет
+	 */
+	public function actionCalculate()
+	{
+		$exporter = new PriceExporter(Yii::$app->db);
+
+		Yii::$app->session->setFlash('info', 'Пересчитано позиций:' . $exporter->calculate());
+
+		return $this->redirect('index');
+	}
+
+	/**
+	 * Пересчет и выгрузка цен
+	 */
+	public function actionExport()
+	{
+		$exporter = new PriceExporter(Yii::$app->db);
+
+		Yii::$app->session->setFlash('info', 'Обновлено цен:' . $exporter->export(true));
+
+		return $this->redirect('index');
 	}
 }

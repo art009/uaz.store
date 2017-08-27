@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Импорт из Excel', ['import'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Пересчитать', ['calculate'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Пересчитать и выгрузить', ['export'], ['class' => 'btn btn-primary']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -28,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'vendor_code',
             'title',
             'price',
+            'site_price',
             'unit',
             [
 	            'attribute' => 'status',
