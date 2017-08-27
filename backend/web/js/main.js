@@ -144,6 +144,36 @@ jQuery(document).ready(function () {
     }).on('pjax:error', '#shop-item-bind-search', function () {
 	    $(this).find('form input, form button').prop('disabled', false);
 	    $(this).find('table').css('opacity', 1);
-    });
 
+    }).on('click', 'a.btn-link-item', function () {
+    	var url = $(this).prop('href'),
+        	row = $(this).closest('tr').clone(),
+    		table = $('#shop-item-link-table');
+
+      /* 	$.ajax({
+            url: url,
+            success: function () {
+                alert('Hello');
+            },
+            error: function(error) {
+                alert(error.responseText);
+            }
+        });*/
+        $(table).find('tbody').append(row);
+
+        return false;
+    }).on('click', 'a.btn-unlink-item', function () {
+        var url = $(this).prop('href');
+
+        $.ajax({
+            url: url,
+            success: function () {
+                alert('Hello');
+            },
+            error: function(error) {
+                alert(error.responseText);
+            }
+        });
+        return false;
+    });
 });

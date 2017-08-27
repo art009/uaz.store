@@ -20,7 +20,9 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $ignored
  * @property string $created_at
  * @property string $updated_at
- */
+ *
+ * @property ProviderItem[] $providerItems
+*/
 class ShopItem extends \yii\db\ActiveRecord
 {
 	const STATUS_ACTIVE = 0;
@@ -131,5 +133,12 @@ class ShopItem extends \yii\db\ActiveRecord
 	public function getStatusLabel()
 	{
 		return self::$statusList[$this->getStatus()] ?? 'Неизвестен';
+	}
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getProviderItems()
+	{
+		return $this->hasMany(ProviderItem::className(), ['id' => 'provider_item_id'])->viaTable('provider_item_to_shop_item', ['shop_item_id' => 'id']);
 	}
 }

@@ -4,7 +4,6 @@ namespace app\modules\pms\controllers;
 
 use app\modules\pms\models\Provider;
 use app\modules\pms\models\ProviderItem;
-use backend\modules\pms\components\PriceExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
 use Yii;
@@ -130,11 +129,18 @@ class ShopItemController extends Controller
 			'pagination' => false,
 		]);
 
+		$linkDataProvider = new ActiveDataProvider([
+			'query' => $model->getProviderItems(),
+			'sort' => false,
+			'pagination' => false,
+		]);
+
 		return $this->render('bind', [
 			'model' => $model,
 			'provider' => $provider,
 			'dataProvider' => $dataProvider,
 			'searchQuery' => $searchQuery,
+			'linkDataProvider' => $linkDataProvider
 		]);
 	}
 
@@ -159,29 +165,56 @@ class ShopItemController extends Controller
 			'provider' => $provider,
 			'dataProvider' => $dataProvider,
 		]);
+
+	}
+
+
+	/**
+	 * Finds the ProviderItem model based on its primary key value.
+	 * If the model is not found, a 404 HTTP exception will be thrown.
+	 * @param integer $id
+	 * @return ProviderItem the loaded model
+	 * @throws NotFoundHttpException if the model cannot be found
+	 */
+	protected function findProviderItemModel($id)
+	{
+		if (($model = ProviderItem::findOne($id)) !== null) {
+			return $model;
+		} else {
+			throw new NotFoundHttpException('Запрашиваемая позиция не найдена.');
+		}
+	}
+	/**
+	 * Связывает товар магазина и товар поставщика
+	 *
+	 * @param int $id
+	 * @param int $shopItemId
+	 *
+	 * @return string
+	 */
+	public function actionLink(int $id, int $shopItemId)
+	{
+		$shopItem = $this->findModel($shopItemId);
+
+		$providerItem = $this->findProviderItemModel($id);
+
+		$shopItem->link('providerItems', $providerItem);
 	}
 
 	/**
-	 * Пересчет
+	 * Отвязывает товар магазина и товар поставщика
+	 *
+	 * @param int $id
+	 * @param int $shopItemId
+	 *
+	 * @return string
 	 */
-	public function actionCalculate()
+	public function actionUnlink(int $id, int $shopItemId)
 	{
-		$exporter = new PriceExporter(Yii::$app->db);
+		$shopItem = $this->findModel($shopItemId);
 
-		Yii::$app->session->setFlash('info', 'Пересчитано позиций:' . $exporter->calculate());
+		$providerItem = $this->findProviderItemModel($id);
 
-		return $this->redirect('index');
-	}
-
-	/**
-	 * Пересчет и выгрузка цен
-	 */
-	public function actionExport()
-	{
-		$exporter = new PriceExporter(Yii::$app->db);
-
-		Yii::$app->session->setFlash('info', 'Обновлено цен:' . $exporter->export(true));
-
-		return $this->redirect('index');
+		$shopItem->unlink('providerItems', $providerItem, true);
 	}
 }
