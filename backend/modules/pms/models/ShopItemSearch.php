@@ -69,7 +69,7 @@ class ShopItemSearch extends ShopItem
             ->andFilterWhere(['like', $this::tableName() . '.unit', $this->unit]);
 
         $cache = \Yii::$app->cache;
-        if (!array_key_exists($this->status, self::$statusList) && $cache->exists('shop-item-search-status')) {
+        if (!array_key_exists('status', $params[$this->formName()] ?? []) && $cache->exists('shop-item-search-status')) {
 	        $this->status = $cache->get('shop-item-search-status');
         }
         if (array_key_exists($this->status, self::$statusList)) {

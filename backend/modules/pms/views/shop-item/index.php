@@ -28,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             'code',
             'vendor_code',
-            'title',
+	        [
+		        'attribute' => 'title',
+		        'format' => 'html',
+		        'value' => function($model) {
+    	            return Html::a($model->title, ['bind', 'id' => $model->id], ['title' => 'Связать']);
+		        },
+	        ],
             'price',
             'site_price',
             'unit',
@@ -39,11 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
 	            'class' => 'yii\grid\ActionColumn',
-	            'template' => '{view}{update}{bind}',
+	            'template' => '{bind}<br/><br/> {view} {update}',
 	            'buttons' => [
 		            'bind' => function ($url) {
 			            return Html::a(Html::icon('transfer'), $url, ['title' => 'Связать']);
 		            },
+	            ],
+	            'options' => [
+		            'width' => '50px',
 	            ],
             ],
         ],

@@ -247,6 +247,8 @@ class ShopItemController extends Controller
 	 */
 	public function actionCalculate()
 	{
+		Yii::$app->cache->delete('shop-item-search-status');
+
 		$exporter = new PriceExporter(Yii::$app->db);
 
 		Yii::$app->session->setFlash('info', 'Пересчитано позиций: ' . $exporter->calculate());
@@ -259,6 +261,8 @@ class ShopItemController extends Controller
 	 */
 	public function actionExport()
 	{
+		Yii::$app->cache->delete('shop-item-search-status');
+
 		$exporter = new PriceExporter(Yii::$app->db);
 
 		Yii::$app->session->setFlash('info', 'Обновлено цен: ' . $exporter->export(true));
