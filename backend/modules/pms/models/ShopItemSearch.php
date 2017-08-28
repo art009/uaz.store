@@ -45,7 +45,8 @@ class ShopItemSearch extends ShopItem
      */
     public function search($params)
     {
-        $query = ShopItem::find();
+        $query = ShopItem::find()
+	        ->joinWith(['providerItems']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -58,28 +59,43 @@ class ShopItemSearch extends ShopItem
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
-            'price' => $this->price,
+	        $this::tableName() . '.id' => $this->id,
+	        $this::tableName() . '.price' => $this->price,
         ]);
 
-        $query->andFilterWhere(['like', 'code', $this->code])
-            ->andFilterWhere(['like', 'vendor_code', $this->vendor_code])
-            ->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'unit', $this->unit]);
+        $query->andFilterWhere(['like', $this::tableName() . '.code', $this->code])
+            ->andFilterWhere(['like', $this::tableName() . '.vendor_code', $this->vendor_code])
+            ->andFilterWhere(['like', $this::tableName() . '.title', $this->title])
+            ->andFilterWhere(['like', $this::tableName() . '.unit', $this->unit]);
 
+        $cache = \Yii::$app->cache;
+        if (!array_key_exists($this->status, self::$statusList) && $cache->exists('shop-item-search-status')) {
+	        $this->status = $cache->get('shop-item-search-status');
+        }
         if (array_key_exists($this->status, self::$statusList)) {
+        	$cache->set('shop-item-search-status', $this->status);
+        	if ($this->status == self::STATUS_WITHOUT_RELATION || $this->status == self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED) {
+        		if ($this->status == self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED) {
+			        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::NO]);
+		        } else {
+			        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::YES]);
+		        }
+		        $query->andWhere(ProviderItem::tableName() . '.id IS NULL');
+	        } else {
+		        $query->andWhere(ProviderItem::tableName() . '.id IS NOT NULL');
+	        }
         	if ($this->status == self::STATUS_ACTIVE) {
-		        $query->andFilterWhere(['ignored' => AppHelper::NO]);
-		        $query->andWhere('site_price > 0');
+		        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::NO]);
+		        $query->andWhere($this::tableName() . '.site_price > 0');
 	        }
         	if ($this->status == self::STATUS_IGNORE) {
-		        $query->andFilterWhere(['ignored' => AppHelper::YES]);
+		        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::YES]);
 	        }
         	if ($this->status == self::STATUS_PROFIT) {
-		        $query->andWhere('site_price > price');
+		        $query->andWhere($this::tableName() . '.site_price > ' . $this::tableName() . '.price');
 	        }
         	if ($this->status == self::STATUS_LOST) {
-		        $query->andWhere('site_price = 0');
+		        $query->andWhere($this::tableName() . '.site_price = 0');
 	        }
         }
 

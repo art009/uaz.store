@@ -11,6 +11,7 @@ use yii\widgets\ActiveForm;
 /* @var $dataProvider \yii\data\ActiveDataProvider */
 /* @var $linkDataProvider \yii\data\ActiveDataProvider */
 /* @var $searchQuery string */
+/* @var $wordSearchQuery string */
 /* @var $providerList array */
 
 $this->title = $model->title . ' [ ' . $model->vendor_code . ' ]';
@@ -61,6 +62,12 @@ $shopItemId = $model->id;
 					$providerList,
 					['class' => 'form-control', 'style' => 'width: auto; display: inline-block; margin-bottom: 5px;']
 			); ?>
+			Поиск по части названия:
+			<?php echo Html::textInput('wordSearch', $wordSearchQuery, [
+				'placeholder' => 'Введите часть названия',
+				'class' => 'form-control',
+				'style' => 'width: auto; display: inline-block; margin-bottom: 5px;'
+			]); ?>
 		</div>
 	</div>
 	<div class="row">
@@ -98,6 +105,9 @@ $shopItemId = $model->id;
 					'list' => function ($url) {
 						return Html::a(Html::icon('list'), $url, ['title' => 'Показать в прайсе', 'class' => 'btn-show-in-list']);
 					},
+				],
+				'options' => [
+					'width' => '50px',
 				],
 			],
 		],

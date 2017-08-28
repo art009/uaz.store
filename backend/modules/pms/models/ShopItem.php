@@ -29,15 +29,19 @@ class ShopItem extends \yii\db\ActiveRecord
 	const STATUS_IGNORE = 1;
 	const STATUS_PROFIT = 2;
 	const STATUS_LOST = 3;
+	const STATUS_WITHOUT_RELATION = 4;
+	const STATUS_WITHOUT_RELATION_AND_NOT_IGNORED = 5;
 
 	/**
 	 * @var array
 	 */
 	public static $statusList = [
-		self::STATUS_ACTIVE => 'Актив',
-		self::STATUS_IGNORE => 'Пропуск',
-		self::STATUS_PROFIT => 'Выгода',
-		self::STATUS_LOST => 'Потеря',
+		self::STATUS_ACTIVE => 'Есть связь + Нет пропуска + Цена для сайта больше 0 (Актив)',
+		self::STATUS_IGNORE => 'Есть связь + Пропуск (Игнор)',
+		self::STATUS_PROFIT => 'Цена для сайта > цены магазина (Выгода)',
+		self::STATUS_LOST => 'Есть связь + Цена для сайта равна 0 (Потеря)',
+		self::STATUS_WITHOUT_RELATION => 'Нет связи + пропуск',
+		self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED => 'Нет связи + нет пропуска',
 	];
 
     /**
@@ -112,14 +116,22 @@ class ShopItem extends \yii\db\ActiveRecord
 	 */
 	public function getStatus()
 	{
-		if ($this->ignored == AppHelper::YES) {
-			$result = self::STATUS_IGNORE;
-		} elseif ($this->site_price == 0) {
-			$result = self::STATUS_LOST;
-		} elseif ($this->site_price > $this->price) {
-			$result = self::STATUS_PROFIT;
+		if ($this->providerItems) {
+			if ($this->ignored == AppHelper::YES) {
+				$result = self::STATUS_IGNORE;
+			} elseif ($this->site_price == 0) {
+				$result = self::STATUS_LOST;
+			} elseif ($this->site_price > $this->price) {
+				$result = self::STATUS_PROFIT;
+			} else {
+				$result = self::STATUS_ACTIVE;
+			}
 		} else {
-			$result = self::STATUS_ACTIVE;
+			if ($this->ignored == AppHelper::YES) {
+				$result = self::STATUS_WITHOUT_RELATION;
+			} else {
+				$result = self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED;
+			}
 		}
 
 		return $result;

@@ -4,6 +4,7 @@ namespace app\modules\pms\controllers;
 
 use app\modules\pms\models\Provider;
 use app\modules\pms\models\ProviderItem;
+use backend\modules\pms\components\PriceExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
 use Yii;
@@ -122,11 +123,24 @@ class ShopItemController extends Controller
 			throw new NotFoundHttpException('Не найден поставщик.');
 		}
 
-		$searchQuery = Yii::$app->request->post('search', $model->title);
-		$resolver = new SimilarPositionResolver($provider->id, $searchQuery, $searchQuery != $model->title ? $model->vendor_code : null);
+
+		$providerItemQuery = ProviderItem::find();
+		$wordSearchQuery = Yii::$app->request->post('wordSearch');
+		$searchQuery = null;
+		if ($wordSearchQuery) {
+			$providerItemQuery->andFilterWhere(['like', 'title', $wordSearchQuery]);
+			$providerItemQuery->orFilterWhere(['like', 'vendor_code', $wordSearchQuery]);
+		} else {
+			$searchQuery = Yii::$app->request->post('search');
+			if (!$searchQuery) {
+				$searchQuery = $model->title;
+			}
+			$resolver = new SimilarPositionResolver($provider->id, $searchQuery, $searchQuery != $model->title ? $model->vendor_code : null);
+			$providerItemQuery->where(['id' => $resolver->getIds()]);
+		}
 
 		$dataProvider = new ActiveDataProvider([
-			'query' => ProviderItem::find()->where(['id' => $resolver->getIds()])->limit(30),
+			'query' => $providerItemQuery->limit(100),
 			'sort' => false,
 			'pagination' => false,
 		]);
@@ -144,6 +158,7 @@ class ShopItemController extends Controller
 			'provider' => $provider,
 			'dataProvider' => $dataProvider,
 			'searchQuery' => $searchQuery,
+			'wordSearchQuery' => $wordSearchQuery,
 			'linkDataProvider' => $linkDataProvider,
 			'providerList' => $providerList,
 		]);
@@ -225,5 +240,29 @@ class ShopItemController extends Controller
 		$shopItem->unlink('providerItems', $providerItem, true);
 
 		return true;
+	}
+
+	/**
+	 * Пересчет
+	 */
+	public function actionCalculate()
+	{
+		$exporter = new PriceExporter(Yii::$app->db);
+
+		Yii::$app->session->setFlash('info', 'Пересчитано позиций: ' . $exporter->calculate());
+
+		return $this->redirect('index');
+	}
+
+	/**
+	 * Пересчет и выгрузка цен
+	 */
+	public function actionExport()
+	{
+		$exporter = new PriceExporter(Yii::$app->db);
+
+		Yii::$app->session->setFlash('info', 'Обновлено цен: ' . $exporter->export(true));
+
+		return $this->redirect('index');
 	}
 }
