@@ -220,6 +220,9 @@ class ShopItemController extends Controller
 
 		$shopItem->link('providerItems', $providerItem);
 
+		$exporter = new PriceExporter(Yii::$app->db);
+		$exporter->calculate($shopItem->id);
+
 		return true;
 	}
 
@@ -238,6 +241,9 @@ class ShopItemController extends Controller
 		$providerItem = $this->findProviderItemModel($id);
 
 		$shopItem->unlink('providerItems', $providerItem, true);
+
+		$exporter = new PriceExporter(Yii::$app->db);
+		$exporter->calculate($shopItem->id);
 
 		return true;
 	}

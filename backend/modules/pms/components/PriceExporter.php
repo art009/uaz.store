@@ -39,24 +39,26 @@ class PriceExporter
 
 		return $this->db->createCommand("
 			UPDATE catalog_product 
-			SET price = (
-				SELECT site_price FROM shop_item WHERE shop_item.code = catalog_product.external_id
-			)
+			SET price = ROUND((
+				SELECT IF (site_price > price, site_price, price) FROM shop_item WHERE shop_item.code = catalog_product.external_id
+			), 1)
 		")->execute();
 	}
 
 	/**
+	 * @param int $shopItemId
+	 *
 	 * @return int
 	 */
-	public function calculate()
+	public function calculate(int $shopItemId = 0)
 	{
 		return $this->db->createCommand("
-			UPDATE shop_item SET site_price = (
+			UPDATE shop_item SET site_price = ROUND((
 				SELECT ROUND(SUM(provider_item.price), 2) 
 				FROM provider_item_to_shop_item
 				LEFT JOIN provider_item ON provider_item_to_shop_item.provider_item_id = provider_item.id
 				WHERE provider_item_to_shop_item.shop_item_id = shop_item.id
-			) * (1 + percent / 100)
+			) * (1 + percent / 100) " . ($shopItemId ? "" : "") . ", 1)
 		")->execute();
 	}
 }

@@ -79,7 +79,7 @@ class ShopItem extends \yii\db\ActiveRecord
             'title' => 'Название',
             'price' => 'Цена',
             'percent' => 'Процент накрутки',
-            'site_price' => 'Цена для сайта',
+            'site_price' => 'Цена расчитанная',
             'unit' => 'Единица измерения',
             'ignored' => 'Пропуск обновления',
             'created_at' => 'Время создания',

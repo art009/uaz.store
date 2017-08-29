@@ -62,11 +62,14 @@ $shopItemId = $model->id;
 					$providerList,
 					['class' => 'form-control', 'style' => 'width: auto; display: inline-block; margin-bottom: 5px;']
 			); ?>
-			Поиск по части названия:
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-8">
 			<?php echo Html::textInput('wordSearch', $wordSearchQuery, [
 				'placeholder' => 'Введите часть названия',
 				'class' => 'form-control',
-				'style' => 'width: auto; display: inline-block; margin-bottom: 5px;'
+				'style' => 'margin-bottom: 5px;'
 			]); ?>
 		</div>
 	</div>
