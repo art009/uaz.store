@@ -26,6 +26,8 @@ use yii\widgets\ActiveForm;
 
 	<?= $form->field($model, 'ignored')->checkbox() ?>
 
+	<?= $form->field($model, 'status')->checkbox() ?>
+
 	<?= $form->field($model, 'site_price')->textInput(['maxlength' => true, 'disabled' => true]) ?>
 
     <div class="form-group">

@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'site_price',
             'unit',
             [
-	            'attribute' => 'status',
+	            'attribute' => 'tempStatus',
 	            'value' => 'statusLabel',
 	            'filter' => ShopItem::$statusList,
             ],

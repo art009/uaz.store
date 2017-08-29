@@ -18,6 +18,7 @@ use yii\behaviors\TimestampBehavior;
  * @property float $site_price
  * @property string $unit
  * @property integer $ignored
+ * @property integer $status
  * @property string $created_at
  * @property string $updated_at
  *
@@ -31,6 +32,7 @@ class ShopItem extends \yii\db\ActiveRecord
 	const STATUS_LOST = 3;
 	const STATUS_WITHOUT_RELATION = 4;
 	const STATUS_WITHOUT_RELATION_AND_NOT_IGNORED = 5;
+	const STATUS_WITHOUT_RELATION_AND_NOT_FOUND = 6;
 
 	/**
 	 * @var array
@@ -42,6 +44,7 @@ class ShopItem extends \yii\db\ActiveRecord
 		self::STATUS_LOST => 'Есть связь + Цена для сайта равна 0 (Потеря)',
 		self::STATUS_WITHOUT_RELATION => 'Нет связи + пропуск',
 		self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED => 'Нет связи + нет пропуска',
+		self::STATUS_WITHOUT_RELATION_AND_NOT_FOUND => 'Нет связи + не найден',
 	];
 
     /**
@@ -59,7 +62,7 @@ class ShopItem extends \yii\db\ActiveRecord
     {
         return [
             [['code'], 'required'],
-            [['price', 'percent', 'site_price'], 'number'],
+            [['price', 'percent', 'site_price', 'status'], 'number'],
             [['ignored'], 'boolean'],
             [['created_at', 'updated_at', 'status'], 'safe'],
             [['code', 'vendor_code', 'title', 'unit'], 'string', 'max' => 255],
@@ -84,7 +87,8 @@ class ShopItem extends \yii\db\ActiveRecord
             'ignored' => 'Пропуск обновления',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',
-            'status' => 'Статус',
+            'status' => 'Пока не найдено у поставщика',
+            'tempStatus' => 'Статус',
             'statusLabel' => 'Статус',
         ];
     }
@@ -114,7 +118,7 @@ class ShopItem extends \yii\db\ActiveRecord
 	/**
 	 * @return int
 	 */
-	public function getStatus()
+	public function getTempStatus()
 	{
 		if ($this->providerItems) {
 			if ($this->ignored == AppHelper::YES) {
@@ -127,7 +131,9 @@ class ShopItem extends \yii\db\ActiveRecord
 				$result = self::STATUS_ACTIVE;
 			}
 		} else {
-			if ($this->ignored == AppHelper::YES) {
+			if ($this->status == AppHelper::YES) {
+				$result = self::STATUS_WITHOUT_RELATION_AND_NOT_FOUND;
+			} elseif ($this->ignored == AppHelper::YES) {
 				$result = self::STATUS_WITHOUT_RELATION;
 			} else {
 				$result = self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED;
@@ -144,7 +150,7 @@ class ShopItem extends \yii\db\ActiveRecord
 	 */
 	public function getStatusLabel()
 	{
-		return self::$statusList[$this->getStatus()] ?? 'Неизвестен';
+		return self::$statusList[$this->getTempStatus()] ?? 'Неизвестен';
 	}
 	/**
 	 * @return \yii\db\ActiveQuery

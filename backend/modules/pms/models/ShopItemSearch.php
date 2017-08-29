@@ -14,7 +14,7 @@ class ShopItemSearch extends ShopItem
 	/**
 	 * @var int
 	 */
-	public $status;
+	public $tempStatus;
 
     /**
      * @inheritdoc
@@ -23,7 +23,7 @@ class ShopItemSearch extends ShopItem
     {
         return [
             [['id'], 'integer'],
-            [['code', 'vendor_code', 'title', 'unit', 'ignored', 'created_at', 'updated_at', 'status'], 'safe'],
+            [['code', 'vendor_code', 'title', 'unit', 'ignored', 'created_at', 'updated_at', 'tempStatus'], 'safe'],
             [['price', 'percent', 'site_price'], 'number'],
         ];
     }
@@ -69,14 +69,20 @@ class ShopItemSearch extends ShopItem
             ->andFilterWhere(['like', $this::tableName() . '.unit', $this->unit]);
 
         $cache = \Yii::$app->cache;
-        if (!array_key_exists('status', $params[$this->formName()] ?? []) && $cache->exists('shop-item-search-status')) {
-	        $this->status = $cache->get('shop-item-search-status');
+        if (!array_key_exists('tempStatus', $params[$this->formName()] ?? []) && $cache->exists('shop-item-search-status')) {
+	        $this->tempStatus = $cache->get('shop-item-search-status');
         }
-        if (array_key_exists($this->status, self::$statusList)) {
-        	$cache->set('shop-item-search-status', $this->status);
-        	if ($this->status == self::STATUS_WITHOUT_RELATION || $this->status == self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED) {
-        		if ($this->status == self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED) {
+        if (array_key_exists($this->tempStatus, self::$statusList)) {
+        	if (in_array($this->tempStatus, [
+		        self::STATUS_WITHOUT_RELATION,
+		        self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED,
+		        self::STATUS_WITHOUT_RELATION_AND_NOT_FOUND,
+	        ])) {
+        		if ($this->tempStatus == self::STATUS_WITHOUT_RELATION_AND_NOT_FOUND) {
+			        $query->andFilterWhere([$this::tableName() . '.status' => AppHelper::YES]);
+		        } elseif ($this->tempStatus == self::STATUS_WITHOUT_RELATION_AND_NOT_IGNORED) {
 			        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::NO]);
+			        $query->andFilterWhere([$this::tableName() . '.status' => AppHelper::NO]);
 		        } else {
 			        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::YES]);
 		        }
@@ -84,20 +90,21 @@ class ShopItemSearch extends ShopItem
 	        } else {
 		        $query->andWhere(ProviderItem::tableName() . '.id IS NOT NULL');
 	        }
-        	if ($this->status == self::STATUS_ACTIVE) {
+        	if ($this->tempStatus == self::STATUS_ACTIVE) {
 		        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::NO]);
 		        $query->andWhere($this::tableName() . '.site_price > 0');
 	        }
-        	if ($this->status == self::STATUS_IGNORE) {
+        	if ($this->tempStatus == self::STATUS_IGNORE) {
 		        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::YES]);
 	        }
-        	if ($this->status == self::STATUS_PROFIT) {
+        	if ($this->tempStatus == self::STATUS_PROFIT) {
 		        $query->andWhere($this::tableName() . '.site_price > ' . $this::tableName() . '.price');
 	        }
-        	if ($this->status == self::STATUS_LOST) {
+        	if ($this->tempStatus == self::STATUS_LOST) {
 		        $query->andWhere($this::tableName() . '.site_price = 0');
 	        }
         }
+	    $cache->set('shop-item-search-status', $this->tempStatus);
 
         return $dataProvider;
     }
