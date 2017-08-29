@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 /* @var $wordSearchQuery string */
 /* @var $providerList array */
 
-$this->title = $model->title . ' [ ' . $model->vendor_code . ' ]';
+$this->title = $model->title . ' [ ' . $model->vendor_code . ' ] [ ' . $model->price . ' ]';
 $this->params['breadcrumbs'][] = ['label' => 'Система управления товарами', 'url' => ['/pms']];
 $this->params['breadcrumbs'][] = ['label' => 'Товары магазина', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
