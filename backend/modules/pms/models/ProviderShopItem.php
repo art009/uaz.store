@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $shop_item_id
  * @property integer $provider_item_id
+ * @property integer $quantity
  *
  * @property ProviderItem $providerItem
  * @property ShopItem $shopItem
@@ -30,7 +31,7 @@ class ProviderShopItem extends \yii\db\ActiveRecord
     {
         return [
             [['shop_item_id', 'provider_item_id'], 'required'],
-            [['shop_item_id', 'provider_item_id'], 'integer'],
+            [['shop_item_id', 'provider_item_id', 'quantity'], 'integer'],
             [['shop_item_id', 'provider_item_id'], 'unique', 'targetAttribute' => ['shop_item_id', 'provider_item_id'], 'message' => 'The combination of ID товара магазина and ID товара поставщика has already been taken.'],
             [['provider_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProviderItem::className(), 'targetAttribute' => ['provider_item_id' => 'id']],
             [['shop_item_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopItem::className(), 'targetAttribute' => ['shop_item_id' => 'id']],
@@ -45,6 +46,7 @@ class ProviderShopItem extends \yii\db\ActiveRecord
         return [
             'shop_item_id' => 'ID товара магазина',
             'provider_item_id' => 'ID товара поставщика',
+            'quantity' => 'Кол-во единиц товара поставщика',
         ];
     }
 

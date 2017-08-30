@@ -9,6 +9,7 @@ class m170823_061748_provider_item_to_shop_item extends Migration
 		$this->createTable('provider_item_to_shop_item', [
 			'shop_item_id' => $this->integer()->notNull()->comment('ID товара магазина'),
 			'provider_item_id' => $this->integer()->notNull()->comment('ID товара поставщика'),
+			'quantity' => $this->integer()->defaultValue(0)->comment('Кол-во единиц товара поставщика'),
 		], 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB');
 
 		$this->addForeignKey('shop_item_key', 'provider_item_to_shop_item', 'shop_item_id', 'shop_item', 'id');

@@ -7,6 +7,7 @@ use app\modules\pms\models\ProviderItem;
 use backend\modules\pms\components\PriceExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
+use common\components\AppHelper;
 use Yii;
 use app\modules\pms\models\ShopItem;
 use app\modules\pms\models\ShopItemSearch;
@@ -274,5 +275,47 @@ class ShopItemController extends Controller
 		Yii::$app->session->setFlash('info', 'Обновлено цен: ' . $exporter->export(true));
 
 		return $this->redirect('index');
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return \yii\web\Response
+	 */
+	public function actionIgnore(int $id)
+	{
+		$model = $this->findModel($id);
+		$ignored = !$model->ignored;
+		$model->updateAttributes([
+			'ignored' => $ignored,
+		]);
+		if ($ignored == AppHelper::YES) {
+			Yii::$app->session->setFlash('warning', 'Позиция магазина добавлена в игнор.');
+		} else {
+			Yii::$app->session->setFlash('success', 'Позиция магазина убрана из игнора.');
+		}
+
+		return $this->redirect(['bind', 'id' => $id]);
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return \yii\web\Response
+	 */
+	public function actionNotFound(int $id)
+	{
+		$model = $this->findModel($id);
+		$notFound = !$model->status;
+		$model->updateAttributes([
+			'status' => $notFound,
+		]);
+		if ($notFound == AppHelper::YES) {
+			Yii::$app->session->setFlash('warning', 'Позиция магазина помечена ненайденной у поставщика');
+		} else {
+			Yii::$app->session->setFlash('success', 'У позиции магазина убрана отметка ненайденной.');
+		}
+
+		return $this->redirect(['bind', 'id' => $id]);
 	}
 }

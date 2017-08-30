@@ -159,4 +159,20 @@ class ShopItem extends \yii\db\ActiveRecord
 	{
 		return $this->hasMany(ProviderItem::className(), ['id' => 'provider_item_id'])->viaTable('provider_item_to_shop_item', ['shop_item_id' => 'id']);
 	}
+
+	/**
+	 * @return int
+	 */
+	public function getNextUnBoundId()
+	{
+		$query = self::find()
+			->select([self::tableName() . '.id'])
+			->joinWith(['providerItems'])
+			->andFilterWhere([self::tableName() . '.ignored' => AppHelper::NO])
+			->andFilterWhere([self::tableName() . '.status' => AppHelper::NO])
+			->andWhere(ProviderItem::tableName() . '.id IS NULL')
+			->andWhere(self::tableName() . '.id > ' . $this->id);
+
+		return $query->scalar();
+	}
 }

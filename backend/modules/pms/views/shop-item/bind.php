@@ -21,12 +21,25 @@ $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'i
 $this->params['breadcrumbs'][] = 'Связывание';
 
 $shopItemId = $model->id;
+$nextId = $model->getNextUnBoundId();
 ?>
 <div class="shop-item-bind">
+
 	<h1><?= Html::encode($this->title) ?></h1>
-	<p>
-		Установленные связи:
-	</p>
+	<div class="row">
+		<div class="col-xs-4">
+			Установленные связи:
+		</div>
+		<div class="col-xs-5 text-right" style="margin-bottom: 4px;">
+			<?php echo Html::a('Игнор', ['ignore', 'id' => $model->id], ['class' => 'btn btn-sm btn-default']) ?>
+			<?php echo Html::a('Не нашел!', ['not-found', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
+		</div>
+		<div class="col-xs-3 text-right" style="margin-bottom: 4px;">
+			<?php if ($nextId): ?>
+			<?php echo Html::a('Следующий непривязанный', ['bind', 'id' => $nextId], ['class' => 'btn btn-sm btn-primary']) ?>
+			<?php endif; ?>
+		</div>
+	</div>
     <?php echo GridView::widget([
         'dataProvider' => $linkDataProvider,
         'tableOptions' => [
@@ -40,6 +53,7 @@ $shopItemId = $model->id;
 			'title',
 			'price',
 			'unit',
+			'manufacturer',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{unlink}',
@@ -96,6 +110,7 @@ $shopItemId = $model->id;
 			'title',
 			'price',
 			'unit',
+			'manufacturer',
 			[
 				'class' => 'yii\grid\ActionColumn',
 				'template' => '{link} {unlink} {list}',
