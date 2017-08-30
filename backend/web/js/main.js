@@ -196,7 +196,7 @@ jQuery(document).ready(function () {
                 	$(row).find('a.btn-link-item').removeClass('hidden');
                 }
                 if (rowsCount <= 1) {
-	                $(table).find('tbody').html('<tr><td colspan="6"><div class="empty">Ничего не найдено.</div></td></tr>');
+	                $(table).find('tbody').html('<tr><td colspan="7"><div class="empty">Ничего не найдено.</div></td></tr>');
                 }
             },
             error: function(error) {
