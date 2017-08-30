@@ -4,6 +4,7 @@ namespace app\modules\pms\controllers;
 
 use app\modules\pms\models\Provider;
 use app\modules\pms\models\ProviderItem;
+use app\modules\pms\models\ProviderShopItem;
 use backend\modules\pms\components\PriceExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
@@ -317,5 +318,25 @@ class ShopItemController extends Controller
 		}
 
 		return $this->redirect(['bind', 'id' => $id]);
+	}
+
+	/**
+	 * @param int $providerItemId
+	 * @param int $shopItemId
+	 * @param int $quantity
+	 *
+	 * @return int
+	 */
+	public function actionQuantity(int $providerItemId, int $shopItemId, int $quantity)
+	{
+		$result = ProviderShopItem::updateAll(['quantity' => $quantity], [
+			'shop_item_id' => $shopItemId,
+			'provider_item_id' => $providerItemId,
+		]);
+
+		$exporter = new PriceExporter(Yii::$app->db);
+		$exporter->calculate($shopItemId);
+
+		return $result;
 	}
 }

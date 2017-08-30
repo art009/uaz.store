@@ -54,7 +54,7 @@ class PriceExporter
 	{
 		return $this->db->createCommand("
 			UPDATE shop_item SET site_price = ROUND((
-				SELECT ROUND(SUM(provider_item.price), 2) 
+				SELECT ROUND(SUM(provider_item.price * provider_item_to_shop_item.quantity), 2) 
 				FROM provider_item_to_shop_item
 				LEFT JOIN provider_item ON provider_item_to_shop_item.provider_item_id = provider_item.id
 				WHERE provider_item_to_shop_item.shop_item_id = shop_item.id

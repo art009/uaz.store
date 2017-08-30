@@ -161,6 +161,7 @@ jQuery(document).ready(function () {
 			    success: function () {
 				    $(row).find('td').first().html(rowsCount + 1);
 				    $(row).find('td').last().html(
+				    	'<input type="number" class="form-control quantity" name="quantity" value="1" title="Количество" step="1" min="1">' +
 					    '<a class="btn-unlink-item" href="/pms/shop-item/unlink?' + query + '" title="Отвязать">' +
 					    '<span class="glyphicon glyphicon-remove-sign"></span>' +
 					    '</a>'
@@ -204,5 +205,26 @@ jQuery(document).ready(function () {
         });
 
         return false;
+    }).on('change', 'input.quantity', function () {
+    	var input = $(this),
+		    quantity = $(input).val(),
+		    tr = $(input).closest('tr'),
+		    table = $(tr).closest('table'),
+		    shopItemId = $(table).data('item-id'),
+		    providerItemId = $(tr).data('key');
+
+	    $.ajax({
+		    url: '/pms/shop-item/quantity?shopItemId=' + shopItemId + '&providerItemId=' + providerItemId + '&quantity=' + quantity,
+		    beforeSend: function () {
+			    $(input).prop('disabled', true);
+		    },
+		    success: function () {},
+		    error: function(error) {
+			    alert('Невозможно изменить количество: ' + error.responseText);
+		    },
+		    complete: function () {
+			    $(input).prop('disabled', false);
+		    }
+	    });
     });
 });

@@ -44,7 +44,8 @@ $nextId = $model->getNextUnBoundId();
         'dataProvider' => $linkDataProvider,
         'tableOptions' => [
             'class' => 'table table-striped table-bordered',
-            'id' => 'shop-item-link-table'
+            'id' => 'shop-item-link-table',
+	        'data-item-id' => $shopItemId
         ],
 		'summary' => false,
         'columns' => [
@@ -56,12 +57,24 @@ $nextId = $model->getNextUnBoundId();
 			'manufacturer',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{unlink}',
+                'template' => '{quantity}{unlink}',
                 'buttons' => [
+					'quantity' => function ($url, $model) use ($shopItemId) {
+						/* @var $model \app\modules\pms\models\ProviderItem */
+						return Html::input('number', 'quantity', $model->getLinkQuantity($shopItemId), [
+							'title' => 'Количество',
+							'class' => 'form-control quantity',
+							'step' => 1,
+							'min' => 1,
+						]);
+					},
 					'unlink' => function ($url) use ($shopItemId) {
 						return Html::a(Html::icon('remove-sign'), $url . '&shopItemId=' . $shopItemId, ['title' => 'Отвязать', 'class' => 'btn-unlink-item']);
 					},
                 ],
+	            'options' => [
+		            'width' => '90px',
+	            ],
             ],
         ],
     ]); ?>

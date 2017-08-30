@@ -138,3 +138,5 @@ select.has-chosen { height: 34px; width: 100%; display: inline-block; vertical-a
 .table-bordered > thead > tr > td,
 .table-bordered > tbody > tr > td,
 .table-bordered > tfoot > tr > td { padding: 5px; }
+
+input[type=number].quantity { display: inline-block; width: 50px; margin-right: 10px; height: 27px; padding: 3px; }

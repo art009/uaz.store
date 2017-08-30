@@ -114,4 +114,20 @@ class ProviderItem extends \yii\db\ActiveRecord
 
     	return in_array($id, $existedIds);
     }
+
+	/**
+	 * @param int $shopItemId
+	 *
+	 * @return int
+	 */
+    public function getLinkQuantity(int $shopItemId)
+    {
+    	return (int)ProviderShopItem::find()
+		    ->select('quantity')
+		    ->where([
+		    	'shop_item_id' => $shopItemId,
+		    	'provider_item_id' => $this->id,
+		    ])
+		    ->scalar();
+    }
 }
