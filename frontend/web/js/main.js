@@ -524,6 +524,42 @@ $(document).ready(function($){
 
 		return false;
 	});
+
+	$(document).on('click', '.image-product', function (event) {
+
+        event.preventDefault();
+        $('.chosen').removeClass('chosen');
+
+        $(this).addClass('chosen');
+        var number = $(this).text() - 1;
+
+        var section = $('tr').filter('[data-key="' + number + '"]'),
+            pos = section.offset().top - $('#w1-collapse').height();
+
+        $('html, body').animate({scrollTop: pos}, 1000);
+        $(section).animate({'opacity':'0'},200,function(){
+            $(this).addClass('chosen');
+            $(this).animate({'opacity':'1'},200);
+        });
+    });
+
+    $(document).on('click', '.manual-product-row', function (event) {
+
+        event.preventDefault();
+        $('.chosen').removeClass('chosen');
+
+        $(this).addClass('chosen');
+        var number = $(this).attr('data-key') ;
+        ++number;
+        var section = $('#' + number + '.image-product'),
+			pos = section.offset().top - $('#w1-collapse').height();
+
+        $('html, body').animate({scrollTop: pos}, 1000);
+        $(section).animate({'opacity':'0'},200,function(){
+            $(this).addClass('chosen');
+            $(this).animate({'opacity':'1'},200);
+        });
+    })
 });
 
 $(window).load(function() {

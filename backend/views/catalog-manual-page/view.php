@@ -62,5 +62,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
         ],
     ]) ?>
-
 </div>

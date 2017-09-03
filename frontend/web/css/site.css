@@ -383,6 +383,15 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .manual-view-content.manual-list .manual-item, .category-view-content.category-list .category-item { margin-right: 10px; }
 .manual-view-content .manual-item .image { background-size: cover; }
 
+.manual-view #manual-product-row{
+	cursor: pointer;
+}
+.manual-view table tbody tr:nth-child(odd) { color: #333333}
+.manual-view table tbody tr:nth-child(even) { color: #ffffff}
+
+.manual-view .image-product.chosen { background-color: #ecb52d; }
+.manual-view .manual-product-row.chosen { background-color: #ecb52d; color: #ffffff}
+
 .category-products-list { text-align: center }
 .category-products-list .product-item { margin: 0 20px 25px; }
 

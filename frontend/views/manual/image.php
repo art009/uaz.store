@@ -3,9 +3,11 @@
 /* @var $this yii\web\View */
 /* @var $model \common\models\Manual */
 /* @var $category \common\models\ManualCategory */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
 use yii\helpers\Html;
 use frontend\widgets\ManualCategoryTreeWidget;
+use yii\grid\GridView;
 
 $this->title = 'Справочник';
 $this->params['breadcrumbs'] = $category->createBreadcrumbs();
@@ -28,7 +30,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 							'height' => $manualProduct->height . 'px',
 						]);
 						?>
-						<div class="image-product" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
+						<div class="image-product" id="<?= $manualProduct->number ?>" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
 						<?php $positions = $manualProduct->getPositionsArray(); ?>
 						<?php if ($positions): ?>
 							<?php foreach ($positions as $position): ?>
@@ -45,7 +47,6 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 						<?php endif; ?>
 					<?php endforeach; ?>
 				<?php endif; ?>
-
 			</div>
 			<div class="manual-page-tools">
 				<span class="tool-zoom-label">Масштаб <b>100</b>%</span>
@@ -54,5 +55,33 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 				<span class="tool-zoom-plus">+</span>
 			</div>
 		</div>
+
+	    <?=GridView::widget([
+			'dataProvider' => $dataProvider,
+			'rowOptions' => [
+                'class' => 'manual-product-row'
+            ],
+			'columns' => [
+				'number',
+				'code',
+				'title',
+				[
+					'class' => 'yii\grid\ActionColumn',
+
+					'template' => '{buy}',
+
+					'buttons' => [
+						'buy' => function ($url,$model) {
+	                        if ($model->product_id){
+								return Html::a(
+									'<span class="button">Купить</span>',
+									$url);
+							}
+							return null;
+						},
+                    ]
+				],
+			],
+		]); ?>
 		<?php endif; ?>
 </div>

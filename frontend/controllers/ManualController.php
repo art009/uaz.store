@@ -7,6 +7,7 @@ use common\models\Manual;
 use common\models\ManualCategory;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\data\ArrayDataProvider;
 
 /**
  * Class ManualController
@@ -105,7 +106,13 @@ class ManualController extends Controller
 			throw new NotFoundHttpException('Категория без чертежа.');
 		}
 
+		$dataProvider = new ArrayDataProvider([
+			'allModels' => $category->manualProducts,
+			'pagination' => false,
+		]);
+
 		return $this->render('image', [
+			'dataProvider' => $dataProvider,
 			'model' => $model,
 			'category' => $category,
 		]);
