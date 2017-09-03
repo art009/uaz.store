@@ -23,7 +23,7 @@ class m170115_183610_catalog_category extends Migration
 
         $this->addForeignKey('parent_category', 'catalog_category', 'parent_id', 'catalog_category', 'id', 'CASCADE', 'CASCADE');
 
-        $this->createCategory(self::$list);
+        //$this->createCategory(self::$list);
     }
 
     public function down()

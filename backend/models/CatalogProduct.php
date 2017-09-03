@@ -18,11 +18,11 @@ use yii\web\UploadedFile;
  */
 class CatalogProduct extends \common\models\CatalogProduct
 {
-    const SMALL_IMAGE_WIDTH = 40;
-    const SMALL_IMAGE_HEIGHT = 40;
+    const SMALL_IMAGE_WIDTH = 88;
+    const SMALL_IMAGE_HEIGHT = 88;
 
-    const MEDIUM_IMAGE_WIDTH = 100;
-    const MEDIUM_IMAGE_HEIGHT = 100;
+    const MEDIUM_IMAGE_WIDTH = 285;
+    const MEDIUM_IMAGE_HEIGHT = 285;
 
 	/**
 	 * Нужно ли сбросить кеш для виджета на главной

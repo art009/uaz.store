@@ -2,6 +2,9 @@
 
 namespace console\controllers;
 
+use backend\models\CatalogCategory;
+use backend\models\CatalogProduct;
+use backend\models\CatalogProductImage;
 use backend\models\Menu;
 use backend\models\Manual;
 use common\components\AppHelper;
@@ -266,5 +269,117 @@ class RestoreController extends Controller
 	protected function saveToJsonFile($path, $data)
 	{
 		return file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+	}
+
+	/**
+	 * @param string $path
+	 * @return array
+	 */
+	protected function loadFromXlsFile($path)
+	{
+		$document = \PHPExcel_IOFactory::load($path);
+		$data = $document->getActiveSheet()->toArray(null, false, false, true);
+		$document->disconnectWorksheets();
+		unset($document);
+
+		return $data;
+	}
+
+	/**
+	 * @param string $title
+	 * @param int|null $parentId
+	 *
+	 * @return CatalogCategory|null
+	 */
+	protected function createCategory(string $title, int $parentId = null)
+	{
+		$category = new CatalogCategory();
+		$category->title = $title;
+		$category->parent_id = $parentId;
+		$category->link = AppHelper::transliteration($title);
+		$category->meta_keywords = $title;
+		$category->meta_description = $title;
+		if ($category->save()) {
+			return $category;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Загрузка категори товаров и связей со страницами справочников
+	 *
+	 * TODO Доделать!
+	 */
+	public function actionCategory()
+	{
+		$path = \Yii::$app->basePath . "/data/category/";
+		foreach (glob($path . "*.xlsx") as $filename) {
+			$manualLink = pathinfo($filename, PATHINFO_FILENAME);
+			$manual = Manual::findOne(['link' => $manualLink]);
+			if ($manual) {
+				$data = $this->loadFromXlsFile($filename);
+				if ($data) {
+					foreach ($data as $row) {
+						$mLevel1 = $row['A'] ?? null;
+						$mLevel2 = $row['B'] ?? null;
+						$mLevel3 = $row['C'] ?? null;
+						$pLevel1 = $row['D'] ?? null;
+						$pLevel2 = $row['E'] ?? null;
+						$pLevel3 = $row['F'] ?? null;
+						if ($mLevel1 && $mLevel2 && $mLevel3 && $pLevel1 && $pLevel2 && $pLevel3) {
+							echo $mLevel1, $mLevel2, $mLevel3, $pLevel1, $pLevel2, $pLevel3, PHP_EOL;
+						}
+						//break;
+					}
+					//$data = array_splice($data, 0, 5);
+					//echo print_r($data, true) . PHP_EOL;
+				} else {
+					echo 'Не удалось получить данные из файла ' . $filename . PHP_EOL;
+				}
+			} else {
+				echo 'Справочник `' . $manualLink . '` не найден в БД.' . PHP_EOL;
+			}
+			//break;
+		}
+	}
+
+	/**
+	 * Загрузка картинок товаров
+	 */
+	public function actionProductImages()
+	{
+		$path = \Yii::$app->basePath . "/data/images/product/";
+		/* @var $products CatalogProduct[] */
+		$products = CatalogProduct::find()->all();
+		if ($products) {
+			foreach ($products as $product) {
+				$imageDir = $path . $product->external_id . '/';
+				if ($product->image && !file_exists($imageDir)) {
+					continue;
+				}
+				echo $product->id . PHP_EOL;
+				$mainImage = null;
+				foreach (glob($imageDir . "/*.jpg") as $filename) {
+					$image = new CatalogProductImage();
+					$image->num = pathinfo($filename, PATHINFO_FILENAME);
+					$image->sourceFile = $filename;
+					$image->product_id = $product->id;
+					if ($image->num == '0') {
+						$image->main =  CatalogProductImage::MAIN_YES;
+					}
+					if ($image->save() && $image->main == CatalogProductImage::MAIN_YES) {
+						$mainImage = $image->image;
+					}
+				}
+				if ($mainImage) {
+					$product->updateAttributes([
+						'image' => $mainImage,
+					]);
+				}
+			}
+		} else {
+			echo 'Товаров нет в БД.' . PHP_EOL;
+		}
 	}
 }
