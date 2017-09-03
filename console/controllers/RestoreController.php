@@ -355,27 +355,26 @@ class RestoreController extends Controller
 		if ($products) {
 			foreach ($products as $product) {
 				$imageDir = $path . $product->external_id . '/';
-				if ($product->image && !file_exists($imageDir)) {
-					continue;
-				}
-				echo $product->id . PHP_EOL;
-				$mainImage = null;
-				foreach (glob($imageDir . "/*.jpg") as $filename) {
-					$image = new CatalogProductImage();
-					$image->num = pathinfo($filename, PATHINFO_FILENAME);
-					$image->sourceFile = $filename;
-					$image->product_id = $product->id;
-					if ($image->num == '0') {
-						$image->main =  CatalogProductImage::MAIN_YES;
+				if (file_exists($imageDir) ?? $product->image) {
+					echo $product->id . PHP_EOL;
+					$mainImage = null;
+					foreach (glob($imageDir . "/*.jpg") as $filename) {
+						$image = new CatalogProductImage();
+						$image->num = pathinfo($filename, PATHINFO_FILENAME);
+						$image->sourceFile = $filename;
+						$image->product_id = $product->id;
+						if ($image->num == '0') {
+							$image->main =  CatalogProductImage::MAIN_YES;
+						}
+						if ($image->save() && $image->main == CatalogProductImage::MAIN_YES) {
+							$mainImage = $image->image;
+						}
 					}
-					if ($image->save() && $image->main == CatalogProductImage::MAIN_YES) {
-						$mainImage = $image->image;
+					if ($mainImage) {
+						$product->updateAttributes([
+							'image' => $mainImage,
+						]);
 					}
-				}
-				if ($mainImage) {
-					$product->updateAttributes([
-						'image' => $mainImage,
-					]);
 				}
 			}
 		} else {

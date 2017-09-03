@@ -90,7 +90,7 @@ class CatalogProductImage extends \common\models\CatalogProductImage
                 }
             }
             if ($this->sourceFile) {
-	            $name = md5($this->num . time()) . '.' . pathinfo($this->sourceFile, PATHINFO_EXTENSION);
+	            $name = md5($this->sourceFile . time()) . '.' . pathinfo($this->sourceFile, PATHINFO_EXTENSION);
 	            $this->saveImage($this->sourceFile, $name);
             }
 
