@@ -351,32 +351,38 @@ class RestoreController extends Controller
 	{
 		$path = \Yii::$app->basePath . "/data/images/product/";
 		/* @var $products CatalogProduct[] */
-		$products = CatalogProduct::find()->all();
+		$products = CatalogProduct::find()->orderBy('external_id')->all();
 		if ($products) {
+			$lost= [];
 			foreach ($products as $product) {
 				$imageDir = $path . $product->external_id . '/';
-				if (file_exists($imageDir) ?? $product->image) {
-					echo $product->id . PHP_EOL;
-					$mainImage = null;
-					foreach (glob($imageDir . "/*.jpg") as $filename) {
-						$image = new CatalogProductImage();
-						$image->num = pathinfo($filename, PATHINFO_FILENAME);
-						$image->sourceFile = $filename;
-						$image->product_id = $product->id;
-						if ($image->num == '0') {
-							$image->main =  CatalogProductImage::MAIN_YES;
+				if (file_exists($imageDir)) {
+					if (false && !$product->image) {
+						echo $product->id . PHP_EOL;
+						$mainImage = null;
+						foreach (glob($imageDir . "/*.jpg") as $filename) {
+							$image = new CatalogProductImage();
+							$image->num = pathinfo($filename, PATHINFO_FILENAME);
+							$image->sourceFile = $filename;
+							$image->product_id = $product->id;
+							if ($image->num == '0') {
+								$image->main = CatalogProductImage::MAIN_YES;
+							}
+							if ($image->save() && $image->main == CatalogProductImage::MAIN_YES) {
+								$mainImage = $image->image;
+							}
 						}
-						if ($image->save() && $image->main == CatalogProductImage::MAIN_YES) {
-							$mainImage = $image->image;
+						if ($mainImage) {
+							$product->updateAttributes([
+								'image' => $mainImage,
+							]);
 						}
 					}
-					if ($mainImage) {
-						$product->updateAttributes([
-							'image' => $mainImage,
-						]);
-					}
+				} else {
+					$lost[] = $product->external_id;
 				}
 			}
+			echo 'Нет папки с картинками для ' . count($lost) . ': ' . implode(', ', $lost);
 		} else {
 			echo 'Товаров нет в БД.' . PHP_EOL;
 		}

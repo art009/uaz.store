@@ -8,6 +8,6 @@ return [
 	'fromEmail' => 'no-reply@uaz.store',
 	'fromName' => 'UAZ.STORE',
     'user.passwordResetTokenExpire' => 3600,
-    'backendUrl' => 'https://manage.uaz.store/',
-    'frontendUrl' => 'https://uaz.store/',
+    'backendUrl' => 'http://manage.uaz.store/',
+    'frontendUrl' => 'http://uaz.store/',
 ];
