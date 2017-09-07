@@ -12,6 +12,7 @@ use common\models\ManualCategory;
 use common\models\ManualProduct;
 use Yii;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 /**
  * Class RestoreController
@@ -357,7 +358,7 @@ class RestoreController extends Controller
 			foreach ($products as $product) {
 				$imageDir = $path . $product->external_id . '/';
 				if (file_exists($imageDir)) {
-					if (false && !$product->image) {
+					if (!$product->image) {
 						echo $product->id . PHP_EOL;
 						$mainImage = null;
 						foreach (glob($imageDir . "/*.jpg") as $filename) {
@@ -385,6 +386,23 @@ class RestoreController extends Controller
 			echo 'Нет папки с картинками для ' . count($lost) . ': ' . implode(', ', $lost);
 		} else {
 			echo 'Товаров нет в БД.' . PHP_EOL;
+		}
+	}
+
+	/**
+	 * Переименование кривых папок
+	 */
+	public function actionRename()
+	{
+		$path = \Yii::$app->basePath . "/data/images/product/";
+		foreach (glob($path . "/*") as $pathname) {
+			$code = pathinfo($pathname, PATHINFO_BASENAME);
+			$rCode = str_pad($code, 8, "0", STR_PAD_LEFT);
+			if (is_numeric($code) && $code > 12 && $code < 4121) {
+				if (rename($path . $code, $path . $rCode)) {
+					echo $path . $code . ' => ' . $path . $rCode . PHP_EOL;
+				}
+			}
 		}
 	}
 }
