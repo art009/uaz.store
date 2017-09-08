@@ -308,40 +308,90 @@ class RestoreController extends Controller
 	}
 
 	/**
-	 * Загрузка категори товаров и связей со страницами справочников
+	 * @param string $title
+	 * @param int|null $parentId
 	 *
-	 * TODO Доделать!
+	 * @return CatalogCategory|null
+	 */
+	protected function findCategory(string $title, int $parentId = null)
+	{
+		$category = CatalogCategory::findOne(['title' => $title, 'parent_id' => $parentId]);
+		if (!$category) {
+			$category = $this->createCategory($title, $parentId);
+		}
+
+		return $category;
+	}
+
+	/**
+	 * @param string $title1
+	 * @param string $title2
+	 * @param string $title3
+	 *
+	 * @return int
+	 */
+	protected function resolveCategoryId(string $title1, string $title2, string $title3)
+	{
+		$result = 0;
+
+		$category1 = $this->findCategory($title1);
+		if ($category1) {
+			$category2 = $this->findCategory($title2, $category1->id);
+			if ($category2) {
+				$category3 = $this->findCategory($title3, $category2->id);
+				if ($category3) {
+					$result = $category3->id;
+				}
+			}
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * Загрузка категори товаров и связей со страницами справочников
 	 */
 	public function actionCategory()
 	{
 		$path = \Yii::$app->basePath . "/data/category/";
-		foreach (glob($path . "*.xlsx") as $filename) {
+		foreach (glob($path . "*.xls*") as $filename) {
 			$manualLink = pathinfo($filename, PATHINFO_FILENAME);
 			$manual = Manual::findOne(['link' => $manualLink]);
 			if ($manual) {
 				$data = $this->loadFromXlsFile($filename);
 				if ($data) {
 					foreach ($data as $row) {
-						$mLevel1 = $row['A'] ?? null;
-						$mLevel2 = $row['B'] ?? null;
-						$mLevel3 = $row['C'] ?? null;
-						$pLevel1 = $row['D'] ?? null;
-						$pLevel2 = $row['E'] ?? null;
-						$pLevel3 = $row['F'] ?? null;
+						$mLevel1 = trim($row['A'] ?? null);
+						$mLevel2 = trim($row['B'] ?? null);
+						$mLevel3 = trim($row['C'] ?? null);
+						$pLevel1 = trim($row['D'] ?? null);
+						$pLevel2 = trim($row['E'] ?? null);
+						$pLevel3 = trim($row['F'] ?? null);
 						if ($mLevel1 && $mLevel2 && $mLevel3 && $pLevel1 && $pLevel2 && $pLevel3) {
-							echo $mLevel1, $mLevel2, $mLevel3, $pLevel1, $pLevel2, $pLevel3, PHP_EOL;
+							$manualPage = ManualCategory::findOne(['title' => $mLevel3, 'manual_id' => $manual->id]);
+							if ($manualPage) {
+								$categoryId = $this->resolveCategoryId($pLevel1, $pLevel2, $pLevel3);
+								if ($categoryId) {
+									$manualPage->updateAttributes([
+										'catalog_category_id' => $categoryId,
+									]);
+								} else {
+									echo $manualLink . ' Не найдена категория.' . PHP_EOL;
+									echo $mLevel1, $mLevel2, $mLevel3, $pLevel1, $pLevel2, $pLevel3, PHP_EOL;
+								}
+							} else {
+								echo $manualLink . ' Не найдена страница справочника.' . PHP_EOL;
+								echo $mLevel1, $mLevel2, $mLevel3, $pLevel1, $pLevel2, $pLevel3, PHP_EOL;
+							}
 						}
-						//break;
 					}
-					//$data = array_splice($data, 0, 5);
-					//echo print_r($data, true) . PHP_EOL;
 				} else {
 					echo 'Не удалось получить данные из файла ' . $filename . PHP_EOL;
 				}
 			} else {
 				echo 'Справочник `' . $manualLink . '` не найден в БД.' . PHP_EOL;
 			}
-			//break;
 		}
 	}
 
