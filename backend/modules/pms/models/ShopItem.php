@@ -186,4 +186,18 @@ class ShopItem extends \yii\db\ActiveRecord
 
 		return $query->scalar();
 	}
+
+	/**
+	 * Идентификатор следующей позиции
+	 *
+	 * @return int
+	 */
+	public function getNextId()
+	{
+		$query = self::find()
+			->select(['id'])
+			->where('id > ' . $this->id);
+
+		return (int)$query->scalar();
+	}
 }

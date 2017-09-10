@@ -9,6 +9,7 @@ use backend\modules\pms\components\PriceExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
 use common\components\AppHelper;
+use common\models\ManualProduct;
 use Yii;
 use app\modules\pms\models\ShopItem;
 use app\modules\pms\models\ShopItemSearch;
@@ -352,5 +353,27 @@ class ShopItemController extends Controller
 		return $this->renderPartial('compare', [
 			'model' => $model,
 		]);
+	}
+
+	/**
+	 * @param int $id
+	 * @param int $productId
+	 *
+	 * @return string
+	 */
+	public function actionAssign(int $id, int $productId)
+	{
+		$model = $this->findModel($id);
+		/* @var $providerItem \app\modules\pms\models\ProviderItem */
+		$providerItem = $model->getProviderItems()->one();
+		if ($providerItem) {
+			$info = $providerItem->getInfo();
+			$codes = $info['codes'] ?? null;
+			if ($codes) {
+				ManualProduct::updateAll(['product_id' => $productId], ['code' => $codes]);
+			}
+		}
+
+		return $this->redirect(['compare', 'id' => $id]);
 	}
 }

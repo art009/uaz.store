@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use common\components\AppHelper;
 use backend\models\CatalogProduct;
+use common\models\ManualProduct;
 
 /* @var $this yii\web\View */
 /* @var $model \app\modules\pms\models\ShopItem */
@@ -11,10 +12,66 @@ use backend\models\CatalogProduct;
 $product = $model->product;
 $providerItem = $model->getProviderItems()->one();
 ?>
-<div class="shop-item-view">
-	<h1>Сравнени информации для товара "<?= Html::encode($model->title) ?>"</h1>
+<style>
+	img { max-width: 50%; max-height: 200px;}
+	h1 { padding-right: 220px; margin-bottom: 0; }
+	h2 { padding-right: 220px; margin-top: 0; }
+	.shop-item-compare { position: relative; }
+	.btn {
+		display: inline-block;
+		padding: 6px 12px;
+		margin-bottom: 0;
+		font-size: 14px;
+		font-weight: normal;
+		line-height: 1.42857143;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: middle;
+		-ms-touch-action: manipulation;
+		touch-action: manipulation;
+		cursor: pointer;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+		background-image: none;
+		border: 1px solid transparent;
+		border-radius: 4px;
+		position: fixed;
+		top: 10px;
+		color: #fff;
+	}
+	.btn-next {
+		background-color: #337ab7;
+		border-color: #2e6da4;
+		right: 10px;
+	}
+	.btn-next:hover {
+		text-decoration: none;
+		background-color: #286090;
+		border-color: #204d74;
+	}
+	.btn-assign {
+		background-color: #5cb85c;
+		border-color: #4cae4c;
+		right: 130px;
+	}
+	.btn-assign:hover {
+		text-decoration: none;
+		background-color: #449d44;
+		border-color: #398439;
+	}
+	.orange { color: orange; }
+	.green { color: darkgreen; }
+	.red { color: darkred; }
+</style>
+<div class="shop-item-compare">
+	<h1><?= Html::encode($model->title) ?></h1>
+	<h2><?= Html::encode($model->vendor_code . ' [ ' . $model->price . ' ]') ?></h2>
+	<?php echo Html::a('Следующий', ['compare', 'id' => $model->getNextId()], ['class' => 'btn btn-next']); ?>
 	<?php if ($product): ?>
 		<?php if ($providerItem): ?>
+			<?php echo Html::a('Привязать', ['assign', 'id' => $model->id, 'productId' => $product->id], ['class' => 'btn btn-assign']); ?>
 			<div style="display: inline-block; width: 49%; vertical-align: top;">
 				<?php
 				if ($product->images) {
@@ -59,13 +116,47 @@ $providerItem = $model->getProviderItems()->one();
 					if ($usage) {
 						echo 'Справочники:<br/>';
 						foreach ($usage as $item) {
-							$link = Html::a($item['title'] ?? null,'https://tdvega.com/' . ($item['link'] ?? null), ['target' => '_blank']);
+							$link = Html::a($item['title'] ?? null, 'https://tdvega.com' . ($item['link'] ?? null), ['target' => '_blank']);
 							echo '<hr/>' . implode(' / ', [
 								$item['brand'] ?? null,
 								$item['model'] ?? null,
 								$item['manual'] ?? null,
 								$link,
 							]) . '<br/>';
+						}
+					}
+					$codes = $info['codes'] ?? [];
+					if ($codes) {
+						/* @var $manualProducts ManualProduct[] */
+						$manualProducts = ManualProduct::findAll(['code' => $codes]);
+						if ($manualProducts) {
+							echo '<br/><b>Найдены товары в справочниках</b><br/>';
+							foreach ($manualProducts as $manualProduct) {
+								echo $manualProduct->title . ' [<b>' . $manualProduct->code . '</b>]: ';
+								$manualCategory = $manualProduct->manualCategory;
+								if ($manualCategory) {
+									$manual = $manualCategory->manual;
+									if ($manual) {
+										echo $manual->title . ' -> <i>' . $manualCategory->title . '</i><br/>';
+										if ($manualProduct->product_id) {
+											if ($manualProduct->product_id != $product->id) {
+												echo '<b class="red">Привязан другой товар!</b>';
+											} else {
+												echo '<b class="green">Привязан текущий товар!</b>';
+											}
+										} else {
+											echo '<b class="orange">Товар не привязан!</b>';
+										}
+									} else {
+										echo 'некорректная связь со справочником';
+									}
+								} else {
+									echo 'некорректная связь со страницей справочника';
+								}
+								echo '<hr/>';
+							}
+						} else {
+							echo '<b>Не найдены товары из справочников.</b>';
 						}
 					}
 				}
