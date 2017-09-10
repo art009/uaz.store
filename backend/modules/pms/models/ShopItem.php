@@ -2,6 +2,7 @@
 
 namespace app\modules\pms\models;
 
+use backend\models\CatalogProduct;
 use common\components\AppHelper;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -23,6 +24,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $updated_at
  *
  * @property ProviderItem[] $providerItems
+ * @property CatalogProduct $product
 */
 class ShopItem extends \yii\db\ActiveRecord
 {
@@ -152,12 +154,21 @@ class ShopItem extends \yii\db\ActiveRecord
 	{
 		return self::$statusList[$this->getTempStatus()] ?? 'Неизвестен';
 	}
+
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
 	public function getProviderItems()
 	{
 		return $this->hasMany(ProviderItem::className(), ['id' => 'provider_item_id'])->viaTable('provider_item_to_shop_item', ['shop_item_id' => 'id']);
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getProduct()
+	{
+		return $this->hasOne(CatalogProduct::className(), ['external_id' => 'code']);
 	}
 
 	/**

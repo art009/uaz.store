@@ -339,4 +339,18 @@ class ShopItemController extends Controller
 
 		return $result;
 	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	public function actionCompare(int $id)
+	{
+		$model = $this->findModel($id);
+
+		return $this->renderPartial('compare', [
+			'model' => $model,
+		]);
+	}
 }

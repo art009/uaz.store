@@ -125,4 +125,25 @@ class AppHelper
 
         return $str;
     }
+
+	/**
+	 * Загрузка данных из JSON-файла
+	 *
+	 * @param string $path
+	 *
+	 * @return mixed|null
+	 */
+	public static function loadFromJsonFile($path)
+	{
+		$result = null;
+		if (file_exists($path)) {
+			$content = @file_get_contents($path);
+			$json = json_decode($content, true);
+			if (json_last_error() == JSON_ERROR_NONE) {
+				$result = $json;
+			}
+		}
+
+		return $result;
+	}
 }

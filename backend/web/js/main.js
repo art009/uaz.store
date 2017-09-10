@@ -43,7 +43,7 @@
 		};
 
 		this.message = function (url, data) {
-			if (this.window && !this.window.closed) {
+			if (this.window && !this.window.closed && this.window.document.location.href === url) {
 				this.window.postMessage(data, url);
 				this.window.focus();
 			} else {
@@ -203,6 +203,11 @@ jQuery(document).ready(function () {
 	            alert('Невозможно разорвать связь: ' + error.responseText);
             }
         });
+
+        return false;
+    }).on('click', 'a.btn-compare', function () {
+        var url = $(this).prop('href');
+	    window.popup.open(url);
 
         return false;
     }).on('change', 'input.quantity', function () {

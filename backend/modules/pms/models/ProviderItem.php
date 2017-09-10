@@ -2,6 +2,7 @@
 
 namespace app\modules\pms\models;
 
+use common\components\AppHelper;
 use Yii;
 
 /**
@@ -129,5 +130,14 @@ class ProviderItem extends \yii\db\ActiveRecord
 		    	'provider_item_id' => $this->id,
 		    ])
 		    ->scalar();
+    }
+
+	/**
+	 * @return mixed|null
+	 */
+    public function getInfo()
+    {
+		$folder = Yii::getAlias('@console') . '/data/product/' . $this->code . '.json';
+	    return AppHelper::loadFromJsonFile($folder);
     }
 }

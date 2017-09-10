@@ -81,7 +81,7 @@ $nextId = $model->getNextUnBoundId();
 	<?php Pjax::begin(['id' => 'shop-item-bind-search']) ?>
 	<?php $form = ActiveForm::begin(['options' => ['data-pjax' => true]]); ?>
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-xs-8">
 			Поставщик:
 			<?php echo Html::dropDownList(
 					'providerId',
@@ -89,6 +89,9 @@ $nextId = $model->getNextUnBoundId();
 					$providerList,
 					['class' => 'form-control', 'style' => 'width: auto; display: inline-block; margin-bottom: 5px;']
 			); ?>
+		</div>
+		<div class="col-xs-4 text-right">
+			<?php echo Html::a('Сравнить', ['compare', 'id' => $model->id], ['class' => 'btn btn-sm btn-danger btn-compare']) ?>
 		</div>
 	</div>
 	<div class="row">
@@ -102,7 +105,7 @@ $nextId = $model->getNextUnBoundId();
 	</div>
 	<div class="row">
 		<div class="col-xs-8">
-			<?php echo Html::textInput('search', $searchQuery, ['placeholder' => 'Введите поисковые запрос', 'class' => 'form-control']); ?>
+			<?php echo Html::textInput('search', $searchQuery, ['placeholder' => 'Введите поисковый запрос', 'class' => 'form-control']); ?>
 		</div>
 		<div class="col-xs-4">
 			<?= Html::submitButton('Найти', ['class' => 'btn btn-success btn-search', 'style' => 'width: 100%;']) ?>
