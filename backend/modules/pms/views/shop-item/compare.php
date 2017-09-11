@@ -70,20 +70,19 @@ $providerItem = $model->getProviderItems()->one();
 	<h2><?= Html::encode($model->vendor_code . ' [ ' . $model->price . ' ]') ?></h2>
 	<?php echo Html::a('Следующий', ['compare', 'id' => $model->getNextId()], ['class' => 'btn btn-next']); ?>
 	<?php if ($product): ?>
-		<?php if ($providerItem): ?>
-			<?php echo Html::a('Привязать', ['assign', 'id' => $model->id, 'productId' => $product->id], ['class' => 'btn btn-assign']); ?>
-			<div style="display: inline-block; width: 49%; vertical-align: top;">
-				<?php
-				if ($product->images) {
-					foreach ($product->images as $image) {
-						echo Html::img(AppHelper::uploadsPath() . '/' . CatalogProduct::FOLDER . '/' . $image->image, [
-							'height' => 200,
-						]);
-					}
+		<div style="display: inline-block; width: 49%; vertical-align: top;">
+			<?php
+			if ($product->images) {
+				foreach ($product->images as $image) {
+					echo Html::img(AppHelper::uploadsPath() . '/' . CatalogProduct::FOLDER . '/' . $image->image, [
+						'height' => 200,
+					]);
 				}
-				?>
-			</div>
-			<div style="display: inline-block; width: 49%; vertical-align: top;">
+			}
+			?>
+		</div>
+		<div style="display: inline-block; width: 49%; vertical-align: top;">
+		<?php if ($providerItem): ?>
 				Код: <b><?php echo $providerItem->code; ?></b><br/>
 				<?php
 				$info = $providerItem->getInfo();
@@ -137,6 +136,7 @@ $providerItem = $model->getProviderItems()->one();
 								if ($manualCategory) {
 									$manual = $manualCategory->manual;
 									if ($manual) {
+										echo Html::a('Привязать', ['assign', 'id' => $model->id, 'productId' => $product->id], ['class' => 'btn btn-assign']);
 										echo $manual->title . ' -> <i>' . $manualCategory->title . '</i><br/>';
 										if ($manualProduct->product_id) {
 											if ($manualProduct->product_id != $product->id) {
@@ -161,10 +161,10 @@ $providerItem = $model->getProviderItems()->one();
 					}
 				}
 				?>
-			</div>
 		<?php else: ?>
 			Должен быть привязан товар поставщика.
 		<?php endif; ?>
+		</div>
 	<?php else: ?>
 	Товар не найден на сайте.
 	<?php endif; ?>
