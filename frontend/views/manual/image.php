@@ -42,7 +42,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 									'height' => $position['height'] . 'px',
 								]);
 								?>
-								<div class="image-product" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
+								<div class="image-product" id="<?php echo $manualProduct->id; ?>" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
 							<?php endforeach; ?>
 						<?php endif; ?>
 					<?php endforeach; ?>
@@ -58,12 +58,14 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 
 	    <?=GridView::widget([
 			'dataProvider' => $dataProvider,
-			'rowOptions' => [
-                'class' => 'manual-product-row'
-            ],
+			'rowOptions' => function ($model, $key, $index, $grid) {
+
+				return ['class' => 'manual-product-row','id' => 'row' . $model['number']];
+			},
+
 			'columns' => [
-				'number',
-				'code',
+                'number',
+                'code',
 				'title',
 				[
 					'class' => 'yii\grid\ActionColumn',
@@ -74,7 +76,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 						'buy' => function ($url,$model) {
 	                        if ($model->product_id){
 								return Html::a(
-									'<span class="button">Купить</span>',
+									'<div class="site-btn add-cart-product" data-id="' . $model->id . '">Купить</div>',
 									$url);
 							}
 							return null;

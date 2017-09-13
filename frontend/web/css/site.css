@@ -390,7 +390,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .manual-view table tbody tr:nth-child(even) { color: #ffffff}
 
 .manual-view .image-product.chosen { background-color: #ecb52d; }
-.manual-view .manual-product-row.chosen { background-color: #ecb52d; color: #ffffff}
+.manual-view .manual-product-row.chosen { background-color: #ecb52d; color: #000000}
 
 .category-products-list { text-align: center }
 .category-products-list .product-item { margin: 0 20px 25px; }

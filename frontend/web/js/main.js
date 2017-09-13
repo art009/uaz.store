@@ -531,10 +531,9 @@ $(document).ready(function($){
         $('.chosen').removeClass('chosen');
 
         $(this).addClass('chosen');
-        var number = $(this).text() - 1;
-
-        var section = $('tr').filter('[data-key="' + number + '"]'),
-            pos = section.offset().top - $('#w1-collapse').height();
+        var number = $(this).attr('id'),
+			section = $('tr#row'+number+''),
+       	    pos = section.offset().top - $('#w1-collapse').height();
 
         $('html, body').animate({scrollTop: pos}, 1000);
         $(section).animate({'opacity':'0'},200,function(){
@@ -549,13 +548,13 @@ $(document).ready(function($){
         $('.chosen').removeClass('chosen');
 
         $(this).addClass('chosen');
-        var number = $(this).attr('data-key') ;
-        ++number;
-        var section = $('#' + number + '.image-product'),
-			pos = section.offset().top - $('#w1-collapse').height();
 
-        $('html, body').animate({scrollTop: pos}, 1000);
-        $(section).animate({'opacity':'0'},200,function(){
+        var number = $(this).attr('id').substr(3),
+			section = $('.manual-page-container'),
+			pos = section.offset().top;
+
+        $('html, body').animate({scrollTop: pos }, 1000);
+        $('#' + number + '.image-product').animate({'opacity':'0'},200,function(){
             $(this).addClass('chosen');
             $(this).animate({'opacity':'1'},200);
         });
