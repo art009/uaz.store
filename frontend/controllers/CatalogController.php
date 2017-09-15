@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\CatalogCategory;
 use Yii;
 use common\components\PriceList;
 use yii\web\Controller;
@@ -14,13 +15,20 @@ use yii\web\Controller;
 class CatalogController extends Controller
 {
 	/**
-	 * Страница товаров
+	 * Страница категорий товаров
+	 *
+	 * @param int $id
 	 *
 	 * @return string
 	 */
-	public function actionIndex()
+	public function actionIndex(int $id = null)
 	{
-		return $this->render('index');
+		$categories = CatalogCategory::findAll(['parent_id' => $id]);
+
+		return $this->render('index', [
+			'categories' => $categories,
+			'id' => $id,
+		]);
 	}
 
 	/**

@@ -18,7 +18,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 		'baseLink' => '/manual/' . $model->link . '/',
 		'manualId' => $model->id,
 		'categoryId' => $category->id,
-		'toggleableParent' => true,
+		'toggleableParent' => false,
 	]); ?>
 	<div class="manual-view-content manual-list">
 		<?php if ($categories): ?>

@@ -44,6 +44,7 @@ return [
 				'<action:(search|price-list)>' => 'catalog/<action>',
 	            '<action:(login|logout|signup|password-reset|set-password)>' => 'user/<action>',
 	            ['class' => 'frontend\components\ManualUrlRule'],
+	            ['class' => 'frontend\components\CatalogUrlRule'],
             ],
         ],
 		'redis' => [

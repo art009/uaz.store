@@ -79,11 +79,12 @@ JS
 		'items' => CatalogCategory::getTreeView(),
         'multiple' => true,
 	]); ?>
+	<?php /*
     <div class="form-group">
         Поиск на страницах каталогов:
         <?php echo Html::input('text', 'manual-search', null, ['id' => 'manual-search', 'placeholder' => 'Искомая строка']); ?>
         <div id="search-results"></div>
-    </div>
+    </div> */ ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 

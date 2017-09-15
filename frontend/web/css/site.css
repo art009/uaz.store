@@ -316,17 +316,17 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 
 /* Manual */
 .manual-index h1 { text-align: center; }
-.manual-list { text-align: center; }
-.manual-item { display: inline-block; vertical-align: top; width: 190px; height: 160px; border: 2px solid #fff;
+.manual-list, .category-list { text-align: center; }
+.manual-item, .category-item { display: inline-block; vertical-align: top; width: 190px; height: 160px; border: 2px solid #fff;
 	margin: 0 5px 10px 5px; position: relative;
 }
-.manual-item > a { display: block; color: #ecb52d; text-decoration: none; font-weight: bold; }
-.manual-item .title { height: 32px; background-color: #424242; line-height: 32px; text-overflow: ellipsis;
+.manual-item > a, .category-item > a { display: block; color: #ecb52d; text-decoration: none; font-weight: bold; }
+.manual-item .title, .category-item .title { height: 32px; background-color: #424242; line-height: 32px; text-overflow: ellipsis;
 	white-space: nowrap; overflow: hidden; padding: 0 5px; text-align: center; }
-.manual-item .image { height: 124px; background: #ffffff url("/img/empty-s.png")  no-repeat center center; }
+.manual-item .image, .category-item .image { height: 124px; background: #ffffff url("/img/empty-s.png")  no-repeat center center; }
 .manual-item .year { position: absolute; right: 10px; bottom: 5px; font-size: 12px; }
-.manual-item:hover { border-color: #ecb52d; }
-.manual-item:hover .title { color: #000; background-color: #ecb52d; }
+.manual-item:hover, .category-item:hover { border-color: #ecb52d; }
+.manual-item:hover .title, .category-item:hover .title { color: #000; background-color: #ecb52d; }
 .manual-item:hover .year { color: #000; }
 /* Manual END */
 
@@ -355,7 +355,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .category-tree li.expanded > span.toggle-area:after { display: none; }
 /* Category Tree END */
 
-.manual-view .manual-view-content { width: 100%; }
+.manual-view .manual-view-content, .category-view .category-view-content { width: 100%; }
 .manual-view .manual-page-image { width: 100%; height: 64vh; overflow: hidden; position: relative; background: white;
 	-ms-user-select: none;
 	-moz-user-select: none;
@@ -380,7 +380,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .manual-view .manual-page-image .image-product { position: absolute; font-size: 16px; color: black; line-height: 18px;
 	background: white; text-align: center; font-weight: bold; border: 2px solid grey; cursor: pointer; border-radius: 4px; }
 
-.manual-view-content.manual-list .manual-item { margin-right: 10px; }
+.manual-view-content.manual-list .manual-item, .category-view-content.category-list .category-item { margin-right: 10px; }
 .manual-view-content .manual-item .image { background-size: cover; }
 
 @media (max-width: 767px ) {
@@ -459,11 +459,11 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 	/* Main page END */
 
 	.manual-index h1 { text-align: left; }
-	.manual-list { text-align: left; }
-	.manual-item { margin: 0 35px 10px 0; }
+	.manual-list, .category-list { text-align: left; }
+	.manual-item, .category-item  { margin: 0 35px 10px 0; }
 
-	.manual-view .category-tree { width: 300px; float: left; }
-	.manual-view .manual-view-content { margin-right: -300px; padding-left: 310px; }
+	.manual-view .category-tree, .category-view .category-tree { width: 300px; float: left; }
+	.manual-view .manual-view-content, .category-view .category-view-content { margin-right: -300px; padding-left: 310px; }
 }
 
 @media(min-width:1200px) {

@@ -38,8 +38,8 @@ class CatalogCategory extends \yii\db\ActiveRecord
     const SMALL_IMAGE_WIDTH = 40;
     const SMALL_IMAGE_HEIGHT = 40;
 
-    const MEDIUM_IMAGE_WIDTH = 100;
-    const MEDIUM_IMAGE_HEIGHT = 100;
+    const MEDIUM_IMAGE_WIDTH = 186;
+    const MEDIUM_IMAGE_HEIGHT = 124;
 
 	const CATEGORY_TREE_CACHE_TAG = 'catalog-category-tree-tag';
 
@@ -278,4 +278,35 @@ class CatalogCategory extends \yii\db\ActiveRecord
 
         return $result;
     }
+
+	/**
+	 * @return string
+	 */
+	public function getFullLink()
+	{
+		$result = '/' . $this->link;
+		$parent = $this->parent;
+		while ($parent) {
+			$result = '/' . $parent->link . $result;
+			$parent = $parent->parent;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Возвращает путь до картинки
+	 *
+	 * @param bool $small
+	 *
+	 * @return null|string
+	 */
+	public function getImagePath($small = false)
+	{
+		if ($this->image && file_exists(AppHelper::uploadsFolder() . '/' . ($small ? self::FOLDER_MEDIUM : self::FOLDER) . '/' . $this->image)) {
+			return AppHelper::uploadsPath() . '/' . ($small ? self::FOLDER_MEDIUM : self::FOLDER) . '/' . $this->image;
+		} else {
+			return null;
+		}
+	}
 }

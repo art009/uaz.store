@@ -88,6 +88,7 @@ class CategoryTreeWidget extends Widget
 				$item = new TreeItem($category);
 				if ($item->isValid()) {
 					$item->active = ($item->id == $this->categoryId);
+					$item->expanded = $item->active;
 					if ($item->parentId) {
 						$this->addChildItem($this->items, $item);
 					} else {

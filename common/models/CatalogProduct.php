@@ -63,11 +63,11 @@ class CatalogProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'hide', 'on_main', 'cart_counter', 'length', 'width', 'height', 'weight', 'rest', 'external_id'], 'integer'],
+            [['category_id', 'hide', 'on_main', 'cart_counter', 'length', 'width', 'height', 'weight', 'rest'], 'integer'],
             [['title', 'link'], 'required'],
             [['meta_keywords', 'meta_description', 'description'], 'string'],
             [['price', 'price_to', 'price_old'], 'number'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'external_id'], 'safe'],
             [['title', 'link', 'image', 'shop_title', 'provider_title', 'shop_code', 'provider_code', 'manufacturer_code', 'provider', 'manufacturer', 'unit'], 'string', 'max' => 255],
             [['link'], 'unique'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
