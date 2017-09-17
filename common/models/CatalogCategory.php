@@ -257,10 +257,11 @@ class CatalogCategory extends \yii\db\ActiveRecord
      * @param int|null $parentId
      * @param string|null $prefix
      * @param int $excludeId
+     * @param bool $finalOnly
      *
      * @return array
      */
-    public static function getTreeView($parentId = null, $prefix = null, $excludeId = 0)
+    public static function getTreeView($parentId = null, $prefix = null, $excludeId = 0, $finalOnly = false)
     {
         $result = [];
         /* @var $categories CatalogCategory[] */
@@ -271,8 +272,12 @@ class CatalogCategory extends \yii\db\ActiveRecord
 
         if ($categories) {
             foreach ($categories as $category) {
-                $result[$category->id] = $prefix . $category->title;
-                $result += self::getTreeView($category->id, $result[$category->id] . ' / ', $excludeId);
+            	$title = $prefix . $category->title;
+                $childTree = self::getTreeView($category->id, $title . ' / ', $excludeId, $finalOnly);
+                if (!$finalOnly || ($finalOnly && empty($childTree))) {
+	                $result[$category->id] = $title;
+                }
+                $result += $childTree;
             }
         }
 
@@ -308,5 +313,25 @@ class CatalogCategory extends \yii\db\ActiveRecord
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Построение хлебных крошек
+	 *
+	 * @return array
+	 */
+	public function createBreadcrumbs()
+	{
+		$result = [];
+		$parent = $this->parent;
+		while ($parent) {
+			$result[] = ['label' => $parent->title, 'url' => ['/catalog' . $parent->getFullLink()]];
+			$parent = $parent->parent;
+		}
+		$result[] = ['label' => 'Каталог товаров', 'url' => ['/catalog']];
+		$result = array_reverse($result);
+		$result[] = $this->title;
+
+		return $result;
 	}
 }

@@ -68,8 +68,8 @@ table .tooltip .tooltip-arrow { display: none; }
 .modal-content { border-radius: 0; background-color: rgba(66,66,66,1); }
 .modal-fm { width: 400px; margin: 45px auto; }
 
-footer { height: 68px; position: relative; bottom: 0; width: 100%; }
-footer > .container { height: 100%; padding-top: 14px; background-color: rgba(0,0,0,0.5);
+footer { height: 68px; position: relative; bottom: 0; width: 100%; z-index: 100; }
+footer > .container { height: 100%; padding-top: 14px; background-color: rgba(0,0,0,0.85);
     border-top: 1px solid rgba(0,0,0,0.2); line-height: 38px;
 }
 footer .footer-left { padding-left: 0; padding-right: 25px; }
@@ -198,7 +198,7 @@ input[type='text']::-moz-placeholder { color: #999999; }
 input[type='text']:-ms-input-placeholder { color: #999999; }
 input[type='text']:-moz-placeholder { color: #999999; }
 
-#alert-container { position: fixed; width: 100%; z-index: 100; bottom: 0; left: 0; padding: 0 10px; }
+#alert-container { position: fixed; width: 100%; z-index: 110; bottom: 0; left: 0; padding: 0 10px; }
 .alert { margin-bottom: 10px; border-radius: 0; position: relative; padding-right: 50px; }
 .alert .close { position: absolute; right: 0; top: 0; font-size: 30px; line-height: 52px; padding: 0 15px; outline: none; }
 .alert .close:hover, .alert .close:focus { opacity: 0.8; }
@@ -383,6 +383,9 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .manual-view-content.manual-list .manual-item, .category-view-content.category-list .category-item { margin-right: 10px; }
 .manual-view-content .manual-item .image { background-size: cover; }
 
+.category-products-list { text-align: center }
+.category-products-list .product-item { margin: 0 20px 25px; }
+
 @media (max-width: 767px ) {
 
 	body { font-size: 16px; }
@@ -464,6 +467,8 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 
 	.manual-view .category-tree, .category-view .category-tree { width: 300px; float: left; }
 	.manual-view .manual-view-content, .category-view .category-view-content { margin-right: -300px; padding-left: 310px; }
+
+	.category-products-list .product-item { margin: 0 2px 25px; }
 }
 
 @media(min-width:1200px) {
@@ -473,5 +478,5 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 	.blocks-list > div a { height: 290px; font-size: 18px; }
 	.blocks-list { padding-top: 20px; }
 
-
+	.category-products-list .product-item { margin: 0 3px 25px; }
 }

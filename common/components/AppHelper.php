@@ -146,4 +146,18 @@ class AppHelper
 
 		return $result;
 	}
+
+	/**
+	 * @param $image
+	 * @param $folder
+	 * @return string
+	 */
+	public static function getImagePath($image, $folder)
+	{
+		if ($image && file_exists(self::uploadsFolder() . '/' . $folder . '/' . $image)) {
+			return self::uploadsPath() . '/' . $folder . '/' . $image;
+		} else {
+			return '/img/empty-s.png';
+		}
+	}
 }

@@ -76,7 +76,7 @@ JS
 
 	<?php echo $form->field($model, 'category_ids')->widget(ChosenSelect::className(), [
 		'placeholder' => 'Выберите категории',
-		'items' => CatalogCategory::getTreeView(),
+		'items' => CatalogCategory::getTreeView(null, null, 0, true),
         'multiple' => true,
 	]); ?>
 	<?php /*

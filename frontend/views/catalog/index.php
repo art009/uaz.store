@@ -1,14 +1,15 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $categories \common\models\CatalogCategory[] */
+/* @var $category \common\models\CatalogCategory|null */
+/* @var $children \common\models\CatalogCategory[] */
 /* @var $id int */
 
 use yii\helpers\Html;
 use frontend\widgets\CategoryTreeWidget;
 
-$this->title = 'Каталог товаров';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = $category ? $category->title : 'Каталог товаров';
+$this->params['breadcrumbs'] = $category ? $category->createBreadcrumbs() : [$this->title];
 ?>
 <div class="category-view">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -18,12 +19,12 @@ $this->params['breadcrumbs'][] = $this->title;
 		'toggleableParent' => false,
 	]); ?>
 	<div class="category-view-content category-list">
-		<?php if ($categories): ?>
-			<?php foreach ($categories as $category): ?>
+		<?php if ($children): ?>
+			<?php foreach ($children as $child): ?>
 				<div class="category-item">
-					<a href="/catalog<?php echo $category->getFullLink(); ?>" title="<?php echo $category->title; ?>">
-						<div class="title"><?php echo $category->title; ?></div>
-						<?php $image = $category->getImagePath(true); ?>
+					<a href="/catalog<?php echo $child->getFullLink(); ?>" title="<?php echo $child->title; ?>">
+						<div class="title"><?php echo $child->title; ?></div>
+						<?php $image = $child->getImagePath(true); ?>
 						<?php echo Html::tag('div', '', [
 							'class' => 'image',
 							'style' => $image ? "background-image:url('" . $image . "')" : null,

@@ -41,8 +41,10 @@ class CatalogUrlRule extends \yii\base\Object implements \yii\web\UrlRuleInterfa
             if ($category) {
             	if ($product) {
 		            return ['catalog/product', ['id' => $product->id, 'categoryId' => $category->id]];
-	            } else {
+	            } elseif ($category->children) {
 		            return ['catalog/index', ['id' => $category->id]];
+	            } else {
+		            return ['catalog/view', ['id' => $category->id]];
 	            }
 	        }
         }

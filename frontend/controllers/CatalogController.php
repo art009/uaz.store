@@ -6,6 +6,7 @@ use common\models\CatalogCategory;
 use Yii;
 use common\components\PriceList;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * Class CatalogController
@@ -24,10 +25,28 @@ class CatalogController extends Controller
 	public function actionIndex(int $id = null)
 	{
 		$categories = CatalogCategory::findAll(['parent_id' => $id]);
+		$category = $id ? $this->findCategory($id) : null;
 
 		return $this->render('index', [
-			'categories' => $categories,
+			'category' => $category,
+			'children' => $categories,
 			'id' => $id,
+		]);
+	}
+
+	/**
+	 * Страница категорий товаров
+	 *
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	public function actionView(int $id = null)
+	{
+		$category = $this->findCategory($id);
+
+		return $this->render('view', [
+			'category' => $category,
 		]);
 	}
 
@@ -57,5 +76,21 @@ class CatalogController extends Controller
 
 			return $this->redirect(Yii::$app->request->referrer);
 		}
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return CatalogCategory
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	protected function findCategory(int $id)
+	{
+		$model = CatalogCategory::findOne($id);
+		if (!$model) {
+			throw new NotFoundHttpException('Категория не найдена.');
+		}
+		return $model;
 	}
 }
