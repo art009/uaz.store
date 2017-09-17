@@ -21,7 +21,8 @@ $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'i
 $this->params['breadcrumbs'][] = 'Связывание';
 
 $shopItemId = $model->id;
-$nextId = $model->getNextUnBoundId();
+$nextUnBoundId = $model->getNextUnBoundId();
+$nextId = $model->getNextId();
 ?>
 <div class="shop-item-bind">
 
@@ -30,13 +31,16 @@ $nextId = $model->getNextUnBoundId();
 		<div class="col-xs-4">
 			Установленные связи:
 		</div>
-		<div class="col-xs-5 text-right" style="margin-bottom: 4px;">
+		<div class="col-xs-4 text-right" style="margin-bottom: 4px;">
 			<?php echo Html::a('Игнор', ['ignore', 'id' => $model->id], ['class' => 'btn btn-sm btn-default']) ?>
 			<?php echo Html::a('Не нашел!', ['not-found', 'id' => $model->id], ['class' => 'btn btn-sm btn-warning']) ?>
 		</div>
-		<div class="col-xs-3 text-right" style="margin-bottom: 4px;">
+		<div class="col-xs-4 text-right" style="margin-bottom: 4px;">
+			<?php if ($nextUnBoundId): ?>
+			<?php echo Html::a('Следующий непривязанный', ['bind', 'id' => $nextUnBoundId], ['class' => 'btn btn-sm btn-primary']) ?>
+			<?php endif; ?>
 			<?php if ($nextId): ?>
-			<?php echo Html::a('Следующий непривязанный', ['bind', 'id' => $nextId], ['class' => 'btn btn-sm btn-primary']) ?>
+			<?php echo Html::a('Следующий', ['bind', 'id' => $nextId], ['class' => 'btn btn-sm btn-info']) ?>
 			<?php endif; ?>
 		</div>
 	</div>
