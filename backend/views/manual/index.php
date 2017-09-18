@@ -50,7 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
 					return AppHelper::$yesNoList[$model->hide];
 				},
 			],
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+
+                'template' => '{view}{update}'
+            ],
         ],
     ]); ?>
 </div>

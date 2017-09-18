@@ -30,7 +30,10 @@ class Manual extends \common\models\Manual
 	public function rules()
 	{
 		return parent::rules() + [
-			[['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+			[['id', 'hide', 'year'], 'integer'],
+			[['parent_id', 'title', 'link', 'description', 'image', 'meta_keywords', 'meta_description', 'created_at', 'updated_at'], 'safe'],
+			[['title', 'link', 'hide'], 'required'],
+			[['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
 		];
 	}
 
@@ -40,7 +43,7 @@ class Manual extends \common\models\Manual
 	public function attributeLabels()
 	{
 		return ArrayHelper::merge(parent::attributeLabels(), [
-			'imageFile' => 'Загружаемая картинка',
+			'image' => 'Загружаемая картинка',
 		]);
 	}
 
@@ -50,7 +53,7 @@ class Manual extends \common\models\Manual
 	public function load($data, $formName = null)
 	{
 		$result = parent::load($data, $formName = null);
-		$this->imageFile = UploadedFile::getInstance($this, 'imageFile');
+		$this->image = UploadedFile::getInstance($this, 'image');
 
 		return $result;
 	}
@@ -101,18 +104,17 @@ class Manual extends \common\models\Manual
 	{
 		$result = true;
 		if (parent::beforeSave($insert)) {
-			if ($this->imageFile) {
-				$name = md5(time() . $this->imageFile->baseName) . '.' . $this->imageFile->extension;
+			if ($this->image) {
+				$name = md5(time() . $this->image->baseName) . '.' . $this->image->extension;
 				$uploadsFolder = AppHelper::uploadsFolder();
-				if ($this->imageFile->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
+				if ($this->image->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
 					$this->saveImage($uploadsFolder . '/' . self::FOLDER . '/' . $name);
 				} else {
-					$this->addError('imageFile', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
+					$this->addError('image', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
 					$result = false;
 				}
 			}
 		}
-
 		return $result;
 	}
 

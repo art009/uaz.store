@@ -62,8 +62,8 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 
 				return ['class' => 'manual-product-row','id' => 'row' . $model['number']];
 			},
-
-			'columns' => [
+				'summary'=>'',
+				'columns' => [
                 'number',
                 'code',
 				'title',
