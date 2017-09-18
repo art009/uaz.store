@@ -9,6 +9,7 @@ use backend\modules\pms\components\PriceExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
 use common\components\AppHelper;
+use common\models\CatalogProduct;
 use common\models\ManualProduct;
 use Yii;
 use app\modules\pms\models\ShopItem;
@@ -366,11 +367,17 @@ class ShopItemController extends Controller
 		$model = $this->findModel($id);
 		/* @var $providerItem \app\modules\pms\models\ProviderItem */
 		$providerItem = $model->getProviderItems()->one();
-		if ($providerItem) {
+		$product = CatalogProduct::findOne($productId);
+		if ($providerItem && $product) {
 			$info = $providerItem->getInfo();
 			$codes = $info['codes'] ?? null;
 			if ($codes) {
-				ManualProduct::updateAll(['product_id' => $productId], ['code' => $codes]);
+				$manualProducts = ManualProduct::findAll(['code' => $codes]);
+				if ($manualProducts) {
+					foreach ($manualProducts as $manualProduct) {
+						$product->link('manualProducts', $manualProduct);
+					}
+				}
 			}
 		}
 

@@ -24,6 +24,7 @@ use Yii;
  *
  * @property CatalogProduct $product
  * @property ManualCategory $manualCategory
+ * @property CatalogProduct[] $catalogProducts
  */
 class ManualProduct extends \yii\db\ActiveRecord
 {
@@ -87,6 +88,15 @@ class ManualProduct extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ManualCategory::className(), ['id' => 'manual_category_id']);
     }
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getCatalogProducts()
+	{
+		return $this->hasMany(CatalogProduct::className(), ['id' => 'catalog_product_id'])
+			->viaTable('manual_product_to_catalog_product', ['manual_product_id' => 'id']);
+	}
 
 	/**
 	 * @return array

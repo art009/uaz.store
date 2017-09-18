@@ -138,14 +138,17 @@ $providerItem = $model->getProviderItems()->one();
 									if ($manual) {
 										echo Html::a('Привязать', ['assign', 'id' => $model->id, 'productId' => $product->id], ['class' => 'btn btn-assign']);
 										echo $manual->title . ' -> <i>' . $manualCategory->title . '</i><br/>';
-										if ($manualProduct->product_id) {
-											if ($manualProduct->product_id != $product->id) {
-												echo '<b class="red">Привязан другой товар!</b>';
-											} else {
-												echo '<b class="green">Привязан текущий товар!</b>';
+										if ($manualProduct->catalogProducts) {
+											echo 'Привязаны: ';
+											$assigned = [];
+											foreach ($manualProduct->catalogProducts as $catalogProduct) {
+												$assigned[] = Html::tag('b', $catalogProduct->title, [
+													'class' => 	$catalogProduct->id == $product->id ? 'green' : 'orange',
+												]);
 											}
+											echo implode(', ', $assigned);
 										} else {
-											echo '<b class="orange">Товар не привязан!</b>';
+											echo '<b class="red">Ни один товар не привязан!</b>';
 										}
 									} else {
 										echo 'некорректная связь со справочником';

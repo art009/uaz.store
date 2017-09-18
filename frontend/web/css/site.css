@@ -468,6 +468,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 	.manual-view .category-tree, .category-view .category-tree { width: 300px; float: left; }
 	.manual-view .manual-view-content, .category-view .category-view-content { margin-right: -300px; padding-left: 310px; }
 
+	.category-products-list { text-align: left; }
 	.category-products-list .product-item { margin: 0 2px 25px; }
 }
 
