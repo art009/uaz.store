@@ -214,13 +214,13 @@ class CatalogCategory extends \yii\db\ActiveRecord
                     $imageHandler
                         ->load($uploadsFolder . '/' . self::FOLDER . '/' . $name)
                         ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
-                        ->save($uploadsFolder . '/' . self::FOLDER . '/' . $name)
+                        ->save($uploadsFolder . '/' . self::FOLDER . '/' . $name, false, 100)
                         ->reload()
                         ->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
-                        ->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $name)
+                        ->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $name, false, 100)
                         ->reload()
                         ->resizeCanvas(self::SMALL_IMAGE_WIDTH, self::SMALL_IMAGE_HEIGHT)
-                        ->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name);
+                        ->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name, false, 100);
                 } else {
                     $this->addError('imageFile', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
                     $result = false;
