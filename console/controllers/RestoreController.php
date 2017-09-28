@@ -458,4 +458,20 @@ class RestoreController extends Controller
 			}
 		}
 	}
+
+	/**
+	 * Пересохранение картинок товара
+	 */
+	public function actionReSaveProductImages()
+	{
+		/* @var $images CatalogProductImage[] */
+		$images = CatalogProductImage::find()
+			->orderBy('product_id')
+			->limit(10)
+			->all();
+		
+		foreach ($images as $image) {
+			$image->reSaveImage();
+		}
+	}
 }

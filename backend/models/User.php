@@ -156,6 +156,7 @@ class User extends \common\models\User
 						->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_LEFT_BOTTOM)
 						->save($uploadsFolder . '/' . self::FOLDER . '/' . $name, false, 100)
 						->reload()
+						->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
 						->resizeCanvas(self::SMALL_IMAGE_WIDTH, self::SMALL_IMAGE_HEIGHT)
 						->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name, false, 100);
 				} else {

@@ -88,6 +88,7 @@ class CatalogManualPage extends \common\models\CatalogManualPage
 						->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
 						->save($uploadsFolder . '/' . self::FOLDER . '/' . $name, false, 100)
 						->reload()
+						->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
 						->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
 						->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $name, false, 100);
 				} else {

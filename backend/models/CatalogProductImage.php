@@ -111,12 +111,17 @@ class CatalogProductImage extends \common\models\CatalogProductImage
 		    $imageHandler = new ImageHandler();
 		    $imageHandler
 			    ->load($sourceFile)
-			    //->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER) Временнно отключен
+			    ->resize(false, CatalogProduct::MAX_HEIGHT)
+			    ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
 			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER . '/' . $name, false, 100)
 			    ->reload()
+			    ->resize(false, CatalogProduct::MAX_HEIGHT)
+			    ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
 			    ->resizeCanvas(CatalogProduct::SMALL_IMAGE_WIDTH, CatalogProduct::SMALL_IMAGE_HEIGHT)
 			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER_SMALL . '/' . $name, false, 100)
 			    ->reload()
+			    ->resize(false, CatalogProduct::MAX_HEIGHT)
+			    ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
 			    ->resizeCanvas(CatalogProduct::MEDIUM_IMAGE_WIDTH, CatalogProduct::MEDIUM_IMAGE_HEIGHT)
 			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER_MEDIUM . '/' . $name, false, 100);
 	    }
@@ -135,5 +140,15 @@ class CatalogProductImage extends \common\models\CatalogProductImage
         } else {
             return false;
         }
+    }
+
+	/**
+	 * Пересохранение картинок
+	 */
+    public function reSaveImage()
+    {
+	    $name = $this->image;
+	    $file = AppHelper::uploadsFolder() . '/' . CatalogProduct::FOLDER . '/' . $name;
+	    $this->saveImage($file, $name);
     }
 }

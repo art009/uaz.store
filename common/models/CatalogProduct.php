@@ -55,6 +55,8 @@ class CatalogProduct extends \yii\db\ActiveRecord
 	const MEDIUM_IMAGE_WIDTH = 285;
 	const MEDIUM_IMAGE_HEIGHT = 285;
 
+	const MAX_HEIGHT = 720;
+
     const ON_MAIN_CACHE_TAG = 'catalog-product-on-main-tag';
 
     /**
