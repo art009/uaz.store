@@ -467,9 +467,8 @@ class RestoreController extends Controller
 		/* @var $images CatalogProductImage[] */
 		$images = CatalogProductImage::find()
 			->orderBy('product_id')
-			->limit(10)
 			->all();
-		
+
 		foreach ($images as $image) {
 			$image->reSaveImage();
 		}
