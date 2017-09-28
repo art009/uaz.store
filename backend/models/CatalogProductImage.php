@@ -111,14 +111,14 @@ class CatalogProductImage extends \common\models\CatalogProductImage
 		    $imageHandler = new ImageHandler();
 		    $imageHandler
 			    ->load($sourceFile)
-			    ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
-			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER . '/' . $name)
+			    //->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER) Временнно отключен
+			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER . '/' . $name, false, 100)
 			    ->reload()
 			    ->resizeCanvas(CatalogProduct::SMALL_IMAGE_WIDTH, CatalogProduct::SMALL_IMAGE_HEIGHT)
-			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER_SMALL . '/' . $name)
+			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER_SMALL . '/' . $name, false, 100)
 			    ->reload()
 			    ->resizeCanvas(CatalogProduct::MEDIUM_IMAGE_WIDTH, CatalogProduct::MEDIUM_IMAGE_HEIGHT)
-			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER_MEDIUM . '/' . $name);
+			    ->save($uploadsFolder . '/' . CatalogProduct::FOLDER_MEDIUM . '/' . $name, false, 100);
 	    }
     }
 

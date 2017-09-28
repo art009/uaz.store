@@ -154,10 +154,10 @@ class User extends \common\models\User
 					$imageHandler
 						->load($uploadsFolder . '/' . self::FOLDER . '/' . $name)
 						->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_LEFT_BOTTOM)
-						->save($uploadsFolder . '/' . self::FOLDER . '/' . $name)
+						->save($uploadsFolder . '/' . self::FOLDER . '/' . $name, false, 100)
 						->reload()
 						->resizeCanvas(self::SMALL_IMAGE_WIDTH, self::SMALL_IMAGE_HEIGHT)
-						->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name);
+						->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name, false, 100);
 				} else {
 					$this->addError('imageFile', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
 					return false;

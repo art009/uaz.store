@@ -88,10 +88,10 @@ class Manual extends \common\models\Manual
 			$imageHandler
 				->load($file)
 				->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
-				->save($uploadsFolder . '/' . self::FOLDER . '/' . $this->image)
+				->save($uploadsFolder . '/' . self::FOLDER . '/' . $this->image, false, 100)
 				->reload()
 				->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
-				->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $this->image);
+				->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $this->image, false, 100);
 		}
 	}
 
