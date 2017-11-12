@@ -2,7 +2,6 @@
 
 namespace backend\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -43,7 +42,7 @@ class CatalogProductSearch extends CatalogProduct
     public function search($params)
     {
         $query = CatalogProduct::find()
-			->joinWith(['categories']);
+			->joinWith(['categories'], false);
 
         // add conditions that should always apply here
 
@@ -67,6 +66,8 @@ class CatalogProductSearch extends CatalogProduct
 
         if ($this->category_id) {
             $query->andFilterWhere(['catalog_product_to_category.category_id' => $this->category_id]);
+        } else {
+	        $query->andWhere('catalog_product_to_category.category_id IS NULL');
         }
 
         $query->andFilterCompare('price', $this->price);
@@ -92,6 +93,8 @@ class CatalogProductSearch extends CatalogProduct
             ->andFilterWhere(['like', $this::tableName() . '.provider', $this->provider])
             ->andFilterWhere(['like', $this::tableName() . '.manufacturer', $this->manufacturer])
             ->andFilterWhere(['like', $this::tableName() . '.unit', $this->unit]);
+
+        $query->groupBy($this::tableName() . '.id');
 
         return $dataProvider;
     }
