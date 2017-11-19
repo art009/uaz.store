@@ -403,6 +403,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .product-content .product-images .product-image:first-child { width: 285px; }
 .product-content .product-images .product-image { width: 88px; margin-bottom: 12px; margin-right: 7px; text-align: center; }
 .product-content .product-images .product-image img { width: 100%; max-width: 285px; }
+.product-content .product-info b span { font-size: 21px; }
 
 @media (max-width: 767px ) {
 

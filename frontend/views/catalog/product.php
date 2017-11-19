@@ -25,9 +25,13 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
 			<?php endif; ?>
 		</div>
 		<div class="product-info">
-			Код: <?php echo $product->getCode(); ?>
+			Код на сайте: <b><?php echo $product->getCode(); ?></b>
 			<br/>
-			Цена: <b><?php echo $product->price; ?> руб</b>
+			<?php if ($product->shop_code): ?>
+			Артикул: <b><?php echo $product->shop_code; ?></b>
+			<br/>
+			<?php endif; ?>
+			Цена: <b><span><?php echo $product->price; ?></span> руб</b>
 			<br/>
 			<div class="site-btn add-cart-product" data-id="<?php echo $product->id; ?>">
 				Добавить в корзину

@@ -150,7 +150,8 @@ class CatalogProduct extends \yii\db\ActiveRecord
      */
     public function getImages()
     {
-        return $this->hasMany(CatalogProductImage::className(), ['product_id' => 'id']);
+        return $this->hasMany(CatalogProductImage::className(), ['product_id' => 'id'])
+	        ->orderBy('main DESC');
     }
 
 	/**
