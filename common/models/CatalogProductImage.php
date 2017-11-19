@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\components\AppHelper;
 use Yii;
 
 /**
@@ -68,4 +69,9 @@ class CatalogProductImage extends \yii\db\ActiveRecord
     {
         return new CatalogProductImageQuery(get_called_class());
     }
+
+	public function getImagePath($small = true)
+	{
+		return AppHelper::getImagePath($this->image, $small ? CatalogProduct::FOLDER_MEDIUM : CatalogProduct::FOLDER);
+	}
 }

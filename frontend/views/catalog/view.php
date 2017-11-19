@@ -4,6 +4,7 @@
 /* @var $category \common\models\CatalogCategory */
 
 use yii\helpers\Html;
+use frontend\widgets\ProductItem;
 
 $this->title = $category->title;
 $this->params['breadcrumbs'] = $category->createBreadcrumbs();
@@ -15,19 +16,7 @@ $products = $category->products;
 	<div class="category-products-list">
 		<?php if ($products): ?>
 			<?php foreach ($products as $product): ?>
-				<div class="product-item">
-					<div class="title"><?php echo $product->title; ?></div>
-					<div class="image">
-						<img src="<?php echo $product->getImagePath(); ?>" alt="<?php echo $product->title; ?>"/>
-					</div>
-					<div class="code">Код <?php echo $product->getCode(); ?></div>
-					<div class="price">
-						Цена: <b><?php echo $product->price; ?> руб</b>
-					</div>
-					<div class="site-btn add-cart-product" data-id="<?php echo $product->id; ?>">
-						Добавить в корзину
-					</div>
-				</div>
+				<?php echo ProductItem::widget(['product' => $product]); ?>
 			<?php endforeach; ?>
 		<?php else: ?>
 			Товары не найдены.

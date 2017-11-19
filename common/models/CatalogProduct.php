@@ -190,6 +190,38 @@ class CatalogProduct extends \yii\db\ActiveRecord
 	 */
     public function getImagePath($small = true)
     {
-    	return AppHelper::getImagePath($this->image, $small ? self::FOLDER_MEDIUM : self::FOLDER);
+    	if ($this->image) {
+    		return AppHelper::getImagePath($this->image, $small ? self::FOLDER_MEDIUM : self::FOLDER);
+	    } else {
+    		return '/img/empty-s.png';
+	    }
     }
+
+	/**
+	 * @return string
+	 */
+	public function getFullLink()
+	{
+		$result = '';
+		if ($this->categories) {
+			$result = '/catalog' . $this->categories[0]->getFullLink() . '/' . $this->link;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @param int|null $categoryId
+	 * @return array
+	 */
+	public function createBreadcrumbs(int $categoryId = null): array
+	{
+		$result = [];
+		if ($this->categories) {
+			$result = $this->categories[0]->createBreadcrumbs(true);
+		}
+		$result[] = $this->title;
+
+		return $result;
+	}
 }

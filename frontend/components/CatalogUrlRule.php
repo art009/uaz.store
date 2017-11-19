@@ -33,7 +33,7 @@ class CatalogUrlRule extends \yii\base\Object implements \yii\web\UrlRuleInterfa
         if (count($pathParts) > 1 && $pathParts[0] == 'catalog') {
 	        $productLink = null;
         	if (count($pathParts) == 5) {
-		        $productLink = end($pathParts);
+		        $productLink = array_pop($pathParts);
 	        }
 	        $categoryLink = end($pathParts);
             $category = $categoryLink ? CatalogCategory::findOne(['link' => $categoryLink]) : null;

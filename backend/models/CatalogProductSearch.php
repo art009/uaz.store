@@ -66,8 +66,6 @@ class CatalogProductSearch extends CatalogProduct
 
         if ($this->category_id) {
             $query->andFilterWhere(['catalog_product_to_category.category_id' => $this->category_id]);
-        } else {
-	        $query->andWhere('catalog_product_to_category.category_id IS NULL');
         }
 
         $query->andFilterCompare('price', $this->price);

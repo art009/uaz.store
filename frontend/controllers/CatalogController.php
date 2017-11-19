@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\CatalogCategory;
+use common\models\CatalogProduct;
 use Yii;
 use common\components\PriceList;
 use yii\web\Controller;
@@ -92,5 +93,40 @@ class CatalogController extends Controller
 			throw new NotFoundHttpException('Категория не найдена.');
 		}
 		return $model;
+	}
+
+	/**
+	 * @param int $id
+	 *
+	 * @return CatalogProduct
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	protected function findProduct(int $id)
+	{
+		$model = CatalogProduct::findOne($id);
+		if (!$model) {
+			throw new NotFoundHttpException('Категория не найдена.');
+		}
+		return $model;
+	}
+
+	/**
+	 * Страница товара
+	 *
+	 * @param int $id
+	 * @param int $categoryId
+	 *
+	 * @return string
+	 */
+	public function actionProduct(int $id = null, int $categoryId = null)
+	{
+		$product = $this->findProduct($id);
+		$category = $this->findCategory($categoryId);
+
+		return $this->render('product', [
+			'product' => $product,
+			'category' => $category,
+		]);
 	}
 }

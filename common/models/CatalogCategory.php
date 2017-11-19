@@ -320,9 +320,11 @@ class CatalogCategory extends \yii\db\ActiveRecord
 	/**
 	 * Построение хлебных крошек
 	 *
+	 * @param bool $selfLink
+	 *
 	 * @return array
 	 */
-	public function createBreadcrumbs()
+	public function createBreadcrumbs(bool $selfLink = false)
 	{
 		$result = [];
 		$parent = $this->parent;
@@ -332,7 +334,11 @@ class CatalogCategory extends \yii\db\ActiveRecord
 		}
 		$result[] = ['label' => 'Каталог товаров', 'url' => ['/catalog']];
 		$result = array_reverse($result);
-		$result[] = $this->title;
+		if ($selfLink) {
+			$result[] = ['label' => $this->title, 'url' => ['/catalog' . $this->getFullLink()]];
+		} else {
+			$result[] = $this->title;
+		}
 
 		return $result;
 	}

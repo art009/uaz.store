@@ -10,16 +10,22 @@ use common\components\AppHelper;
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Категории товаров', 'url' => ['/catalog']];
 $this->params['breadcrumbs'][] = $this->title;
+$link = $model->getFullLink();
+if ($link) {
+	$link = Yii::$app->params['frontendUrl'] . trim($link, '/');
+}
 ?>
 <div class="catalog-product-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Просмотр на сайте', Yii::$app->params['frontendUrl'] . 'catalog/' . $model->link, [
+	    <?php if ($link): ?>
+        <?= Html::a('Просмотр на сайте', $link, [
             'class' => 'btn btn-info',
             'target' => '_blank',
         ]) ?>
+	    <?php endif; ?>
         <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',

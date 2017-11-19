@@ -558,7 +558,11 @@ $(document).ready(function($){
             $(this).addClass('chosen');
             $(this).animate({'opacity':'1'},200);
         });
-    })
+    });
+
+	$("[data-fancybox]").fancybox({
+		'padding': 0
+	});
 });
 
 $(window).load(function() {
