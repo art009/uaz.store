@@ -40,7 +40,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-				'<action:(error|about|delivery)>' => 'site/<action>',
+				'<action:(error|index)>' => 'site/<action>',
 				'<action:(search|price-list)>' => 'catalog/<action>',
 	            '<action:(login|logout|signup|password-reset|set-password)>' => 'user/<action>',
 	            ['class' => 'frontend\components\PageUrlRule'],
