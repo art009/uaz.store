@@ -40,7 +40,7 @@ class NavMenu extends Nav
 			$item = [
 				'label' => $menuItem->title,
 				'url' => [$menuItem->link],
-				'active' => false,
+				'active' => Yii::$app->request->getPathInfo() == trim($menuItem->link, '/'),
 			];
 			if ($menuItem->controller_id) {
 				$item['active'] = ($controllerId == $menuItem->controller_id && (!$menuItem->action_id || $actionId == $menuItem->action_id));
