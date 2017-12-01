@@ -33,6 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php echo $model->meta_keywords; ?>
         </code>
     </p>
+	<hr/>
     <p>
         <b>Текст метатега description:</b>
         <br/>
@@ -40,7 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php echo $model->meta_description; ?>
         </code>
     </p>
-    <pre>
+	<hr/>
+	<b>Содержимое страницы:</b>
+	<br/>
+    <div>
         <?php echo $model->description; ?>
-    </pre>
+    </div>
 </div>
