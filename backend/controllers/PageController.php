@@ -2,12 +2,16 @@
 
 namespace backend\controllers;
 
+use common\components\AppHelper;
 use Yii;
 use common\models\Page;
 use backend\models\PageSearch;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\web\UploadedFile;
 
 /**
  * PageController implements the CRUD actions for Page model.
@@ -28,6 +32,18 @@ class PageController extends Controller
             ],
         ];
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function beforeAction($action)
+	{
+		if ($action->id == 'upload') {
+			$this->enableCsrfValidation = false;
+		}
+
+		return parent::beforeAction($action);
+	}
 
     /**
      * Lists all Page models.
@@ -120,5 +136,24 @@ class PageController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+	/**
+	 * @throws BadRequestHttpException
+	 */
+    public function actionUpload()
+    {
+	    $file = UploadedFile::getInstanceByName('file');
+	    if ($file) {
+	    	$name = AppHelper::transliteration($file->baseName) . '.' . $file->extension;
+		    if ($file->saveAs(AppHelper::uploadsFolder() . '/page/' . $name)) {
+			    Yii::$app->response->format = Response::FORMAT_JSON;
+		    	return ['location' => $name];
+		    } else {
+			    throw new BadRequestHttpException('File not save.');
+		    }
+	    } else {
+		    throw new BadRequestHttpException('File not send.');
+	    }
     }
 }
