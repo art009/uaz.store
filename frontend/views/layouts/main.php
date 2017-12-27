@@ -89,7 +89,7 @@ $actionId = Yii::$app->controller->action->id;
 
     <div class="nav-contacts">
         <div class="nav-phone">
-            <span>+7 (800) </span>00-00-00
+            <span>+7 965 </span>632 32 62
         </div>
         <div class="nav-email">
             <a href="mailto:support@uaz.store">support@uaz.store</a>
