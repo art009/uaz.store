@@ -20,6 +20,7 @@ Yii::$container = new yii\di\Container();
  * @property \common\components\ImageHandler $ih
  * @property \frontend\components\Cart $cart
  * @property \yii\redis\Cache $cache
+ * @property \yii\sphinx\Connection $sphinx
  */
 class WebApplication extends yii\web\Application
 {
