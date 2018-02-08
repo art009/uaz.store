@@ -147,6 +147,8 @@ JS
 
     <?= $form->field($model, 'unit')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'oversize')->checkbox() ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

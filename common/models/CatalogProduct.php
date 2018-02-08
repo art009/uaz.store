@@ -36,6 +36,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $unit
  * @property integer $rest
  * @property string $external_id
+ * @property integer $oversize
  * @property string $created_at
  * @property string $updated_at
  *
@@ -73,7 +74,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'hide', 'on_main', 'cart_counter', 'length', 'width', 'height', 'weight', 'rest'], 'integer'],
+            [['category_id', 'hide', 'on_main', 'cart_counter', 'length', 'width', 'height', 'weight', 'rest', 'oversize'], 'integer'],
             [['title', 'link'], 'required'],
             [['meta_keywords', 'meta_description', 'description'], 'string'],
             [['price', 'price_to', 'price_old'], 'number'],
@@ -118,6 +119,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
             'unit' => 'Единица измерения',
             'rest' => 'Остаток',
             'external_id' => 'Код синхронизации',
+            'oversize' => 'Крупногабаритный',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',
         ];

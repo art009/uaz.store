@@ -96,6 +96,7 @@ if ($link) {
             'height',
             'weight',
             'unit',
+            'oversize:boolean',
             'created_at',
             'updated_at',
         ],

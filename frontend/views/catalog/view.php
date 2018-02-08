@@ -9,7 +9,7 @@ use frontend\widgets\ProductItem;
 $this->title = $category->title;
 $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 
-$products = $category->products;
+$products = $category->getProducts()->orderBy('title, ISNULL(image)')->all();
 ?>
 <div class="category-view">
     <h1><?= Html::encode($this->title) ?></h1>
