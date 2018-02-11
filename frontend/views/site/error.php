@@ -7,7 +7,7 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Ошибка ' . $exception->statusCode;
+$this->title = 'Ошибка ' . $exception->getCode();
 ?>
 <div class="site-error">
 
