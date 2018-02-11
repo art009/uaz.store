@@ -342,4 +342,18 @@ class CatalogCategory extends \yii\db\ActiveRecord
 
 		return $result;
 	}
+
+	/**
+	 * @param null|string|array $order
+	 * @param bool $asArray
+	 * @return array|\yii\db\ActiveRecord[]
+	 */
+	public function getProductModels($order = null, $asArray = false)
+	{
+		$query = $this->getProducts();
+		if($order) $query->orderBy($order);
+		if($asArray) $query->asArray();
+
+		return $query->all();
+	}
 }
