@@ -21,6 +21,7 @@ Yii::$container = new yii\di\Container();
  * @property \frontend\components\Cart $cart
  * @property \yii\redis\Cache $cache
  * @property \yii\sphinx\Connection $sphinx
+ * @property \common\components\SphinxSearch $sphinxSearch
  */
 class WebApplication extends yii\web\Application
 {

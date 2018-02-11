@@ -1,16 +1,19 @@
 <?php
 
+use yii\helpers\Html;
+
 /* @var $product \common\models\CatalogProduct */
 
+$link = $product->getFullLink();
+$title = $product->title;
+$image = Html::img($product->getImagePath(), ['alt' => $title]);
 ?>
 <div class="product-item">
 	<div class="title">
-		<a href="<?php echo $product->getFullLink(); ?>"><?php echo $product->title; ?></a>
+		<?php echo $link ? Html::a($title, $link) : $title; ?>
 	</div>
 	<div class="image">
-		<a href="<?php echo $product->getFullLink(); ?>">
-			<img src="<?php echo $product->getImagePath(); ?>" alt="<?php echo $product->title; ?>"/>
-		</a>
+		<?php echo $link ? Html::a($image, $link) : $image; ?>
 	</div>
 	<div class="code">Код <?php echo $product->getCode(); ?></div>
 	<div class="price">

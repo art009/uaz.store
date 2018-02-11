@@ -3,12 +3,12 @@
 namespace common\models;
 
 use common\components\AppHelper;
+use common\components\ImageHandler;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\ArrayHelper;
 use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
-use common\components\ImageHandler;
 
 /**
  * This is the model class for table "catalog_category".
@@ -344,15 +344,14 @@ class CatalogCategory extends \yii\db\ActiveRecord
 	}
 
 	/**
-	 * @param null|string|array $order
-	 * @param bool $asArray
-	 * @return array|\yii\db\ActiveRecord[]
+	 * Товары с сортировкой для фронта
+	 *
+	 * @return CatalogProduct[]
 	 */
-	public function getProductModels($order = null, $asArray = false)
+	public function getFrontProducts()
 	{
 		$query = $this->getProducts();
-		if($order) $query->orderBy($order);
-		if($asArray) $query->asArray();
+		$query->orderBy('ISNULL(image), title');
 
 		return $query->all();
 	}

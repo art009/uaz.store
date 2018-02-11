@@ -1,13 +1,11 @@
 <?php
 
-/* @var $this yii\web\View */
+use frontend\widgets\ProductSearch;
 
-use yii\helpers\Html;
+/* @var $this \yii\web\View */
 
 $this->title = 'Поиск товаров';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <p>В разработке.</p>
-</div>
+<h1><?php echo $this->title ?></h1>
+<?php echo ProductSearch::widget(); ?>

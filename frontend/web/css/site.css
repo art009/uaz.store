@@ -210,27 +210,10 @@ table tbody td { padding: 5px 8px; }
 table tbody tr:nth-child(odd) { background-color: #333333; }
 
 /* Main search form */
-.m-search-form__cont {
-	margin-left: 3px;
-}
-
-form#m-search-form {
-	margin-bottom: 15px;
-	background-color: transparent;
-	width: 100%;
-}
-
-form#m-search-form input {
-	border: 1px solid #ecb52d;
-	height: 32px;
-}
-
-form#m-search-form button {
-	background: #ecb52d;
-	border: 1px solid #ecb52d;
-	border-radius: 0px;
-	height: 32px;
-}
+.m-search-form__cont { margin-left: 3px; }
+form#m-search-form { margin-bottom: 15px; background-color: transparent; width: 100%; }
+form#m-search-form input { border: 1px solid #ecb52d; height: 32px; }
+form#m-search-form button { background: #ecb52d; border: 1px solid #ecb52d; border-radius: 0px; height: 32px; }
 /* Main search form END */
 
 /* Main page */

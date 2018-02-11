@@ -2,10 +2,10 @@
 
 namespace frontend\controllers;
 
+use common\components\PriceList;
 use common\models\CatalogCategory;
 use common\models\CatalogProduct;
 use Yii;
-use common\components\PriceList;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -41,6 +41,8 @@ class CatalogController extends Controller
 	 * @param int $id
 	 *
 	 * @return string
+	 *
+	 * @throws NotFoundHttpException
 	 */
 	public function actionView(int $id = null)
 	{
@@ -48,21 +50,18 @@ class CatalogController extends Controller
 
 		return $this->render('view', [
 			'category' => $category,
+			'products' => $category->getFrontProducts(),
 		]);
 	}
 
 	/**
 	 * Страница поиска
 	 *
-	 * @param string|null $q
-	 *
 	 * @return string
 	 */
-	public function actionSearch($q = null)
+	public function actionSearch()
 	{
-		return $this->render('search', [
-			'q' => $q,
-		]);
+		return $this->render('search');
 	}
 
 	/**

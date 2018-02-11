@@ -29,5 +29,9 @@ return [
 		    'username' => '',
 		    'password' => '',
 	    ],
+	    'sphinxSearch' => [
+		    'class' => 'common\components\SphinxSearch',
+		    'index' => 'uaz',
+	    ],
     ],
 ];
