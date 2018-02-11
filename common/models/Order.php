@@ -43,13 +43,21 @@ class Order extends \yii\db\ActiveRecord
 	const DELIVERY_NONE 			= 0;
 	const DELIVERY_PICKUP			= 1;
 	const DELIVERY_RUSSIA_POST		= 2;
-	const DELIVERY_BUSINESS_LINES	= 3;
+	const DELIVERY_EMS_POST		    = 3;
+	const DELIVERY_BUSINESS_LINES   = 4;
+	const DELIVERY_PEK              = 5;
+	const DELIVERY_KIT              = 6;
+	const DELIVERY_BAIKAL_SERVICE   = 7;
 
 	// Способы оплаты
-	const PAYMENT_NONE	= 0;
-	const PAYMENT_POD	= 1;
-	const PAYMENT_SBOL	= 2;
-	const PAYMENT_QIWI	= 3;
+	const PAYMENT_NONE	    = 0;
+	const PAYMENT_CARD	    = 1;
+	const PAYMENT_NON_CASH	= 2;
+	const PAYMENT_POD	    = 3;
+	const PAYMENT_SBOL	    = 4;
+	const PAYMENT_QIWI	    = 5;
+	const PAYMENT_YA_MONEY  = 6;
+	const PAYMENT_CASH	    = 7;
 
 	/**
 	 * Список статусов
@@ -80,7 +88,11 @@ class Order extends \yii\db\ActiveRecord
 		self::DELIVERY_NONE 			=> 'Не выбрано',
 		self::DELIVERY_PICKUP 			=> 'Самовывоз',
 		self::DELIVERY_RUSSIA_POST 		=> 'Почта России',
-		self::DELIVERY_BUSINESS_LINES	=> 'Деловые линии',
+		self::DELIVERY_EMS_POST         => 'EMS Почта',
+		self::DELIVERY_BUSINESS_LINES   => 'Деловые линии',
+		self::DELIVERY_PEK              => 'ПЭК',
+		self::DELIVERY_KIT              => 'Кит',
+		self::DELIVERY_BAIKAL_SERVICE   => 'Байкал Сервис',
 	];
 
 	/**
@@ -89,10 +101,14 @@ class Order extends \yii\db\ActiveRecord
 	 * @var array
 	 */
 	static $paymentList = [
-		self::PAYMENT_NONE 	=> 'Не выбрано',
-		self::PAYMENT_POD 	=> 'Наложенный платеж',
-		self::PAYMENT_SBOL 	=> 'Сбербанк Онлайн',
-		self::PAYMENT_QIWI	=> 'QIWI-кошелек',
+		self::PAYMENT_NONE 	    => 'Не выбрано',
+		self::PAYMENT_CARD 	    => 'Карты Visa, MasterCard, МИР',
+		self::PAYMENT_NON_CASH 	=> 'Безналичный расчет',
+		self::PAYMENT_POD	    => 'Наложенный платеж',
+		self::PAYMENT_SBOL	    => 'Сбербанк Онлайн',
+		self::PAYMENT_QIWI	    => 'QIWI-кошелек',
+		self::PAYMENT_YA_MONEY  => 'Яндекс деньги',
+		self::PAYMENT_CASH  	=> 'Наличные деньги',
 	];
 
     /**
