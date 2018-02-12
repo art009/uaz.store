@@ -5,15 +5,15 @@
 /* @var $controllerId string */
 /* @var $actionId string */
 
+use frontend\assets\AppAsset;
+use frontend\widgets\Alert;
+use frontend\widgets\CallbackWidget;
+use frontend\widgets\NavMenu;
+use frontend\widgets\QuestionWidget;
 use yii\bootstrap\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use frontend\assets\AppAsset;
-use frontend\widgets\Alert;
-use frontend\widgets\NavMenu;
-use frontend\widgets\CallbackWidget;
-use frontend\widgets\QuestionWidget;
 
 AppAsset::register($this);
 
@@ -59,6 +59,12 @@ $actionId = Yii::$app->controller->action->id;
                 'label' => Html::icon('search'),
                 'url' => ['/search'],
 				'active' => ($controllerId == 'catalog' && $actionId == 'search'),
+				'linkOptions' => [
+					'data-tooltip' => 'tooltip',
+					'data-trigger' => 'hover',
+					'data-placement' => 'bottom',
+					'title' => 'Поиск товара',
+				],
             ],
 			[
                 'label' => Html::icon('shopping-cart'),
