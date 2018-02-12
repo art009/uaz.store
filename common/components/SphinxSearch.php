@@ -37,6 +37,6 @@ class SphinxSearch extends Component
 		$query->match(new MatchExpression(':q', ['q' => $expression]));
 		$query->limit($this->limit);
 
-		return $query->all();
+		return $query->column();
 	}
 }
