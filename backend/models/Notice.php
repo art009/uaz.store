@@ -31,6 +31,7 @@ class Notice extends \common\models\Notice
 		self::TYPE_NONE => 'Без типа',
 		self::TYPE_CALLBACK => 'Обратный звонок',
 		self::TYPE_QUESTION => 'Вопрос',
+		self::TYPE_ORDER => 'Быстрый заказ',
 	];
 
 	/**

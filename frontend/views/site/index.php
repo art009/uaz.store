@@ -33,7 +33,7 @@ $this->registerMetaTag([
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="#">
+                <a href="#" data-toggle="modal" data-target="#order-form-modal">
                     <div class="icon"><div class="image"></div></div>
                     Быстрый<br/>заказ
                 </a>

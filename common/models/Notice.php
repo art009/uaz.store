@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -21,6 +20,7 @@ class Notice extends \yii\db\ActiveRecord
 	const TYPE_NONE = 0;
 	const TYPE_CALLBACK = 1;
 	const TYPE_QUESTION = 2;
+	const TYPE_ORDER = 3;
 
 	const STATUS_NEW = 0;
 	const STATUS_VIEW = 1;

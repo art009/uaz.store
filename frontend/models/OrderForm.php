@@ -6,11 +6,11 @@ use JsonSerializable;
 use yii\base\Model;
 
 /**
- * Class CallbackForm
+ * Class OrderForm
  *
  * @package frontend\models
  */
-class CallbackForm extends Model implements JsonSerializable
+class OrderForm extends Model implements JsonSerializable
 {
 	const CACHE_DURATION = 600;
 
@@ -20,13 +20,24 @@ class CallbackForm extends Model implements JsonSerializable
 	public $phone;
 
 	/**
+	 * @var string
+	 */
+	public $name;
+
+	/**
+	 * @var string
+	 */
+	public $text;
+
+	/**
 	 * @inheritdoc
 	 */
 	public function rules()
 	{
 		return [
-			['phone', 'required'],
+			[['phone', 'text'], 'required'],
 			['phone', 'trim'],
+			['name', 'safe'],
 		];
 	}
 
@@ -37,6 +48,8 @@ class CallbackForm extends Model implements JsonSerializable
 	{
 		return [
 			'phone' => 'Телефон',
+			'name' => 'Имя',
+			'text' => 'Запрос',
 		];
 	}
 
@@ -49,7 +62,7 @@ class CallbackForm extends Model implements JsonSerializable
 			$this->addError('phone', 'Необходим 10-значный номер телефона.');
 		}
 		if (\Yii::$app->cache->exists($this->getCacheKey())) {
-			$this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте позже.');
+			$this->addError('phone', 'Вы недавно оставляли запрос! Попробуйте позже.');
 		}
 
 
@@ -63,11 +76,13 @@ class CallbackForm extends Model implements JsonSerializable
 	{
 		return [
 			'phone' => $this->phone,
+			'name' => $this->name,
+			'text' => $this->text,
 		];
 	}
 
 	/**
-	 * Создание уведомления для администратора
+	 * Создание письма для администратора
 	 *
 	 * @return bool
 	 */
@@ -78,7 +93,7 @@ class CallbackForm extends Model implements JsonSerializable
 		}
 		\Yii::$app->cache->add($this->getCacheKey(), 1, self::CACHE_DURATION);
 
-		return Notice::create(json_encode($this), Notice::TYPE_CALLBACK);
+		return Notice::create(json_encode($this), Notice::TYPE_ORDER);
 	}
 
 	/**
@@ -88,6 +103,6 @@ class CallbackForm extends Model implements JsonSerializable
 	 */
 	public function getCacheKey()
 	{
-		return 'Callback' . preg_replace('/[^0-9]/', '', $this->phone);
+		return 'Order' . preg_replace('/[^0-9]/', '', $this->phone);
 	}
 }

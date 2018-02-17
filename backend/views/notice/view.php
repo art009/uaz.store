@@ -1,8 +1,8 @@
 <?php
 
+use backend\models\Notice;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use backend\models\Notice;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Notice */
@@ -44,6 +44,13 @@ $data = $model->getData();
 	<?php if ($model->type == Notice::TYPE_QUESTION): ?>
 		<p>
 			Поступил вопрос от <b><?php echo $data['name'] ?? 'Неизвестного'; ?></b> <a href="mailto:<?php echo $data['email'] ?? null; ?>"><?php echo $data['email'] ?? null; ?></a>:<br/>
+			<?php echo $data['text'] ?? ''; ?>
+		</p>
+	<?php endif; ?>
+
+	<?php if ($model->type == Notice::TYPE_ORDER): ?>
+		<p>
+			Поступил запрос от <b><?php echo $data['name'] ?? 'Неизвестного'; ?></b> <a href="tel:<?php echo $data['phone'] ?? null; ?>"><?php echo $data['phone'] ?? null; ?></a>:<br/>
 			<?php echo $data['text'] ?? ''; ?>
 		</p>
 	<?php endif; ?>

@@ -8,6 +8,7 @@
 use frontend\assets\AppAsset;
 use frontend\widgets\Alert;
 use frontend\widgets\CallbackWidget;
+use frontend\widgets\FastOrderWidget;
 use frontend\widgets\NavMenu;
 use frontend\widgets\QuestionWidget;
 use yii\bootstrap\Html;
@@ -165,6 +166,7 @@ $actionId = Yii::$app->controller->action->id;
 </footer>
 <?php echo CallbackWidget::widget(); ?>
 <?php echo QuestionWidget::widget(); ?>
+<?php echo FastOrderWidget::widget(); ?>
 <script type="application/ld+json">
 {
   "@context" : "http://schema.org",

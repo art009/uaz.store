@@ -2,8 +2,8 @@
 namespace frontend\models;
 
 use common\models\Notice;
-use yii\base\Model;
 use JsonSerializable;
+use yii\base\Model;
 
 /**
  * Class QuestionForm
@@ -84,7 +84,7 @@ class QuestionForm extends Model implements JsonSerializable
 	 *
 	 * @return bool
 	 */
-	public function send()
+	public function create()
 	{
 		if (!$this->validate()) {
 			return false;
