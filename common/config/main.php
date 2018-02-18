@@ -33,5 +33,11 @@ return [
 		    'class' => 'common\components\SphinxSearch',
 		    'index' => 'uaz',
 	    ],
+	    'cashbox' => [
+	    	'class' => 'common\components\cashbox\Cashbox',
+		    'url' => 'https://fce.chekonline.ru:4443/fr/api/v2/Complex',
+		    'certificatePath' => dirname(dirname(dirname(__DIR__))) . '/cashbox/cert.crt',
+		    'privateKeyPath' => dirname(dirname(dirname(__DIR__))) . '/cashbox/cert.key',
+	    ],
     ],
 ];

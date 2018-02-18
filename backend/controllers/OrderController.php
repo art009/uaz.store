@@ -61,6 +61,42 @@ class OrderController extends Controller
 		}
     }
 
+	/**
+	 * TODO: Пересмотреть контроллер. Реализован в качестве тестирования кассы
+	 *
+	 * @param $id
+	 * @return \yii\web\Response
+	 */
+	public function actionCashbox($id)
+	{
+		$model = $this->findModel($id);
+		$cashbox = Yii::$app->cashbox;
+
+		$orderProducts = $model->orderProducts;
+		$user = $model->user;
+		if ($orderProducts and $user) {
+
+			$cashbox->setPhoneOrEmail($user->email);
+
+			foreach ($orderProducts as $orderProduct) {
+
+				$product = $orderProduct->product;
+				if ($product) {
+					$cashbox->setProduct($orderProduct->price, $orderProduct->quantity, $product->title);
+				}
+			}
+		}
+
+		$result = $cashbox->execute();
+		if ($result === true) {
+			Yii::$app->session->setFlash('success', "Заказ успешно отправлен в кассу");
+		} else {
+			Yii::$app->session->setFlash('error', "Ошибка при отправке в кассу. Код ошибки: $result");
+		}
+
+		return $this->redirect(['/order']);
+    }
+
     /**
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

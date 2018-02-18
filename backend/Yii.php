@@ -22,6 +22,7 @@ Yii::$container = new yii\di\Container();
  * @property \yii\redis\Cache $cache
  * @property \yii\sphinx\Connection $sphinx
  * @property \common\components\SphinxSearch $sphinxSearch
+ * @property common\components\cashbox\Cashbox $cashbox
  */
 class WebApplication extends yii\web\Application
 {

@@ -62,7 +62,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}',
+                'template' => '{view} {cashbox}',
+                'buttons' => [
+                    'cashbox' => function($url, $model, $key) {
+                        /* @var $model Order */
+	                    return Html::a(
+		                    '<span class="glyphicon glyphicon-download-alt"></span>',
+		                    ['cashbox', 'id' => $model->id],
+		                    [
+			                    'title' => 'Отправить в кассу',
+			                    'data-pjax' => 0,
+		                    ]
+	                    );
+                    },
+                ],
             ],
         ],
     ]); ?>
