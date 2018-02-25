@@ -412,6 +412,9 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 .product-content .product-images .product-image img { width: 100%; max-width: 285px; }
 .product-content .product-info b span { font-size: 21px; }
 
+form#order-form { display: inline-block; }
+form#order-form .form-group b { color: #ecb52d; }
+
 @media (max-width: 767px ) {
 
 	body { font-size: 16px; }

@@ -3,7 +3,6 @@
 namespace common\models;
 
 use common\classes\OrderStatusWorkflow;
-use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -85,7 +84,6 @@ class Order extends \yii\db\ActiveRecord
 	 * @var array
 	 */
 	static $deliveryList = [
-		self::DELIVERY_NONE 			=> 'Не выбрано',
 		self::DELIVERY_PICKUP 			=> 'Самовывоз',
 		self::DELIVERY_RUSSIA_POST 		=> 'Почта России',
 		self::DELIVERY_EMS_POST         => 'EMS Почта',
@@ -101,7 +99,6 @@ class Order extends \yii\db\ActiveRecord
 	 * @var array
 	 */
 	static $paymentList = [
-		self::PAYMENT_NONE 	    => 'Не выбрано',
 		self::PAYMENT_CARD 	    => 'Карты Visa, MasterCard, МИР',
 		self::PAYMENT_NON_CASH 	=> 'Безналичный расчет',
 		self::PAYMENT_POD	    => 'Наложенный платеж',
@@ -324,5 +321,21 @@ class Order extends \yii\db\ActiveRecord
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getTotal()
+	{
+		return (float)$this->sum + (float)$this->delivery_sum;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function confirm(): bool
+	{
+		return $this->updateAttributes(['status' => self::STATUS_PROCESS]) || $this->status == self::STATUS_PROCESS;
 	}
 }

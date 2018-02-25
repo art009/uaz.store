@@ -4,7 +4,6 @@
 /* @var $cart \frontend\components\Cart */
 
 use yii\bootstrap\Html;
-use common\models\CatalogProduct;
 
 $this->title = 'Корзина';
 $this->params['breadcrumbs'][] = $this->title;
@@ -60,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		    </div>
 		    <div class="pull-right">
 			    <span class="total">Итого: <b><?php echo number_format($cart->sum, 2, '.', ' '); ?></b> руб</span>
-			    <a href="/order/create" class="btn site-btn">Оформить заказ</a>
+			    <a href="/order/confirm" class="btn site-btn">Оформить заказ</a>
 		    </div>
 	    </div>
     <?php endif; ?>
