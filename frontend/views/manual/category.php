@@ -5,15 +5,15 @@
 /* @var $category \common\models\ManualCategory */
 /* @var $categories \common\models\ManualCategory[] */
 
-use yii\helpers\Html;
 use frontend\widgets\ManualCategoryTreeWidget;
+use yii\helpers\Html;
 
-$this->title = 'Справочник';
+$this->title = $category->title . ' на ' . $model->title;
 $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 
 ?>
 <div class="manual-view">
-    <h1><?= Html::encode($category->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 	<?php echo ManualCategoryTreeWidget::widget([
 		'baseLink' => '/manual/' . $model->link . '/',
 		'manualId' => $model->id,

@@ -5,11 +5,10 @@
 /* @var $category \common\models\ManualCategory */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-use yii\helpers\Html;
-use frontend\widgets\ManualCategoryTreeWidget;
 use yii\grid\GridView;
+use yii\helpers\Html;
 
-$this->title = 'Справочник';
+$this->title = $category->title . ' на ' . $model->title;
 $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 
 ?>

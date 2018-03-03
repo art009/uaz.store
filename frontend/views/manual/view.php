@@ -4,16 +4,17 @@
 /* @var $model \common\models\Manual */
 /* @var $categories \common\models\ManualCategory[] */
 
-use yii\helpers\Html;
 use frontend\widgets\ManualCategoryTreeWidget;
+use frontend\widgets\SeoTextWidget;
+use yii\helpers\Html;
 
-$this->title = 'Справочник ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Справочники', 'url' => ['/manual']];
-$this->params['breadcrumbs'][] = $model->title;
+$this->title = 'Запчасти на ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Справочники запчастей', 'url' => ['/manual']];
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="manual-view">
-    <h1><?= Html::encode($model->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
 	<?php echo ManualCategoryTreeWidget::widget([
 		'baseLink' => '/manual/' . $model->link . '/',
 		'manualId' => $model->id,
@@ -35,5 +36,6 @@ $this->params['breadcrumbs'][] = $model->title;
 				</div>
 			<?php endforeach; ?>
 		<?php endif; ?>
+		<div><?php echo SeoTextWidget::widget(); ?></div>
 	</div>
 </div>

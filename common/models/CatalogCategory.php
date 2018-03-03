@@ -332,7 +332,7 @@ class CatalogCategory extends \yii\db\ActiveRecord
 			$result[] = ['label' => $parent->title, 'url' => ['/catalog' . $parent->getFullLink()]];
 			$parent = $parent->parent;
 		}
-		$result[] = ['label' => 'Каталог товаров', 'url' => ['/catalog']];
+		$result[] = ['label' => 'Каталог', 'url' => ['/catalog']];
 		$result = array_reverse($result);
 		if ($selfLink) {
 			$result[] = ['label' => $this->title, 'url' => ['/catalog' . $this->getFullLink()]];

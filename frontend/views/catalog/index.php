@@ -5,10 +5,11 @@
 /* @var $children \common\models\CatalogCategory[] */
 /* @var $id int */
 
-use yii\helpers\Html;
 use frontend\widgets\CategoryTreeWidget;
+use frontend\widgets\SeoTextWidget;
+use yii\helpers\Html;
 
-$this->title = $category ? $category->title : 'Каталог товаров';
+$this->title = $category ? $category->title : 'Каталог';
 $this->params['breadcrumbs'] = $category ? $category->createBreadcrumbs() : [$this->title];
 ?>
 <div class="category-view">
@@ -33,5 +34,6 @@ $this->params['breadcrumbs'] = $category ? $category->createBreadcrumbs() : [$th
 				</div>
 			<?php endforeach; ?>
 		<?php endif; ?>
+		<div><?php echo SeoTextWidget::widget(); ?></div>
 	</div>
 </div>

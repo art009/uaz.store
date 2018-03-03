@@ -113,6 +113,9 @@ function initAnimatedSections() {
 		},
 
 		scroll: function (event) {
+			if ($(event.target).closest('.main-about').length > 0) {
+				return true;
+			}
 			if (!self.canAnimate()) {
 				return false;
 			}

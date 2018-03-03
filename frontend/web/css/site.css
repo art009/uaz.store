@@ -492,7 +492,7 @@ form#order-form .form-group b { color: #ecb52d; }
 	.products-list { padding-top: 45px; position: absolute; left: 5%; top: 50%; margin-top: -170px; }
 	.product-item { width: 180px; }
 
-	.main-about { position: absolute; left: 10%; top: 50%; margin-top: -150px; }
+	.main-about { position: absolute; left: 10%; top: 50%; margin-top: -150px; height: 375px; overflow-y: scroll; }
 	/* Main page END */
 
 	.manual-index h1 { text-align: left; }

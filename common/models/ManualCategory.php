@@ -4,7 +4,6 @@ namespace common\models;
 
 use common\components\AppHelper;
 use common\components\ImageHandler;
-use Yii;
 
 /**
  * This is the model class for table "manual_category".
@@ -209,10 +208,10 @@ class ManualCategory extends \yii\db\ActiveRecord
 		$result = [];
 		$manual = $this->manual;
 		$link = '/manual';
-		$result[] = ['label' => 'Справочники', 'url' => ['/manual']];
+		$result[] = ['label' => 'Справочники запчастей', 'url' => ['/manual']];
 		if ($manual) {
 			$link .= '/' . $manual->link;
-			$result[] = ['label' => $manual->title, 'url' => [$link]];
+			$result[] = ['label' => 'Запчасти на ' . $manual->title, 'url' => [$link]];
 			$parent = $this->parent;
 			if ($parent) {
 				$grandParent = $parent->parent;
