@@ -4,7 +4,9 @@ namespace frontend\controllers;
 
 use common\models\LoginForm;
 use common\models\User;
+use frontend\models\ChangePasswordForm;
 use frontend\models\PasswordResetRequestForm;
+use frontend\models\ProfileEditForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use Yii;
@@ -21,6 +23,8 @@ use yii\web\Controller;
  */
 class UserController extends Controller
 {
+    public $defaultAction = 'edit';
+
 	/**
 	 * @inheritdoc
 	 */
@@ -29,7 +33,7 @@ class UserController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['index', 'logout', 'signup', 'password-reset', 'set-password'],
+				'only' => ['index', 'logout', 'signup', 'password-reset', 'set-password', 'edit'],
 				'rules' => [
 					[
 						'actions' => ['signup', 'password-reset', 'set-password'],
@@ -37,7 +41,7 @@ class UserController extends Controller
 						'roles' => ['?'],
 					],
 					[
-						'actions' => ['index', 'logout'],
+						'actions' => ['index', 'logout', 'edit'],
 						'allow' => true,
 						'roles' => ['@'],
 					],
@@ -163,5 +167,55 @@ class UserController extends Controller
 		return $this->render('setPassword', [
 			'model' => $model,
 		]);
+	}
+
+    /**
+     * Change user profile
+     *
+     * @return string|\yii\web\Response
+     */
+    public function actionEdit()
+    {
+        $model = new ProfileEditForm(Yii::$app->user->getId());
+
+        if ($model->load(Yii::$app->request->post()) and $model->save()) {
+            Yii::$app->session->addFlash('success', 'Данные успешно сохранены.');
+
+            return $this->refresh();
+        }
+
+        return $this->render('edit', [
+            'model' => $model,
+        ]);
+	}
+
+    /**
+     * Change user password
+     *
+     * @return string|\yii\web\Response
+     * @throws BadRequestHttpException
+     */
+    public function actionChangePassword()
+    {
+        $user = Yii::$app->user->identity;
+        if ($user === null) {
+            return $this->goHome();
+        }
+
+        try {
+            $model = new ChangePasswordForm($user->getId());
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) and $model->changePassword()) {
+            Yii::$app->session->addFlash('success', 'Пароль успешно изменен.');
+
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('change-password', [
+            'model' => $model,
+        ]);
 	}
 }
