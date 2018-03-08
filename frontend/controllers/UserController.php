@@ -33,7 +33,7 @@ class UserController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['index', 'logout', 'signup', 'password-reset', 'set-password', 'edit'],
+				'only' => ['index', 'logout', 'signup', 'password-reset', 'set-password', 'edit', 'change-password'],
 				'rules' => [
 					[
 						'actions' => ['signup', 'password-reset', 'set-password'],
@@ -41,7 +41,7 @@ class UserController extends Controller
 						'roles' => ['?'],
 					],
 					[
-						'actions' => ['index', 'logout', 'edit'],
+						'actions' => ['index', 'logout', 'edit', 'change-password'],
 						'allow' => true,
 						'roles' => ['@'],
 					],

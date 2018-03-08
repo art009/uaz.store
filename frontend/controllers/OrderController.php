@@ -6,6 +6,7 @@ use common\models\Order;
 use common\models\User;
 use frontend\components\FrontAppComponentTrait;
 use frontend\models\ConfirmOrderForm;
+use frontend\models\search\OrderSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -28,16 +29,50 @@ class OrderController extends Controller
 		return [
 			'access' => [
 				'class' => AccessControl::className(),
-				'only' => ['confirm'],
+				'only' => ['index', 'view', 'confirm'],
 				'rules' => [
 					[
-						'actions' => ['confirm'],
+						'actions' => ['index', 'view', 'confirm'],
 						'allow' => true,
 						'roles' => ['@'],
 					],
 				],
 			],
 		];
+	}
+
+    /**
+     * The user order list in user profile
+     *
+     * @return string|Response
+     */
+    public function actionIndex()
+    {
+        $user = $this->getUserComponent();
+        if ($user === null) {
+            return $this->goHome();
+        }
+
+        $searchModel = new OrderSearch();
+        $notStatus = [$searchModel::STATUS_CART, $searchModel::STATUS_CART_CLEAR];
+        $dataProvider = $searchModel->search($user->getId(), $this->getRequestComponent()->queryParams, $notStatus);
+        $dataProvider->setPagination(['pageSize' => 3]);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+	}
+
+    /**
+     * The user order item in user profile
+     *
+     * @param int $id
+     * @return string
+     */
+    public function actionView($id)
+    {
+        return $this->render('view');
 	}
 
 	/**

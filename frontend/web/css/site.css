@@ -304,6 +304,78 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 
 /* User END */
 
+/* Order index */
+.order-list {
+	width: 370px;
+	background-color: #424242;
+}
+
+.order-header { margin-bottom: 20px; min-height:36px; line-height: 36px; }
+.order-header > div { border: 1px solid transparent; }
+.order-header > div:first-child { border-top-color: #ecb52d; border-right-color: #ecb52d; color: #ecb52d; }
+.order-header > div:last-child { border-bottom-color: #ecb52d;  color: #999999; }
+.order-header > div:last-child a { color: #fff; }
+
+.order-list .list-view {
+	padding: 18px;
+}
+
+.order-list__item {
+	margin-bottom: 10px;
+}
+
+.order-list__item_row {
+	border: 1px solid #b8b8b8;
+	padding: 6px;
+	margin-bottom: -1px;
+}
+
+.order-list__item_row .site-btn {
+	line-height: 2;
+	margin: -6px;
+	padding: 2px 10px;
+}
+
+.order-list__item_row span {
+	font-size: 14px;
+	color: #ecb52d;
+}
+
+.order-list__item_row span b {
+	font-size: 20px;
+}
+
+.order-list .pagination {
+	width: 100%;
+}
+
+.order-list .pagination > li:not(.prev):not(.next) > a {
+	margin-left: 10px;
+}
+
+.order-list .pagination > li > a,
+.order-list .pagination > li > span {
+	background-color: transparent;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	border: 1px solid #b2b2b2;
+	color: #b2b2b2;
+}
+
+.order-list .pagination > li > a:active,
+.order-list .pagination > li > a:focus,
+.order-list .pagination > li > a:hover,
+.order-list .pagination > li > span:hover {
+	background-color: transparent;
+}
+
+.order-list .pagination > li.active > a {
+	color: #ecb52d;
+	border-color: #ecb52d;
+}
+/* Order index END */
+
 /* Order cart */
 .cart-index table tbody td.title { text-align: left; }
 .cart-index table tbody td.price { color: #ecb52d; }
