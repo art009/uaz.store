@@ -2,13 +2,12 @@
 
 namespace backend\models;
 
-use Yii;
-use yii\bootstrap\Html;
-use yii\web\BadRequestHttpException;
-use yii\web\UploadedFile;
-use yii\helpers\ArrayHelper;
 use common\components\AppHelper;
 use common\components\ImageHandler;
+use yii\bootstrap\Html;
+use yii\helpers\ArrayHelper;
+use yii\web\BadRequestHttpException;
+use yii\web\UploadedFile;
 
 /**
  * Class Manual
@@ -33,7 +32,7 @@ class Manual extends \common\models\Manual
 			[['id', 'hide', 'year'], 'integer'],
 			[['parent_id', 'title', 'link', 'description', 'image', 'meta_keywords', 'meta_description', 'created_at', 'updated_at'], 'safe'],
 			[['title', 'link', 'hide'], 'required'],
-			[['image'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+			[['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
 		];
 	}
 
@@ -43,7 +42,7 @@ class Manual extends \common\models\Manual
 	public function attributeLabels()
 	{
 		return ArrayHelper::merge(parent::attributeLabels(), [
-			'image' => 'Загружаемая картинка',
+			'imageFile' => 'Загружаемая картинка',
 		]);
 	}
 
@@ -53,7 +52,7 @@ class Manual extends \common\models\Manual
 	public function load($data, $formName = null)
 	{
 		$result = parent::load($data, $formName = null);
-		$this->image = UploadedFile::getInstance($this, 'image');
+		$this->imageFile = UploadedFile::getInstance($this, 'imageFile');
 
 		return $result;
 	}
@@ -105,10 +104,10 @@ class Manual extends \common\models\Manual
 	{
 		$result = true;
 		if (parent::beforeSave($insert)) {
-			if ($this->image) {
-				$name = md5(time() . $this->image->baseName) . '.' . $this->image->extension;
+			if ($this->imageFile) {
+				$name = md5(time() . $this->imageFile->baseName) . '.' . $this->imageFile->extension;
 				$uploadsFolder = AppHelper::uploadsFolder();
-				if ($this->image->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
+				if ($this->imageFile->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
 					$this->saveImage($uploadsFolder . '/' . self::FOLDER . '/' . $name);
 				} else {
 					$this->addError('image', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
@@ -126,7 +125,7 @@ class Manual extends \common\models\Manual
 	{
 		if (parent::beforeDelete()) {
 
-			if ($this->pages) {
+			if ($this->categories) {
 				throw new BadRequestHttpException('Невозможно удалить непустой справочник');
 			}
 

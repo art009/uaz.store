@@ -4,6 +4,9 @@ namespace common\models;
 
 use common\components\AppHelper;
 use common\components\ImageHandler;
+use yii\behaviors\TimestampBehavior;
+use yii\web\BadRequestHttpException;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "manual_category".
@@ -37,6 +40,11 @@ class ManualCategory extends \yii\db\ActiveRecord
 	const MEDIUM_IMAGE_WIDTH = 186;
 	const MEDIUM_IMAGE_HEIGHT = 124;
 
+	/**
+	 * @var UploadedFile
+	 */
+	public $imageFile;
+
     /**
      * @inheritdoc
      */
@@ -60,6 +68,7 @@ class ManualCategory extends \yii\db\ActiveRecord
             [['catalog_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogCategory::className(), 'targetAttribute' => ['catalog_category_id' => 'id']],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => ManualCategory::className(), 'targetAttribute' => ['parent_id' => 'id']],
             [['manual_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manual::className(), 'targetAttribute' => ['manual_id' => 'id']],
+	        [['imageFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
         ];
     }
 
@@ -81,8 +90,22 @@ class ManualCategory extends \yii\db\ActiveRecord
 	        'meta_description' => 'Текст метатега description',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',
+	        'imageFile' => 'Загружаемая картинка',
         ];
     }
+
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			[
+				'class' => TimestampBehavior::className(),
+				'value' => date('Y-m-d H:i:s'),
+			],
+		];
+	}
 
     /**
      * @return \yii\db\ActiveQuery
@@ -124,6 +147,16 @@ class ManualCategory extends \yii\db\ActiveRecord
         return $this->hasMany(ManualProduct::className(), ['manual_category_id' => 'id']);
     }
 
+	/**
+	 * @inheritdoc
+	 */
+	public function load($data, $formName = null)
+	{
+		$result = parent::load($data, $formName = null);
+		$this->imageFile = UploadedFile::getInstance($this, 'imageFile');
+
+		return $result;
+	}
 
 	/**
 	 * Deletes model image
@@ -137,10 +170,56 @@ class ManualCategory extends \yii\db\ActiveRecord
 	}
 
 	/**
+	 * @param bool $insert
+	 *
+	 * @return bool
+	 *
+	 * @throws \Exception
+	 */
+	public function beforeSave($insert)
+	{
+		$result = true;
+		if (parent::beforeSave($insert)) {
+			if ($this->imageFile) {
+				$name = md5(time()) . '.' . $this->imageFile->extension;
+				$uploadsFolder = AppHelper::uploadsFolder();
+				if ($this->imageFile->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
+					$this->saveImage($uploadsFolder . '/' . self::FOLDER . '/' . $name, $name);
+				} else {
+					$this->addError('imageFile', 'Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
+					$result = false;
+				}
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function beforeDelete()
+	{
+		if (parent::beforeDelete()) {
+
+			if ($this->manualCategories || $this->manualProducts) {
+				throw new BadRequestHttpException('Невозможно удалить непустую категорию');
+			}
+
+			$this->deleteImages();
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Сохранение картинки
 	 *
-	 * @param string $file
-	 * @param string $hashName
+	 * @param $file
+	 * @param null $hashName
+	 * @throws \Exception
 	 */
 	public function saveImage($file, $hashName = null)
 	{
@@ -230,6 +309,46 @@ class ManualCategory extends \yii\db\ActiveRecord
 	}
 
 	/**
+	 * Построение хлебных крошек для бека
+	 *
+	 * @param bool $withTitle
+	 *
+	 * @return array
+	 */
+	public function createBackendBreadcrumbs(bool $withTitle = true)
+	{
+		$result = [];
+		$manual = $this->manual;
+		$result[] = ['label' => 'Справочники', 'url' => ['/manual']];
+		if ($manual) {
+			$result[] = [
+				'label' => 'Категории справочника ' . $manual->title,
+				'url' => ['/manual-category', 'manualId' => $manual->id]
+			];
+			$parent = $this->parent;
+			if ($parent) {
+				$grandParent = $parent->parent;
+				if ($grandParent) {
+					$result[] = [
+						'label' => $grandParent->title,
+						'url' => ['/manual-category', 'manualId' => $manual->id, 'categoryId' => $grandParent->id]
+					];
+				}
+				$result[] = [
+					'label' => $parent->title,
+					'url' => ['/manual-category', 'manualId' => $manual->id, 'categoryId' => $parent->id]
+				];
+			}
+		}
+
+		if ($withTitle) {
+			$result[] = $this->title;
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Полная ссылка
 	 *
 	 * @return string
@@ -249,5 +368,30 @@ class ManualCategory extends \yii\db\ActiveRecord
 		$result .= '/' . $this->link;
 
 		return $result;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLevel(): int
+	{
+		$parent = $this->parent;
+		if ($parent) {
+			if ($parent->parent) {
+				return 3;
+			}
+
+			return 2;
+		}
+
+		return 1;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isImageLevel(): bool
+	{
+		return $this->getLevel() === 3;
 	}
 }

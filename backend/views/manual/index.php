@@ -1,8 +1,8 @@
 <?php
 
-use yii\helpers\Html;
-use yii\grid\GridView;
 use common\components\AppHelper;
+use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -48,6 +48,14 @@ $this->params['breadcrumbs'][] = $this->title;
 				'value' => function ($model) {
 					/* @var $model \common\models\CatalogCategory */
 					return AppHelper::$yesNoList[$model->hide];
+				},
+			],
+			[
+				'attribute' => 'Категории',
+				'format' => 'raw',
+				'value' => function ($model) {
+					/* @var $model \common\models\Manual */
+					return Html::a('Список', ['manual-category/index', 'manualId' => $model->id], ['data-pjax' => 0]);
 				},
 			],
             ['class' => 'yii\grid\ActionColumn',

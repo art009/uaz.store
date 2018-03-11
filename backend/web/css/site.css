@@ -140,3 +140,38 @@ select.has-chosen { height: 34px; width: 100%; display: inline-block; vertical-a
 .table-bordered > tfoot > tr > td { padding: 5px; }
 
 input[type=number].quantity { display: inline-block; width: 50px; margin-right: 10px; height: 27px; padding: 3px; }
+
+.manual-category-view .manual-page-image { width: 100%; height: 64vh; overflow: hidden; position: relative; background: white;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	border: 1px solid black;
+}
+.manual-category-view .manual-page-image .manual-page-container { left: 0; top: 0; position: absolute;
+	transform-origin: 0 0;
+	-webkit-transform-origin: 0 0;
+	-moz-transform-origin: 0 0;
+	-o-transform-origin: 0 0;
+	-ms-transform-origin: 0 0;
+}
+.manual-category-view .manual-page-image .manual-page-container img { cursor: move; }
+.manual-category-view .manual-page-image .manual-page-tools { position: absolute; left: 5px; bottom: 10px; font-size: 18px;
+	color: white; padding: 10px 5px; background-color: rgba(0,0,0,0.8); }
+.manual-category-view .manual-page-image .manual-page-tools > span:first-child { border: none; cursor: default; width: 150px;
+	display: inline-block; }
+.manual-category-view .manual-page-image .manual-page-tools > span { padding: 2px 10px; border: 1px solid white;
+	cursor: pointer; margin-right: 5px; }
+.manual-category-view .manual-page-image .manual-page-tools > span:hover { border-color: #ecb52d; }
+.manual-category-view .manual-page-image .image-product { position: absolute; font-size: 16px; color: black; line-height: 18px;
+	background: white; text-align: center; font-weight: bold; border: 2px solid grey; cursor: pointer; border-radius: 4px; }
+
+.manual-view-content.manual-list .manual-item, .category-view-content.category-list .category-item { margin-right: 10px; }
+.manual-view-content .manual-item .image { background-size: cover; }
+
+.manual-category-view #manual-product-row{
+	cursor: pointer;
+}
+
+.manual-category-view .image-product.chosen { background-color: #ecb52d; }
+.manual-category-view .manual-product-row.chosen { background-color: #ecb52d; color: #000000}

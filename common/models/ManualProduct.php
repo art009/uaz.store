@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "manual_product".
@@ -73,6 +73,19 @@ class ManualProduct extends \yii\db\ActiveRecord
         ];
     }
 
+	/**
+	 * @inheritdoc
+	 */
+	public function behaviors()
+	{
+		return [
+			[
+				'class' => TimestampBehavior::className(),
+				'value' => date('Y-m-d H:i:s'),
+			],
+		];
+	}
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -113,4 +126,26 @@ class ManualProduct extends \yii\db\ActiveRecord
 
 	    return $result;
     }
+
+	/**
+	 * @param bool $insert
+	 *
+	 * @return bool
+	 *
+	 * @throws \Exception
+	 */
+	public function beforeSave($insert)
+	{
+		$result = true;
+		if (parent::beforeSave($insert)) {
+			if ($this->getIsNewRecord()) {
+				$this->left = 10;
+				$this->top = 10;
+				$this->width = 60;
+				$this->height = 20;
+			}
+		}
+
+		return $result;
+	}
 }

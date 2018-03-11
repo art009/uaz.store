@@ -1,9 +1,8 @@
 <?php
 
+use common\components\AppHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use common\components\AppHelper;
-use common\widgets\TreeView;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Manual */
@@ -46,7 +45,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'updated_at',
         ],
     ]) ?>
-
-    <h3>Страницы справочника</h3>
-    <?php echo TreeView::widget(['data' => $model->getCategoryTree()]); ?>
 </div>
