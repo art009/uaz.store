@@ -2,6 +2,9 @@
 
 namespace frontend\controllers;
 
+use common\components\document\classes\GenerateXls;
+use common\components\document\classes\GenerateXls__;
+use common\components\document\IndividualOrder;
 use common\models\Order;
 use common\models\User;
 use frontend\components\FrontAppComponentTrait;
@@ -120,5 +123,24 @@ class OrderController extends Controller
 	{
 		Yii::$app->session->addFlash('warning', 'Отмена заказа пока невозможна.');
 		return $this->redirect(Yii::$app->request->referrer);
+	}
+
+    /**
+     * @param $id
+     * @return Response
+     */
+    public function actionDocument($id)
+    {
+        $model = new IndividualOrder($id, Yii::$app->user->getId());
+
+        if ($model->validate()) {
+            $filePath = $model->getFile();
+            if ($filePath) {
+                return Yii::$app->response->sendFile($filePath, $model->getAttachmentName())->send();
+            }
+        }
+
+        $this->getSessionComponent()->setFlash('error', 'Необходимо заполнить профиль.');
+        return $this->redirect(['/user']);
 	}
 }
