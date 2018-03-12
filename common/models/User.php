@@ -267,4 +267,12 @@ class User extends ActiveRecord implements IdentityInterface
 	{
 		return $this->hasMany(Order::className(), ['user_id' => 'id']);
 	}
+
+	/**
+	 * @return bool
+	 */
+	public function isLegal(): bool
+	{
+		return $this->legal == self::LEGAL_YES;
+	}
 }

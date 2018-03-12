@@ -2,13 +2,14 @@
 
 namespace backend\controllers;
 
-use Yii;
 use backend\models\Order;
 use backend\models\OrderSearch;
+use common\classes\document\OrderManager;
+use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * OrderController implements the CRUD actions for Order model.
@@ -112,4 +113,34 @@ class OrderController extends Controller
             throw new NotFoundHttpException('Запрашиваемый заказ не найден.');
         }
     }
+
+	/**
+	 * @param int $id
+	 *
+	 * @param string $type TODO В будущем убрать дефолтное значение
+	 *
+	 * @return Response
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	public function actionDocument(int $id, string $type = OrderManager::TYPE_INDIVIDUAL_USER_INVOICE)
+	{
+		$order = $this->findModel($id);
+		$manager = new OrderManager($order);
+		$errors = $manager->checkDocument($type);
+		if (empty($errors)) {
+			$filePath = $manager->getDocumentPath($type);
+			if ($filePath) {
+				return Yii::$app->response->sendFile($filePath, $manager->getDocumentLabel($type))->send();
+			}
+		} else {
+			foreach ($errors as $type => $messages) {
+				foreach ($messages as $message) {
+					Yii::$app->session->setFlash($type, $message);
+				}
+			}
+		}
+
+		return $this->redirect(['/user']);
+	}
 }

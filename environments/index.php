@@ -55,6 +55,7 @@ return [
 			'frontend/web/uploads/user',
 			'frontend/web/uploads/user/s',
 			'frontend/web/uploads/page',
+	        'frontend/web/uploads/user/document',
 		],
         'setExecutable' => [
             'yii',
@@ -87,6 +88,7 @@ return [
 			'frontend/web/uploads/user',
 			'frontend/web/uploads/user/s',
 	        'frontend/web/uploads/page',
+	        'frontend/web/uploads/user/document',
         ],
         'setExecutable' => [
             'yii',
