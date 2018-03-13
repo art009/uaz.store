@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\classes\document\OrderManager;
 use common\classes\OrderStatusWorkflow;
 use yii\behaviors\TimestampBehavior;
 
@@ -337,5 +338,13 @@ class Order extends \yii\db\ActiveRecord
 	public function confirm(): bool
 	{
 		return $this->updateAttributes(['status' => self::STATUS_PROCESS]) || $this->status == self::STATUS_PROCESS;
+	}
+
+	/**
+	 * @return OrderManager
+	 */
+	public function getDocumentManager(): OrderManager
+	{
+		return new OrderManager($this);
 	}
 }

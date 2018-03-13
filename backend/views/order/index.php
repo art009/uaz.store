@@ -1,8 +1,8 @@
 <?php
 
-use yii\helpers\Html;
-use yii\grid\GridView;
 use backend\models\Order;
+use yii\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\OrderSearch */
@@ -60,6 +60,26 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'created_at',
             // 'updated_at',
 
+	        [
+		        'attribute' => 'Документы',
+		        'format' => 'raw',
+		        'value' => function ($model) {
+			        /* @var $model \backend\models\Order */
+			        $manager = $model->getDocumentManager();
+			        $list = $manager->getDocumentList();
+			        $result = [];
+			        foreach ($list as $type => $label) {
+			        	$errors = $manager->checkDocument($type);
+			        	if (empty($errors)) {
+			        		$result[] = Html::a($label, ['document', 'id' => $model->id, 'type' => $type]);
+				        } else {
+					        $result[] = Html::tag('span', $label);
+				        }
+			        }
+			        return implode('<br/>', $result);
+		        },
+		        'filter' => false,
+	        ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {cashbox}',
