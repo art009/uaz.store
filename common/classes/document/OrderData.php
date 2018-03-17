@@ -71,13 +71,15 @@ class OrderData extends OrderObject
 			$result['userAddress'] = $user->address ?? null;
 		}
 		if ($products) {
-			foreach ($products as $num => $product) {
-				$result['orderProductNum'][$num] = $num;
-				$result['orderProductTitle'][$num] = $product->getTitle();
-				$result['orderProductCount'][$num] = $product->quantity;
-				$result['orderProductUnit'][$num] = $product->product ? $product->product->unit : null;
-				$result['orderProductPrice'][$num] = $product->price;
-				$result['orderProductSum'][$num] = $product->getTotal();
+			$k = 0;
+			foreach ($products as $product) {
+				$k++;
+				$result['orderProductNum'][$k] = $k;
+				$result['orderProductTitle'][$k] = $product->getTitle();
+				$result['orderProductCount'][$k] = $product->quantity;
+				$result['orderProductUnit'][$k] = $product->product ? $product->product->unit : null;
+				$result['orderProductPrice'][$k] = $product->price;
+				$result['orderProductSum'][$k] = $product->getTotal();
 			}
 		}
 

@@ -158,7 +158,7 @@ abstract class AbstractGenerator implements GeneratorInterface
 		$data = $this->getTemplateData();
 		foreach ($data as $key => $value) {
 			$key = self::QUOTE_CHAR . $key . self::QUOTE_CHAR;
-			if (is_string($value) || is_numeric($value)) {
+			if (!is_array($value)) {
 				$result[$key] = $value;
 			}
 		}
