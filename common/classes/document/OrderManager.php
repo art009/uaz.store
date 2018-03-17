@@ -58,6 +58,11 @@ class OrderManager extends OrderObject
 		if (!array_key_exists($type, $map)) {
 			$result['error'][] = 'Неизвестный тип документа';
 		}
+		$orderData = $this->getOrderData();
+		$dataErrors = $orderData->validate();
+		foreach ($dataErrors as $error) {
+			$result['warning'][] = $error;
+		}
 
 		return $result;
 	}
@@ -140,7 +145,7 @@ class OrderManager extends OrderObject
 		$generator = new $map[$type];
 		$generator->setFilePath($this->getFilePath($type));
 		$generator->setTemplatePath($this->getTemplatePath($type));
-		$generator->setTemplateData([]);
+		$generator->setTemplateData($this->getOrderData()->toArray());
 
 		return $generator;
 	}
@@ -170,5 +175,13 @@ class OrderManager extends OrderObject
 		$name = $list[$type] ?? 'Документ';
 
 		return $name . ' для заказа № ' . $this->getOrderId() . ' от ' . $this->getOrderDate() . '.xls';
+	}
+
+	/**
+	 * @return OrderData
+	 */
+	protected function getOrderData(): OrderData
+	{
+		return new OrderData($this->getOrder());
 	}
 }

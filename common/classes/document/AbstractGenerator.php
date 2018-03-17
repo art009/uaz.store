@@ -3,6 +3,7 @@
 namespace common\classes\document;
 
 use PHPExcel;
+use PHPExcel_Cell;
 use PHPExcel_IOFactory;
 use PHPExcel_Writer_Excel5;
 
@@ -13,6 +14,8 @@ use PHPExcel_Writer_Excel5;
  */
 abstract class AbstractGenerator implements GeneratorInterface
 {
+	const QUOTE_CHAR = '`';
+
 	/**
 	 * @var string
 	 */
@@ -34,9 +37,9 @@ abstract class AbstractGenerator implements GeneratorInterface
 	protected $phpExcel = null;
 
 	/**
-	 * Подстановка данных в шаблок
+	 * Обработка шаблона
 	 */
-	abstract protected function process();
+	abstract protected function processTemplate();
 
 	/**
 	 * @return string
@@ -111,9 +114,56 @@ abstract class AbstractGenerator implements GeneratorInterface
 	 */
 	public function generate(): bool
 	{
-		$this->process();
+		$this->processTemplate();
+		$this->processData();
 
 		return $this->saveFile();
+	}
+
+	/**
+	 * Подстановка данных в шаблон
+	 *
+	 * @throws \PHPExcel_Exception
+	 * @throws \PHPExcel_Reader_Exception
+	 */
+	protected function processData()
+	{
+		$phpExcel = $this->getPhpExcel();
+		$sheet = $phpExcel->getActiveSheet();
+		$data = $this->getFormattedTemplateData();
+		foreach ($sheet->getRowIterator() as $row) {
+			$cellIterator = $row->getCellIterator();
+			/* @var $cell PHPExcel_Cell */
+			foreach ($cellIterator as $cell) {
+				$cellValue = trim($cell->getValue());
+				if (!$cellValue) {
+					continue;
+				}
+				$value = strtr($cellValue, $data);
+				if ($value != $cellValue) {
+					$cell->setValue($value);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Подставляется экранирование и проверяется тип
+	 *
+	 * @return array
+	 */
+	protected function getFormattedTemplateData(): array
+	{
+		$result = [];
+		$data = $this->getTemplateData();
+		foreach ($data as $key => $value) {
+			$key = self::QUOTE_CHAR . $key . self::QUOTE_CHAR;
+			if (is_string($value) || is_numeric($value)) {
+				$result[$key] = $value;
+			}
+		}
+
+		return $result;
 	}
 
 	/**

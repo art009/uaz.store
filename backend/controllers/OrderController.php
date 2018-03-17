@@ -136,11 +136,11 @@ class OrderController extends Controller
 		} else {
 			foreach ($errors as $type => $messages) {
 				foreach ($messages as $message) {
-					Yii::$app->session->setFlash($type, $message);
+					Yii::$app->session->setFlash($type, '<b>Проблема генерации документа для заказа № ' . $id . '</b><br/> ' . $message);
 				}
 			}
 		}
 
-		return $this->redirect(['/user']);
+		return $this->redirect(['/order']);
 	}
 }

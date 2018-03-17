@@ -70,11 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			        $result = [];
 			        foreach ($list as $type => $label) {
 			        	$errors = $manager->checkDocument($type);
-			        	if (empty($errors)) {
-			        		$result[] = Html::a($label, ['document', 'id' => $model->id, 'type' => $type]);
-				        } else {
-					        $result[] = Html::tag('span', $label);
-				        }
+				        $result[] = Html::a($label, ['document', 'id' => $model->id, 'type' => $type], ['class' => empty($errors) ? 'text-primary' : 'text-danger']);
 			        }
 			        return implode('<br/>', $result);
 		        },

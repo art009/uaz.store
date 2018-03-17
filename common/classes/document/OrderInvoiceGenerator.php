@@ -11,7 +11,7 @@ namespace common\classes\document;
  */
 class OrderInvoiceGenerator extends AbstractGenerator
 {
-	protected function process()
+	protected function processTemplate()
 	{
 		//TODO Логика подстановки значений в ячейки
 	}

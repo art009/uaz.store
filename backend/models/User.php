@@ -4,6 +4,7 @@ namespace backend\models;
 
 use codeonyii\yii2validators\AtLeastValidator;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use common\components\AppHelper;
 use common\components\ImageHandler;
@@ -80,32 +81,9 @@ class User extends \common\models\User
 	 */
 	public function attributeLabels()
 	{
-		return [
-			'id' => 'ID',
-			'email' => 'E-mail',
-			'phone' => 'Телефон',
-			'auth_key' => 'Auth Key',
-			'password_hash' => 'Хеш пароля',
-			'password_reset_token' => 'Токен сброса пароля',
-			'status' => 'Статус',
-			'role' => 'Роль',
-			'legal' => 'Физ/Юр лицо',
-			'name' => 'ФИО/Название компании',
-			'passport_series' => 'Серия паспорта',
-			'passport_number' => 'Номер паспорта',
-			'inn' => 'ИНН',
-			'kpp' => 'КПП',
-			'postcode' => 'Почтовый индекс',
-			'address' => 'Полный адрес',
-			'fax' => 'Факс',
-			'photo' => 'Фотография',
-			'offer_accepted' => 'Согласие с офертой',
-			'accepted_at' => 'Время согласия',
-			'created_at' => 'Время создания',
-			'updated_at' => 'Время обновления',
-			'password' => 'Пароль',
+		return ArrayHelper::merge(parent::attributeLabels(), [
 			'imageFile' => 'Загружаемая фотография',
-		];
+		]);
 	}
 
 	/**
