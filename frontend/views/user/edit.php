@@ -78,26 +78,26 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);?>
 
     <?php if($model->getLegal() == User::LEGAL_NO): ?>
-        <?php echo $form->field($model, 'password_series', [
+        <?php echo $form->field($model, 'passportSeries', [
             'template' => '{input}{error}{hint}'
         ])->widget(MaskedInput::className(), [
             'mask' => '99 99',
             'options' => [
                 'class' => 'form-control',
-                'placeholder' => $model->getAttributeLabel('password_series'),
+                'placeholder' => $model->getAttributeLabel('passportSeries'),
             ],
             'clientOptions' => [
                 'clearIncomplete' => false
             ],
         ]);?>
 
-        <?php echo $form->field($model, 'password_number', [
+        <?php echo $form->field($model, 'passportNumber', [
             'template' => '{input}{error}{hint}'
         ])->widget(MaskedInput::className(), [
             'mask' => '99 99 99',
             'options' => [
                 'class' => 'form-control',
-                'placeholder' => $model->getAttributeLabel('password_number'),
+                'placeholder' => $model->getAttributeLabel('passportNumber'),
             ],
             'clientOptions' => [
                 'clearIncomplete' => false

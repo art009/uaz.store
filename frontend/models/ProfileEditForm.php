@@ -43,12 +43,12 @@ class ProfileEditForm extends Model
     /**
      * @var int Individual
      */
-    public $password_series;
+    public $passportSeries;
 
     /**
      * @var int Individual
      */
-    public $password_number;
+    public $passportNumber;
 
 
     /**
@@ -80,24 +80,28 @@ class ProfileEditForm extends Model
     public function __construct(int $userId, array $config = [])
     {
         $this->setUser($userId);
-        $this->configure();
-
         parent::__construct($config);
     }
 
     /**
-     * Set attributes
-     * @return void
+     * @inheritdoc
      */
-    protected function configure()
+    public function init()
     {
-        if ($this->user instanceof User) {
-            foreach ($this->user->getAttributes() as $attribute => $value) {
-                if ($this->hasProperty($attribute)) {
-                    $this->$attribute = $value;
-                }
-            }
-        }
+        parent::init();
+
+        $user = $this->user;
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->phone = $user->phone;
+        $this->postcode = $user->postcode;
+        $this->address = $user->address;
+        $this->fax = $user->fax;
+        $this->passportSeries = $user->passport_series;
+        $this->passportNumber = $user->passport_number;
+        $this->inn = $user->inn;
+        $this->kpp = $user->kpp;
+        $this->legal = $user->legal;
     }
 
     /**
@@ -115,9 +119,9 @@ class ProfileEditForm extends Model
     /**
      * @return int
      */
-    public function getLegal(): int
+    public function getLegal()
     {
-        return $this->legal;
+        return (int)$this->legal;
     }
 
     /**
@@ -129,7 +133,7 @@ class ProfileEditForm extends Model
             [['name', 'phone', 'email'], 'required'],
             [['name', 'email', 'address', 'fax'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 10],
-            [['postcode', 'password_series', 'password_number', 'inn', 'kpp'], 'integer'],
+            [['postcode', 'passportSeries', 'passportNumber', 'inn', 'kpp'], 'integer'],
             [['phone', 'name', 'email'], 'trim'],
             ['email', 'email'],
             ['phone', 'unique', 'targetClass' => '\common\models\User',
@@ -157,8 +161,8 @@ class ProfileEditForm extends Model
             'postcode' => 'Почтовый индекс',
             'address' => 'Полный адрес',
             'fax' => 'Факс',
-            'password_series' => 'Серия паспорта',
-            'password_number' => 'Номер паспорта',
+            'passportSeries' => 'Серия паспорта',
+            'passportNumber' => 'Номер паспорта',
             'inn' => 'ИНН',
             'kpp' => 'КПП',
             'legal' => 'Физ/Юр лицо',
@@ -173,7 +177,7 @@ class ProfileEditForm extends Model
         if (parent::beforeValidate()) {
 
             $this->formattingPhone('phone');
-            $this->formattingInt(['postcode', 'password_series', 'password_number', 'inn', 'kpp']);
+            $this->formattingInt(['postcode', 'passportSeries', 'passportNumber', 'inn', 'kpp']);
 
             return true;
         }
@@ -212,17 +216,21 @@ class ProfileEditForm extends Model
     public function save()
     {
         if ($this->validate()) {
-            foreach ($this->getAttributes() as $attribute => $value) {
-                if ($this->user->hasProperty($attribute)) {
-                    $this->user->$attribute = $value;
-                }
-            }
+            $user = $this->user;
+            $user->name = $this->name;
+            $user->email = $this->email;
+            $user->phone = $this->phone;
+            $user->postcode = $this->postcode;
+            $user->address = $this->address;
+            $user->fax = $this->fax;
+            $user->passport_series = $this->passportSeries;
+            $user->passport_number = $this->passportNumber;
+            $user->inn = $this->inn;
+            $user->kpp = $this->kpp;
+            $user->legal = $this->legal;
 
-            if ($this->user->validate()) {
-                return $this->user->save();
-            } else {
-                $this->errors = $this->user->getErrors();
-            }
+            return $user->save();
+
         }
 
         return false;
