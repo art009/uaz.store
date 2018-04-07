@@ -14,6 +14,7 @@ use Yii;
 class OrderManager extends OrderObject
 {
 	const TYPE_INDIVIDUAL_USER_INVOICE = 'iu_invoice';
+	const TYPE_LEGAL_USER_INVOICE = 'lu_invoice';
 
 	const TEMPLATE_FILE_PATH = '@common/classes/document/templates/';
 	const RESULT_FILE_PATH = '@frontend/web/uploads/user/document/';
@@ -24,7 +25,9 @@ class OrderManager extends OrderObject
 	protected function getGeneratorMap(): array
 	{
 		if ($this->isUserLegal()) {
-			return []; // TODO Тут добавятся генераторы доков юр лица
+			return [
+			    self::TYPE_LEGAL_USER_INVOICE => OrderInvoiceGenerator::class,
+            ]; // TODO Тут добавятся генераторы доков юр лица
 		}
 
 		return [
@@ -38,7 +41,9 @@ class OrderManager extends OrderObject
 	public function getDocumentList(): array
 	{
 		if ($this->isUserLegal()) {
-			return []; // TODO Тут добавятся доки юр лица
+			return [
+			    self::TYPE_LEGAL_USER_INVOICE => 'Счет на юр лицо',
+            ]; // TODO Тут добавятся доки юр лица
 		}
 
 		return [
