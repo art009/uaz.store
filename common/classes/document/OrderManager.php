@@ -17,6 +17,8 @@ class OrderManager extends OrderObject
 
 	const TYPE_LEGAL_USER_INVOICE = 'lu_invoice';
 	const TYPE_LEGAL_USER_SPECIFICATION_FOR_CONTRACT = 'lu_specification_for_contract';
+	const TYPE_LEGAL_USER_ACCOUNT = 'lu_account';
+	const TYPE_LEGAL_USER_WAYBILL = 'lu_waybill';
 
 	const TEMPLATE_FILE_PATH = '@common/classes/document/templates/';
 	const RESULT_FILE_PATH = '@frontend/web/uploads/user/document/';
@@ -30,6 +32,8 @@ class OrderManager extends OrderObject
 			return [
 			    self::TYPE_LEGAL_USER_INVOICE => OrderInvoiceGenerator::class,
                 self::TYPE_LEGAL_USER_SPECIFICATION_FOR_CONTRACT => OrderInvoiceGenerator::class,
+                self::TYPE_LEGAL_USER_WAYBILL => OrderWayballGenerator::class,
+                self::TYPE_LEGAL_USER_ACCOUNT => OrderWayballGenerator::class,
             ]; // TODO Тут добавятся генераторы доков юр лица
 		}
 
@@ -46,7 +50,9 @@ class OrderManager extends OrderObject
 		if ($this->isUserLegal()) {
 			return [
 			    self::TYPE_LEGAL_USER_INVOICE => 'Счет на юр лицо',
-                self::TYPE_LEGAL_USER_SPECIFICATION_FOR_CONTRACT => 'Специф к дог на юр лицо'
+                self::TYPE_LEGAL_USER_SPECIFICATION_FOR_CONTRACT => 'Специф к дог на юр лицо',
+                self::TYPE_LEGAL_USER_WAYBILL => 'Накладная на юр лицо',
+                self::TYPE_LEGAL_USER_ACCOUNT => 'Счет-фактура на юр лицо',
             ]; // TODO Тут добавятся доки юр лица
 		}
 

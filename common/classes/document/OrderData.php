@@ -96,6 +96,7 @@ class OrderData extends OrderObject
 				$result['orderProductUnit'][$k] = $product->product ? $product->product->unit : null;
 				$result['orderProductPrice'][$k] = $product->price;
 				$result['orderProductSum'][$k] = $product->getTotal();
+				$result['orderProductCode'][$k] = $product->getCode();
 			}
 		}
 
