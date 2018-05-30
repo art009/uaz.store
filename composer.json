@@ -27,7 +27,8 @@
         "codeonyii/yii2-at-least-validator" : "~1.1",
 	  	"yiisoft/yii2-redis": "~2.0.0",
 	  	"yiisoft/yii2-sphinx": "~2.0.0",
-	  	"paquettg/php-html-parser": "~1.7"
+	  	"paquettg/php-html-parser": "~1.7",
+        "phpoffice/phpword": "v0.14.*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

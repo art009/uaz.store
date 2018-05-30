@@ -19,6 +19,7 @@ class OrderManager extends OrderObject
 	const TYPE_LEGAL_USER_SPECIFICATION_FOR_CONTRACT = 'lu_specification_for_contract';
 	const TYPE_LEGAL_USER_ACCOUNT = 'lu_account';
 	const TYPE_LEGAL_USER_WAYBILL = 'lu_waybill';
+	const TYPE_LEGAL_USER_CONTRACT = 'lu_contract';
 
 	const TEMPLATE_FILE_PATH = '@common/classes/document/templates/';
 	const RESULT_FILE_PATH = '@frontend/web/uploads/user/document/';
@@ -34,6 +35,7 @@ class OrderManager extends OrderObject
                 self::TYPE_LEGAL_USER_SPECIFICATION_FOR_CONTRACT => OrderInvoiceGenerator::class,
                 self::TYPE_LEGAL_USER_WAYBILL => OrderWayballGenerator::class,
                 self::TYPE_LEGAL_USER_ACCOUNT => OrderWayballGenerator::class,
+                self::TYPE_LEGAL_USER_CONTRACT => WordGenerator::class,
             ]; // TODO Тут добавятся генераторы доков юр лица
 		}
 
@@ -53,6 +55,7 @@ class OrderManager extends OrderObject
                 self::TYPE_LEGAL_USER_SPECIFICATION_FOR_CONTRACT => 'Специф к дог на юр лицо',
                 self::TYPE_LEGAL_USER_WAYBILL => 'Накладная на юр лицо',
                 self::TYPE_LEGAL_USER_ACCOUNT => 'Счет-фактура на юр лицо',
+                self::TYPE_LEGAL_USER_CONTRACT => 'Дог поставки на юр лицо',
             ]; // TODO Тут добавятся доки юр лица
 		}
 
@@ -114,7 +117,26 @@ class OrderManager extends OrderObject
 	 */
 	protected function getTemplatePath(string $type): string
 	{
-		return Yii::getAlias(self::TEMPLATE_FILE_PATH) . $type . '.xls';
+		return Yii::getAlias(self::TEMPLATE_FILE_PATH) . $type . $this->getExtension($type);
+	}
+
+    /**
+     * @param string $type
+     * @return null|string
+     */
+    protected function getExtension(string $type)
+    {
+        $path = Yii::getAlias(self::TEMPLATE_FILE_PATH);
+        $files = scandir($path);
+        if ($files) {
+            foreach ($files as $file) {
+                if (stristr($file, $type . '.') !== false) {
+                    return strrchr($file, '.');
+                }
+            }
+        }
+
+        return null;
 	}
 
 	/**
@@ -173,7 +195,7 @@ class OrderManager extends OrderObject
 	protected function getFileName(string $type): string
 	{
 		if ($this->checkGenerator($type)) {
-			return implode('_', [$type, $this->getUserId(), $this->getOrderId()]) . '.xls';
+			return implode('_', [$type, $this->getUserId(), $this->getOrderId()]) . $this->getExtension($type);
 		}
 
 		return '';
@@ -189,7 +211,7 @@ class OrderManager extends OrderObject
 		$list = $this->getDocumentList();
 		$name = $list[$type] ?? 'Документ';
 
-		return $name . ' для заказа № ' . $this->getOrderId() . ' от ' . $this->getOrderDate() . '.xls';
+		return $name . ' для заказа № ' . $this->getOrderId() . ' от ' . $this->getOrderDate() . $this->getExtension($type);
 	}
 
 	/**
