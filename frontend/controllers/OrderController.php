@@ -2,9 +2,6 @@
 
 namespace frontend\controllers;
 
-use common\components\document\classes\GenerateXls;
-use common\components\document\classes\GenerateXls__;
-use common\components\document\IndividualOrder;
 use common\models\Order;
 use common\models\User;
 use frontend\components\FrontAppComponentTrait;
@@ -13,6 +10,8 @@ use frontend\models\search\OrderSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -67,15 +66,29 @@ class OrderController extends Controller
         ]);
 	}
 
-    /**
-     * The user order item in user profile
-     *
-     * @param int $id
-     * @return string
-     */
+	/**
+	 * @param $id
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 * @throws ForbiddenHttpException
+	 */
     public function actionView($id)
     {
-        return $this->render('view');
+    	$order = Order::findOne($id);
+    	if (!$order) {
+    		throw new NotFoundHttpException('Заказ не найден.');
+	    }
+	    /** @var User $user */
+	    $user = $this->getUserComponent()->getIdentity();
+	    if ($order->user_id != $user->id) {
+	    	throw new ForbiddenHttpException('Заказ недоступен.');
+	    }
+
+        return $this->render('view', [
+        	'order' => $order,
+        ]);
 	}
 
 	/**

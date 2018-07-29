@@ -2,10 +2,9 @@
 
 namespace frontend\models\search;
 
-use Yii;
+use common\models\Order;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Order;
 
 /**
  * OrderSearch represents the model behind the search form about `backend\models\Order`.
@@ -46,6 +45,7 @@ class OrderSearch extends Order
     {
         $query = Order::find();
         $query->where(['user_id' => $userId]);
+        $query->orderBy('id DESC');
 
         if ($notStatusFilter) {
             $query->andWhere(['not in', 'status', $notStatusFilter]);

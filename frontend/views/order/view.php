@@ -1,10 +1,11 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $order \common\models\Order */
 
 use yii\helpers\Html;
 
-$this->title = 'Личный кабинет';
+$this->title = 'Заказ №' . $order->id;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
