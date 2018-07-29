@@ -82,12 +82,13 @@ class OrderController extends Controller
 	    }
 	    /** @var User $user */
 	    $user = $this->getUserComponent()->getIdentity();
-	    if ($order->user_id != $user->id) {
+	    if (!$user || $order->user_id != $user->id) {
 	    	throw new ForbiddenHttpException('Заказ недоступен.');
 	    }
 
         return $this->render('view', [
         	'order' => $order,
+        	'user' => $user,
         ]);
 	}
 

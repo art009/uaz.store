@@ -487,6 +487,8 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 form#order-form { display: inline-block; }
 form#order-form .form-group b { color: #ecb52d; }
 
+.color-yellow { color: #ecb52d; }
+
 @media (max-width: 767px ) {
 
 	body { font-size: 16px; }
