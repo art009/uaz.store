@@ -87,6 +87,9 @@ $this->params['breadcrumbs'][] = $this->title;
 		                    ['cashbox', 'id' => $model->id],
 		                    [
 			                    'title' => 'Отправить в кассу',
+			                    'aria-label' => 'Отправить в кассу',
+			                    'data-confirm' => 'Вы уверены, что хотите отправить информацию по заказу в кассу?',
+			                    'data-method' => 'post',
 			                    'data-pjax' => 0,
 		                    ]
 	                    );

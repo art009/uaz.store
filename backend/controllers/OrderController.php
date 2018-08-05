@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Order;
 use backend\models\OrderSearch;
 use common\classes\document\OrderManager;
+use common\classes\OrderStatusWorkflow;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -43,6 +44,33 @@ class OrderController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+	/**
+	 * Смена статуса
+	 *
+	 * @param int $id
+	 * @param int $status
+	 *
+	 * @return Response
+	 *
+	 * @throws BadRequestHttpException
+	 * @throws NotFoundHttpException
+	 * @throws \yii\db\Exception
+	 */
+    public function actionChangeStatus(int $id, int $status): Response
+    {
+    	$model = $this->findModel($id);
+
+    	if (!in_array($status, OrderStatusWorkflow::statusList($model->status))) {
+		    throw new BadRequestHttpException('Попытка перевода в недопустимый статус.');
+	    }
+
+	    if (!$model->getWorkflow()->toStatus($status)) {
+		    throw new BadRequestHttpException('Неудачная попытка перевода в статус.');
+	    }
+
+    	return $this->redirect(['view', 'id' => $id]);
     }
 
 	/**

@@ -5,6 +5,7 @@ namespace common\classes;
 use common\models\Order;
 use common\models\OrderProduct;
 use Yii;
+use yii\db\Exception;
 
 /**
  * Class OrderStatusWorkflow
@@ -114,15 +115,17 @@ class OrderStatusWorkflow
 	 * @param int $status
 	 *
 	 * @return bool
+	 *
+	 * @throws Exception
 	 */
-	public function toStatus($status)
+	public function toStatus(int $status): bool
 	{
-		$result = false;
-
 		switch ($status) {
 			case Order::STATUS_CART_CLEAR:
 				$result = $this->transitionToCartClear();
 				break;
+			default:
+				$result = $this->softTransitionToStatus($status);
 		}
 
 		return $result;
@@ -132,8 +135,10 @@ class OrderStatusWorkflow
 	 * Перевод в статус "Очищенная корзина"
 	 *
 	 * @return bool
+	 *
+	 * @throws Exception
 	 */
-	public function transitionToCartClear()
+	protected function transitionToCartClear(): bool
 	{
 		$result = false;
 		$order = $this->getOrder();
@@ -156,5 +161,19 @@ class OrderStatusWorkflow
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Мягкий перевод в любой статус
+	 *
+	 * @param int $status
+	 *
+	 * @return bool
+	 */
+	protected function softTransitionToStatus(int $status): bool
+	{
+		$order = $this->getOrder();
+
+		return (bool)$order->updateAttributes(['status' => $status, 'updated_at' => date('Y-m-d H:i:s')]);
 	}
 }
