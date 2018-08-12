@@ -138,7 +138,7 @@ class ManualProduct extends \yii\db\ActiveRecord
 	{
 		$result = true;
 		if (parent::beforeSave($insert)) {
-			if ($this->getIsNewRecord()) {
+			if ($this->getIsNewRecord() && !$this->left) {
 				$this->left = 10;
 				$this->top = 10;
 				$this->width = 60;

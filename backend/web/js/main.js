@@ -275,6 +275,20 @@ function showProviderPosition(providerId, key) {
 	});
 })(jQuery);
 
+function getCoordinates(event) {
+	if (typeof event.originalEvent.touches !== 'undefined' && event.originalEvent.touches.length) {
+		return {
+			x: event.originalEvent.touches[0].pageX,
+			y: event.originalEvent.touches[0].pageY
+		}
+	} else {
+		return {
+			x: (event.pageX || event.clientX),
+			y: (event.pageY || event.clientY)
+		}
+	}
+}
+
 // READY
 jQuery(document).ready(function () {
 
@@ -436,6 +450,101 @@ jQuery(document).ready(function () {
 		    }
 	    });
     });
+
+    var dragContainer = $('.manual-page-container'),
+	    dragEl = null,
+	    dragContainerCoordinates = { left: null, top: null };
+
+	$(document).on('click touchend', '.manual-category-view .image-product', function(event) {
+		dragContainerCoordinates = $(dragContainer).offset();
+		if (dragEl !== null) {
+			$(dragEl).removeClass('draggable');
+
+			var id = $(dragEl).data('id'),
+				positions = [];
+
+			$('.image-product[data-id="' + id + '"]').each(function (i, item) {
+				var position = {
+					left: $(item).position().left,
+					top: $(item).position().top,
+					width: $(item).outerWidth(),
+					height: $(item).outerHeight()
+				};
+
+				positions.push(position);
+			});
+
+			$.ajax({
+				url: '/manual-product/save-positions',
+				type: 'post',
+				data: {
+					id: id,
+					positions: positions
+				},
+				success: function () {
+					console.log('Позиции успешно сохранены.');
+				},
+				error: function (error) {
+					alert('Ошибка при сохранении позиций: ' + error.responseText);
+				}
+			});
+
+			dragEl = null;
+		} else {
+			dragEl = $(this);
+			$(dragEl).addClass('draggable');
+			$('.image-product').removeClass('chosen');
+			$('.image-product[data-id="' + $(dragEl).data('id') + '"]').addClass('chosen');
+		}
+	});
+
+	$(dragContainer).on('mousemove touchmove', function(event){
+		event.preventDefault();
+		event.stopPropagation();
+		if (dragEl) {
+			var c = getCoordinates(event),
+				left = Math.round(c.x - dragContainerCoordinates.left - (dragEl).width() / 2),
+				top = Math.round(c.y - dragContainerCoordinates.top - (dragEl).height() / 2);
+
+			if (left < 0) {
+				left = 0;
+			}
+
+			if (top < 0) {
+				top = 0;
+			}
+
+			$(dragEl).css({
+				'left': left + 'px',
+				'top': top + 'px'
+			});
+		}
+	});
+
+	$(document).on('click touchend', 'a.choose-area', function(event){
+		event.preventDefault();
+		event.stopPropagation();
+
+		var areaId = $(this).data('id');
+
+		if (areaId) {
+			$('.image-product').removeClass('chosen');
+			$('.image-product[data-id="' + areaId + '"]').addClass('chosen');
+		}
+	});
+
+	$(document).on('click touchend', 'a.add-area', function(event){
+		event.preventDefault();
+		event.stopPropagation();
+
+		var areaId = $(this).data('id');
+
+		if (areaId) {
+			var image = $('<div class="image-product" data-id="' + areaId + '" style="left:0;top:0;width:60px;height:20px;">' + $(this).data('number') + '</div>');
+			$(dragContainer).append(image);
+			$(image).addClass('chosen').click();
+		}
+	});
 });
 
 $(window).load(function() {

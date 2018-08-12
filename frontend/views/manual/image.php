@@ -29,7 +29,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 							'height' => $manualProduct->height . 'px',
 						]);
 						?>
-						<div class="image-product" id="<?= $manualProduct->number ?>" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
+						<div class="image-product" id="<?= $manualProduct->id ?>" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
 						<?php $positions = $manualProduct->getPositionsArray(); ?>
 						<?php if ($positions): ?>
 							<?php foreach ($positions as $position): ?>
@@ -59,7 +59,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 			'dataProvider' => $dataProvider,
 			'rowOptions' => function ($model, $key, $index, $grid) {
 
-				return ['class' => 'manual-product-row','id' => 'row' . $model['number']];
+				return ['class' => 'manual-product-row','id' => 'row' . $model['id']];
 			},
 				'summary'=>'',
 				'columns' => [

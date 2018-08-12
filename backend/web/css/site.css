@@ -173,5 +173,28 @@ input[type=number].quantity { display: inline-block; width: 50px; margin-right: 
 	cursor: pointer;
 }
 
-.manual-category-view .image-product.chosen { background-color: #ecb52d; }
+.manual-category-view .image-product.chosen {
+	border-color: #ecb52d;
+	z-index: 100;
+	-webkit-box-shadow: 0 0 14px 0 rgba(236, 181, 45, 0.8);
+	-moz-box-shadow:    0 0 14px 0 rgba(236, 181, 45, 0.8);
+	box-shadow:         0 0 14px 0 rgba(236, 181, 45, 0.8);
+}
+.manual-category-view .image-product.draggable {
+	-webkit-animation: chosen 2s linear infinite;
+	animation: chosen 2s linear infinite;
+	z-index: 100;
+	cursor: move;
+}
 .manual-category-view .manual-product-row.chosen { background-color: #ecb52d; color: #000000}
+
+@-webkit-keyframes chosen {
+	0% { background-color: #ecb52d; }
+	50% { background: white; }
+	100% { background-color: #ecb52d; }
+}
+@keyframes chosen {
+	0% { background-color: #ecb52d; }
+	50% { background: white; }
+	100% { background-color: #ecb52d; }
+}

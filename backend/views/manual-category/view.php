@@ -60,10 +60,12 @@ $this->params['breadcrumbs'] = $model->createBackendBreadcrumbs();
 								'height' => $manualProduct->height . 'px',
 							]);
 							?>
-							<div class="image-product" id="<?= $manualProduct->number ?>" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
+							<div class="image-product" data-id="<?= $manualProduct->id ?>" style="<?php echo $styles; ?>">
+								<?php echo $manualProduct->number; ?>
+							</div>
 							<?php $positions = $manualProduct->getPositionsArray(); ?>
 							<?php if ($positions): ?>
-								<?php foreach ($positions as $position): ?>
+								<?php foreach ($positions as $k => $position): ?>
 									<?php
 									$styles = Html::cssStyleFromArray([
 										'left' => $position['left'] . 'px',
@@ -72,7 +74,9 @@ $this->params['breadcrumbs'] = $model->createBackendBreadcrumbs();
 										'height' => $position['height'] . 'px',
 									]);
 									?>
-									<div class="image-product" id="<?php echo $manualProduct->id; ?>" style="<?php echo $styles; ?>"><?php echo $manualProduct->number; ?></div>
+									<div class="image-product" data-id="<?php echo $manualProduct->id; ?>" style="<?php echo $styles; ?>">
+										<?php echo $manualProduct->number; ?>
+									</div>
 								<?php endforeach; ?>
 							<?php endif; ?>
 						<?php endforeach; ?>
@@ -102,7 +106,27 @@ $this->params['breadcrumbs'] = $model->createBackendBreadcrumbs();
 					'title',
 					[
 						'class' => 'yii\grid\ActionColumn',
+						'template' => '{choose} {add} l {view} {update} {delete}',
 						'buttons' => [
+							'choose' => function ($url, $model, $key) {
+								return Html::a(Html::icon('pushpin'), [''], [
+									'class' => 'choose-area',
+									'title' => 'Выбрать области',
+									'aria-label' => 'Выбрать области',
+									'data-pjax' => 0,
+									'data-id' => $model->id,
+								]);
+							},
+							'add' => function ($url, $model, $key) {
+								return Html::a(Html::icon('screenshot'), [''], [
+									'class' => 'add-area',
+									'title' => 'Добавить область',
+									'aria-label' => 'Добавить область',
+									'data-pjax' => 0,
+									'data-id' => $model->id,
+									'data-number' => $model->number,
+								]);
+							},
 							'view' => function ($url, $model, $key) {
 								return Html::a(Html::icon('eye-open'), ['/manual-product/view', 'id' => $model->id], [
 									'title' => 'Просмотр',

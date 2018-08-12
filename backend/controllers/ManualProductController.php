@@ -75,7 +75,7 @@ class ManualProductController extends Controller
         $model->manual_category_id = $category->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['manual-category/view', 'id' => $model->manual_category_id]);
         }
 
         return $this->render('create', [
@@ -96,7 +96,7 @@ class ManualProductController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+	        return $this->redirect(['manual-category/view', 'id' => $model->manual_category_id]);
         }
 
         return $this->render('update', [
@@ -153,5 +153,34 @@ class ManualProductController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+	/**
+	 * @return bool
+	 *
+	 * @throws NotFoundHttpException
+	 */
+    public function actionSavePositions()
+    {
+    	$request = Yii::$app->request;
+
+    	$id = $request->post('id');
+    	$positions = $request->post('positions');
+
+	    $model = $this->findModel($id);
+
+	    $basePosition = array_shift($positions);
+	    if ($basePosition) {
+	    	$model->left = $basePosition['left'] ?? 0;
+	    	$model->top = $basePosition['top'] ?? 0;
+	    	$model->width = $basePosition['width'] ?? 0;
+	    	$model->height = $basePosition['height'] ?? 0;
+	    }
+
+	    if ($positions) {
+	    	$model->positions = json_encode($positions);
+	    }
+
+	    return (int)$model->save(false);
     }
 }
