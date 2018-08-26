@@ -4,7 +4,6 @@ namespace common\models;
 
 use common\components\AppHelper;
 use common\interfaces\CartProductInterface;
-use Yii;
 
 /**
  * This is the model class for table "order_product".
@@ -159,6 +158,16 @@ class OrderProduct extends \yii\db\ActiveRecord implements CartProductInterface
 		parent::afterSave($insert, $changedAttributes);
 
 		$this->order->updateSum(true);
+	}
+
+	/**
+	 * После удаления
+	 */
+	public function afterDelete()
+	{
+		$this->order->updateSum(true);
+
+		parent::afterDelete();
 	}
 
 	/**

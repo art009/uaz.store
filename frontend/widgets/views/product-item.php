@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 
 /* @var $product \common\models\CatalogProduct */
 
@@ -13,6 +13,15 @@ $image = Html::img($product->getImagePath(), ['alt' => $title]);
 		<?php echo $link ? Html::a($title, $link) : $title; ?>
 	</div>
 	<div class="image">
+		<?php if ($product->oversize): ?>
+			<?php echo Html::icon('scale', [
+				'class' => 'bulky-product',
+				'data-tooltip' => 'tooltip',
+				'data-trigger' => 'hover',
+				'data-placement' => 'right',
+				'title' => 'Крупногабаритный товар',
+			]); ?>
+		<?php endif; ?>
 		<?php echo $link ? Html::a($image, $link) : $image; ?>
 	</div>
 	<div class="code">Код <?php echo $product->getCode(); ?></div>

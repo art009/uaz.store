@@ -1,5 +1,7 @@
 <?php
 
+use yii\bootstrap\Html;
+
 /* @var $this yii\web\View */
 /* @var $category \common\models\CatalogCategory */
 /* @var $product \common\models\CatalogProduct */
@@ -37,5 +39,14 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
 				Добавить в корзину
 			</div>
 		</div>
+		<?php if ($product->oversize): ?>
+			<?php echo Html::icon('scale', [
+				'class' => 'bulky-product',
+				'data-tooltip' => 'tooltip',
+				'data-trigger' => 'hover',
+				'data-placement' => 'right',
+				'title' => 'Крупногабаритный товар',
+			]); ?>
+		<?php endif; ?>
 	</div>
 </div>

@@ -74,7 +74,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			<div class="form-group">
 				Стоимость заказа: <b class="color-yellow"><?php echo number_format($order->sum, 2, '.', ' '); ?></b> руб
 				<br/>
-				Стоимость доставки: <b class="color-yellow">после согласования</b>
+				Стоимость доставки:
+				<?php if ($order->delivery_sum > 0): ?>
+					<b class="color-yellow"><?php echo number_format($order->delivery_sum, 2, '.', ' '); ?></b> руб
+				<?php else: ?>
+					<b class="color-yellow">бесплатно</b>
+				<?php endif; ?>
 				<br/>
 				<span class="total summary">Итого: <b class="color-yellow"><?php echo number_format($order->getTotal(), 2, '.', ' '); ?></b> руб</span>
 				<br/>

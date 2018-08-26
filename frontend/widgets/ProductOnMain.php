@@ -30,7 +30,7 @@ class ProductOnMain extends Widget
 	{
 		$this->products = CatalogProduct::getDb()->cache(function(){
 			return CatalogProduct::find()
-				->select(['id', 'title', 'link', 'price', 'image'])
+				->select(['id', 'title', 'link', 'price', 'image', 'oversize'])
 				->where([
 					'hide' => AppHelper::NO,
 					'on_main' => AppHelper::YES,

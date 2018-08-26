@@ -231,10 +231,15 @@ class Order extends \yii\db\ActiveRecord
 		$this->sum = 0;
 		/* @var $orderProducts OrderProduct[] */
 		$orderProducts = $this->getOrderProducts()->all();
+		$hasOverSized = false;
 		foreach ($orderProducts as $orderProduct) {
 			$this->sum += round($orderProduct->price * $orderProduct->quantity, 2);
+			if ($orderProduct->product && $orderProduct->product->oversize) {
+				$hasOverSized = true;
+			}
 		}
 		if ($save) {
+			$this->calculateDeliverySum($this->sum, $hasOverSized);
 			$this->update();
 		}
 	}
@@ -346,5 +351,25 @@ class Order extends \yii\db\ActiveRecord
 	public function getDocumentManager(): OrderManager
 	{
 		return new OrderManager($this);
+	}
+
+	/**
+	 * Расчет стоимости доставки
+	 *
+	 * Нет крупногабарита и сумма больше 5к - доставка до места отправления бесплатна
+	 * Нет крупногабарита и сумма меньше 5к - 200р
+	 * Есть крупногабарит и сумма больше 50к - бесплатно
+	 * Есть крупногабарит и сумма меньше 50к - 500р
+	 *
+	 * @param float $sum
+	 * @param bool $hasOverSized
+	 */
+	public function calculateDeliverySum(float $sum, bool $hasOverSized)
+	{
+		if ($hasOverSized) {
+			$this->delivery_sum = ($sum >= 50000) ? 0 : 500;
+		} else {
+			$this->delivery_sum = ($sum >= 5000) ? 0 : 200;
+		}
 	}
 }

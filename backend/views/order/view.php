@@ -92,7 +92,12 @@ $user = $model->user;
 			<div class="form-group">
 				Стоимость заказа: <b class="color-yellow"><?php echo number_format($model->sum, 2, '.', ' '); ?></b> руб
 				<br/>
-				Стоимость доставки: <b class="color-yellow">после согласования</b>
+				Стоимость доставки:
+				<?php if ($model->delivery_sum > 0): ?>
+					<b class="color-yellow"><?php echo number_format($model->delivery_sum, 2, '.', ' '); ?></b> руб
+				<?php else: ?>
+					<b class="color-yellow">бесплатно</b>
+				<?php endif; ?>
 				<br/>
 				<h3 class="total summary">Итого: <b class="color-yellow"><?php echo number_format($model->getTotal(), 2, '.', ' '); ?></b> руб</h3>
 			</div>
