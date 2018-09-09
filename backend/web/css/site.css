@@ -186,6 +186,9 @@ input[type=number].quantity { display: inline-block; width: 50px; margin-right: 
 	z-index: 100;
 	cursor: move;
 }
+.manual-category-view .image-product.sizable {
+	cursor: nwse-resize;
+}
 .manual-category-view .manual-product-row.chosen { background-color: #ecb52d; color: #000000}
 
 @-webkit-keyframes chosen {

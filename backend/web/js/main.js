@@ -453,44 +453,58 @@ jQuery(document).ready(function () {
 
     var dragContainer = $('.manual-page-container'),
 	    dragEl = null,
+	    dragSize = 0,
 	    dragContainerCoordinates = { left: null, top: null };
 
 	$(document).on('click touchend', '.manual-category-view .image-product', function(event) {
 		dragContainerCoordinates = $(dragContainer).offset();
 		if (dragEl !== null) {
 			$(dragEl).removeClass('draggable');
+			if (dragSize === 0) {
+				dragSize = 1;
 
-			var id = $(dragEl).data('id'),
-				positions = [];
+				$(dragEl).addClass('sizable');
 
-			$('.image-product[data-id="' + id + '"]').each(function (i, item) {
-				var position = {
-					left: $(item).position().left,
-					top: $(item).position().top,
-					width: $(item).outerWidth(),
-					height: $(item).outerHeight()
-				};
+				console.log(123);
+			} else {
+				dragSize = 0;
 
-				positions.push(position);
-			});
+				$(dragEl).removeClass('sizable');
 
-			$.ajax({
-				url: '/manual-product/save-positions',
-				type: 'post',
-				data: {
-					id: id,
-					positions: positions
-				},
-				success: function () {
-					console.log('Позиции успешно сохранены.');
-				},
-				error: function (error) {
-					alert('Ошибка при сохранении позиций: ' + error.responseText);
-				}
-			});
+				var id = $(dragEl).data('id'),
+					positions = [];
 
-			dragEl = null;
+				$('.image-product[data-id="' + id + '"]').each(function (i, item) {
+					var position = {
+						left: $(item).position().left,
+						top: $(item).position().top,
+						width: $(item).outerWidth(),
+						height: $(item).outerHeight()
+					};
+
+					positions.push(position);
+				});
+
+				$.ajax({
+					url: '/manual-product/save-positions',
+					type: 'post',
+					data: {
+						id: id,
+						positions: positions
+					},
+					success: function () {
+						console.log('Позиции успешно сохранены.');
+					},
+					error: function (error) {
+						alert('Ошибка при сохранении позиций: ' + error.responseText);
+					}
+				});
+
+				dragEl = null;
+			}
 		} else {
+			dragSize = 0;
+
 			dragEl = $(this);
 			$(dragEl).addClass('draggable');
 			$('.image-product').removeClass('chosen');
@@ -503,21 +517,40 @@ jQuery(document).ready(function () {
 		event.stopPropagation();
 		if (dragEl) {
 			var c = getCoordinates(event),
-				left = Math.round(c.x - dragContainerCoordinates.left - (dragEl).width() / 2),
-				top = Math.round(c.y - dragContainerCoordinates.top - (dragEl).height() / 2);
+				width = Math.round(c.x - dragContainerCoordinates.left - $(dragEl).position().left + $(dragEl).outerWidth() / 2),
+				height = Math.round(c.y - dragContainerCoordinates.top - $(dragEl).position().top + $(dragEl).outerHeight() / 2),
+				left = Math.round(c.x - dragContainerCoordinates.left - $(dragEl).outerWidth() / 2),
+				top = Math.round(c.y - dragContainerCoordinates.top - $(dragEl).outerHeight() / 2);
 
-			if (left < 0) {
-				left = 0;
+
+
+			if ($(dragEl).hasClass('draggable')) {
+				if (left < 0) {
+					left = 0;
+				}
+
+				if (top < 0) {
+					top = 0;
+				}
+
+				$(dragEl).css({
+					'left': left + 'px',
+					'top': top + 'px'
+				});
+			} else {
+				if (width < 60) {
+					width = 60;
+				}
+
+				if (height < 20) {
+					height = 20;
+				}
+
+				$(dragEl).css({
+					'width': width + 'px',
+					'height': height + 'px'
+				});
 			}
-
-			if (top < 0) {
-				top = 0;
-			}
-
-			$(dragEl).css({
-				'left': left + 'px',
-				'top': top + 'px'
-			});
 		}
 	});
 
