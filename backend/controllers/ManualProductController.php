@@ -177,9 +177,7 @@ class ManualProductController extends Controller
 	    	$model->height = $basePosition['height'] ?? 0;
 	    }
 
-	    if ($positions) {
-	    	$model->positions = json_encode($positions);
-	    }
+	    $model->positions = $positions ? json_encode($positions) : '[]';
 
 	    return (int)$model->save(false);
     }

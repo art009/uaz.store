@@ -456,6 +456,40 @@ jQuery(document).ready(function () {
 	    dragSize = 0,
 	    dragContainerCoordinates = { left: null, top: null };
 
+    function saveDragElPositions(id) {
+    	if (dragEl === null) {
+    		return;
+	    }
+
+	    var positions = [];
+
+	    $('.image-product[data-id="' + id + '"]').each(function (i, item) {
+		    var position = {
+			    left: $(item).position().left,
+			    top: $(item).position().top,
+			    width: $(item).outerWidth(),
+			    height: $(item).outerHeight()
+		    };
+
+		    positions.push(position);
+	    });
+
+	    $.ajax({
+		    url: '/manual-product/save-positions',
+		    type: 'post',
+		    data: {
+			    id: id,
+			    positions: positions
+		    },
+		    success: function () {
+			    console.log('Позиции успешно сохранены.');
+		    },
+		    error: function (error) {
+			    alert('Ошибка при сохранении позиций: ' + error.responseText);
+		    }
+	    });
+    }
+
 	$(document).on('click touchend', '.manual-category-view .image-product', function(event) {
 		dragContainerCoordinates = $(dragContainer).offset();
 		if (dragEl !== null) {
@@ -471,34 +505,7 @@ jQuery(document).ready(function () {
 
 				$(dragEl).removeClass('sizable');
 
-				var id = $(dragEl).data('id'),
-					positions = [];
-
-				$('.image-product[data-id="' + id + '"]').each(function (i, item) {
-					var position = {
-						left: $(item).position().left,
-						top: $(item).position().top,
-						width: $(item).outerWidth(),
-						height: $(item).outerHeight()
-					};
-
-					positions.push(position);
-				});
-
-				$.ajax({
-					url: '/manual-product/save-positions',
-					type: 'post',
-					data: {
-						id: id,
-						positions: positions
-					},
-					success: function () {
-						console.log('Позиции успешно сохранены.');
-					},
-					error: function (error) {
-						alert('Ошибка при сохранении позиций: ' + error.responseText);
-					}
-				});
+				saveDragElPositions($(dragEl).data('id'));
 
 				dragEl = null;
 			}
@@ -509,6 +516,17 @@ jQuery(document).ready(function () {
 			$(dragEl).addClass('draggable');
 			$('.image-product').removeClass('chosen');
 			$('.image-product[data-id="' + $(dragEl).data('id') + '"]').addClass('chosen');
+		}
+	});
+
+	$(document).on('keyup', function(event){
+		if (dragEl !== null) {
+			if (event.keyCode === 46 && confirm('Действительно удалить область?')) {
+				var id = $(dragEl).data('id');
+				$(dragEl).remove();
+				saveDragElPositions(id);
+				dragEl = null;
+			}
 		}
 	});
 
