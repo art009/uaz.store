@@ -10,4 +10,5 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'backendUrl' => 'http://manage.uaz.store/',
     'frontendUrl' => 'http://uaz.store/',
+	'payment.secretSeed' => 'zyr5v1wTe',
 ];

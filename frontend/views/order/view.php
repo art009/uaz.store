@@ -1,5 +1,6 @@
 <?php
 
+use common\classes\OrderPayment;
 use common\models\Order;
 use yii\bootstrap\Html;
 
@@ -13,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Заказы', 'url' => ['index']]
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<div class="user-index">
+<div class="order-view">
     <h1><?= Html::encode($this->title) ?></h1>
 	<?php $items = $order->orderProducts; ?>
 	<table>
@@ -86,5 +87,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				<br/>
 			</div>
 		</form>
+		<?php if ($order->payment_type == Order::PAYMENT_CARD && $order->status == Order::STATUS_PAYMENT_WAITING): ?>
+		<div class="payment-container">
+			<?php echo OrderPayment::inlineForm($order->user_id, $order->id, $order->getTotal(), $user->phone); ?>
+		</div>
+		<?php endif; ?>
 	</div>
 </div>

@@ -16,6 +16,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $delivery_sum
  * @property integer $delivery_type
  * @property integer $payment_type
+ * @property string $payment_id
  * @property string $changed_at
  * @property string $created_at
  * @property string $updated_at
@@ -125,7 +126,7 @@ class Order extends \yii\db\ActiveRecord
         return [
             [['user_id', 'status', 'delivery_type', 'payment_type'], 'integer'],
             [['sum', 'delivery_sum'], 'number'],
-            [['changed_at', 'created_at', 'updated_at'], 'safe'],
+            [['payment_id', 'changed_at', 'created_at', 'updated_at'], 'safe'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -143,6 +144,7 @@ class Order extends \yii\db\ActiveRecord
             'delivery_sum' => 'Стоимость доставки',
             'delivery_type' => 'Способ доставки',
             'payment_type' => 'Метод оплаты',
+            'payment_id' => 'ID оплаты',
             'changed_at' => 'Время изменения статуса',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',
