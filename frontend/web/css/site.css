@@ -519,7 +519,8 @@ form#order-form .form-group b { color: #ecb52d; }
 .order-view .payment-container .tmg #tmg_ps_body .tmg_ps_paysys_desc p a:hover,
 .order-view .payment-container .tmg #tmg_ps_body .tmg_ps_paysys_desc p a:link { color: #ecb52d !important; }
 .order-view .payment-container .tmg #tmg_ps_body { margin-top: 0; }
-.order-view .payment-container .tmg #tmg_ps_nextstep form { width: auto; }
+.order-view .payment-container .tmg #tmg_ps_support_status { display: none; }
+.order-view .payment-container .tmg #tmg_ps_nextstep form { width: auto; margin-top: 25px; }
 .order-view .payment-container .tmg #tmg_ps_next_button { margin-right: 0; border-radius: 0; }
 
 @media (max-width: 767px ) {

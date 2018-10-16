@@ -368,6 +368,11 @@ class Order extends \yii\db\ActiveRecord
 	 */
 	public function calculateDeliverySum(float $sum, bool $hasOverSized)
 	{
+		if ($this->delivery_type == self::DELIVERY_PICKUP) {
+			$this->delivery_sum = 0;
+			return;
+		}
+
 		if ($hasOverSized) {
 			$this->delivery_sum = ($sum >= 50000) ? 0 : 500;
 		} else {
