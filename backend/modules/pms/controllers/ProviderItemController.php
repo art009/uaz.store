@@ -3,12 +3,12 @@
 namespace app\modules\pms\controllers;
 
 use app\modules\pms\models\Provider;
+use app\modules\pms\models\ProviderItem;
+use app\modules\pms\models\ProviderItemSearch;
 use backend\modules\pms\components\ProviderItemAcceptCache;
 use backend\modules\pms\models\ProviderItemAcceptForm;
 use backend\modules\pms\models\ProviderItemImportForm;
 use Yii;
-use app\modules\pms\models\ProviderItem;
-use app\modules\pms\models\ProviderItemSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -17,6 +17,20 @@ use yii\web\NotFoundHttpException;
  */
 class ProviderItemController extends Controller
 {
+	/**
+	 * @param $action
+	 *
+	 * @return bool
+	 *
+	 * @throws \yii\web\BadRequestHttpException
+	 */
+	public function beforeAction($action)
+	{
+		$this->enableCsrfValidation = false;
+
+		return parent::beforeAction($action);
+	}
+
 	/**
 	 * Список товаров поставщика
 	 *
