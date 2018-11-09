@@ -24,7 +24,11 @@ $image = Html::img($product->getImagePath(), ['alt' => $title]);
 		<?php endif; ?>
 		<?php echo $link ? Html::a($image, $link) : $image; ?>
 	</div>
-	<div class="code">Код <?php echo $product->getCode(); ?></div>
+	<div class="code" title="<?php echo $product->shop_code; ?>">
+		Код <?php echo $product->getCode(); ?>
+		<br/>
+		Арт. <?php echo $product->shop_code; ?>
+	</div>
 	<div class="price">
 		Цена: <b><?php echo $product->price; ?> руб</b>
 	</div>

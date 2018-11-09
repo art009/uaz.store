@@ -38,7 +38,7 @@ use yii\widgets\MaskedInput;
 
 <?= $form->field($model, 'text', [
 	'template' => '{input}{error}{hint}'
-])->textarea(['placeholder' => 'Запрос', 'rows' => 4]);?>
+])->textarea(['placeholder' => 'Что бы вы хотели приобрести?', 'rows' => 4]);?>
 
 <?= Html::submitButton('Отправить', ['class' => 'site-btn', 'name' => 'order-send-button']) ?>
 

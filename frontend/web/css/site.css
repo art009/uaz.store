@@ -286,7 +286,7 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 	box-shadow:         0 0 14px 0 rgba(236, 181, 45, 0.8);
 }
 .product-item .title { position: absolute; height: 60px; left: 0; top: 13px; padding: 0 13px; max-height: 180px;
-	background-color: #fff; overflow: hidden;
+	background-color: #fff; overflow: hidden; line-height: 19px; z-index: 100;
 }
 .product-item .title a { color: #000000; display: block; }
 .product-item .title:hover { height: auto; }
@@ -294,7 +294,8 @@ main.site-index > nav > ul a:hover { opacity: 1; -webkit-transition: opacity 0.2
 	text-align: center; line-height: 120px; position: relative;
 }
 .product-item .image img { max-height: 120px; vertical-align: middle; }
-.product-item .code { line-height: 26px; font-size: 13px; color: #505050; }
+.product-item .code { line-height: 14px; font-size: 13px; color: #505050; margin-top: 3px;
+	white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .product-item .price b { font-size: 16px; }
 .product-item .site-btn { position: absolute; bottom: 0; left: 0; width: 100%; }
 

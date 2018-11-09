@@ -2,12 +2,12 @@
 
 namespace frontend\controllers;
 
-use common\models\CatalogCategory;
+use common\components\AppHelper;
 use common\models\Manual;
 use common\models\ManualCategory;
+use yii\data\ArrayDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\data\ArrayDataProvider;
 
 /**
  * Class ManualController
@@ -23,7 +23,9 @@ class ManualController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$models = Manual::find()->all();
+		$models = Manual::find()
+			->where(['hide' => AppHelper::NO])
+			->all();
 
 		return $this->render('index', [
 			'models' => $models,

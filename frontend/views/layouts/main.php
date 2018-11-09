@@ -150,7 +150,7 @@ $actionId = Yii::$app->controller->action->id;
             </p>
             <p class="pull-right">
                 <span class="icon-link-outer">
-				    <?php echo Html::a('В', 'https://vk.com/uaz_zapchasty', [
+				    <?php echo Html::a('В', 'https://vk.com/uaz.store', [
 						'target' => '_blank',
                         'rel' => 'nofollow',
 						'class' => 'link-icon social',
@@ -174,7 +174,7 @@ $actionId = Yii::$app->controller->action->id;
   "name" : "UAZ.STORE",
   "url" : "https://uaz.store",
   "sameAs" : [
-    "https://vk.com/uaz_zapchasty",
+    "https://vk.com/uaz.store",
   ]
 }
 </script>
