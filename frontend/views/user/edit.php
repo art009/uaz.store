@@ -1,8 +1,8 @@
 <?php
 
 use common\models\User;
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 use yii\widgets\MaskedInput;
 
 /* @var $this \yii\web\View */
@@ -13,9 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="user-profile">
-
     <h1><?php echo Html::encode($this->title) ?></h1>
-
+	<a href="/logout" data-method="post" class="site-btn logout-btn">Выход</a>
     <?php $form = ActiveForm::begin([
         'enableClientValidation' => false,
     ]); ?>
@@ -94,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php echo $form->field($model, 'passportNumber', [
             'template' => '{input}{error}{hint}'
         ])->widget(MaskedInput::className(), [
-            'mask' => '99 99 99',
+            'mask' => '999999',
             'options' => [
                 'class' => 'form-control',
                 'placeholder' => $model->getAttributeLabel('passportNumber'),
@@ -109,20 +108,19 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php echo $form->field($model, 'inn', [
             'template' => '{input}{error}{hint}'
         ])->widget(MaskedInput::className(), [
-            'mask' => '9999 9999 9999 9999 9999',
             'options' => [
                 'class' => 'form-control tel_input',
-                'placeholder' => $model->getAttributeLabel('inn'),
+                'placeholder' => $model->getAttributeLabel('inn') . ' (10 или 12 цифр)',
             ],
             'clientOptions' => [
-                'clearIncomplete' => false
+	            'alias' => '9{10,12}',
             ],
         ]);?>
 
         <?php echo $form->field($model, 'kpp', [
             'template' => '{input}{error}{hint}'
         ])->widget(MaskedInput::className(), [
-            'mask' => '9 999 999 99',
+            'mask' => '999 999 999',
             'options' => [
                 'class' => 'form-control tel_input',
                 'placeholder' => $model->getAttributeLabel('kpp'),

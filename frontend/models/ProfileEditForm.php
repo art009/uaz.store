@@ -133,7 +133,11 @@ class ProfileEditForm extends Model
             [['name', 'phone', 'email'], 'required'],
             [['name', 'email', 'address', 'fax'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 10],
-            [['postcode', 'passportSeries', 'passportNumber', 'inn', 'kpp'], 'integer'],
+            [['postcode'], 'string', 'length' => 6],
+            [['passportSeries'], 'string', 'length' => 4],
+            [['passportNumber'], 'string', 'length' => 6],
+            [['inn'], 'string', 'min' => 10, 'max' => 12],
+            [['kpp'], 'string', 'length' => 9],
             [['phone', 'name', 'email'], 'trim'],
             ['email', 'email'],
             ['phone', 'unique', 'targetClass' => '\common\models\User',
@@ -204,7 +208,7 @@ class ProfileEditForm extends Model
     {
         foreach ($attributes as $attribute) {
             if ($this->hasProperty($attribute)) {
-                $this->$attribute = str_replace(" ", "", $this->$attribute);
+                $this->$attribute = str_replace([' ', '_'], '', $this->$attribute);
             }
         }
     }

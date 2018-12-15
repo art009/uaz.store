@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-profile">
 
     <h1><?php echo Html::encode($this->title) ?></h1>
-
+	<a href="/logout" data-method="post" class="site-btn logout-btn">Выход</a>
     <div class="order-list">
 
         <div class="order-header">
