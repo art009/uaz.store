@@ -4,7 +4,9 @@ namespace common\models;
 
 use common\components\AppHelper;
 use common\components\ImageHandler;
+use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\caching\TagDependency;
 use yii\web\BadRequestHttpException;
 use yii\web\UploadedFile;
 
@@ -196,6 +198,17 @@ class ManualCategory extends \yii\db\ActiveRecord
 	}
 
 	/**
+	 * @param bool $insert
+	 * @param array $changedAttributes
+	 */
+	public function afterSave($insert, $changedAttributes)
+	{
+		TagDependency::invalidate(Yii::$app->cache, self::CATEGORY_TREE_CACHE_TAG . $this->manual_id);
+
+		parent::afterSave($insert, $changedAttributes);
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	public function beforeDelete()
@@ -269,6 +282,9 @@ class ManualCategory extends \yii\db\ActiveRecord
 		} else {
 			/** @var ManualCategory $category */
 			$category = $this->getManualCategories()->one();
+			if (!$category) {
+				return null;
+			}
 			if ($this->parent_id) {
 				return $category->getImagePath($small);
 			} else {

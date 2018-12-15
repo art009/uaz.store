@@ -19,7 +19,9 @@ class ManualCategoryTreeWidget extends CategoryTreeWidget
 	public $manualId;
 
 	/**
-	 * @return array
+	 * @return array|mixed
+	 *
+	 * @throws \Throwable
 	 */
 	protected function getCategories()
 	{

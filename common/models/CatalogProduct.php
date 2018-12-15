@@ -227,4 +227,14 @@ class CatalogProduct extends \yii\db\ActiveRecord
 
 		return $result;
 	}
+
+	/**
+	 * Скрыт ли товар
+	 *
+	 * @return bool
+	 */
+	public function isHidden(): bool
+	{
+		return $this->hide;
+	}
 }

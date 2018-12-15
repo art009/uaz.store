@@ -3,8 +3,8 @@
 namespace frontend\controllers;
 
 use common\models\CatalogProduct;
-use yii\web\Controller;
 use Yii;
+use yii\web\Controller;
 use yii\web\Response;
 
 /**
@@ -77,7 +77,7 @@ class CartController extends Controller
 		];
 
 		$product = CatalogProduct::findOne((int)$productId);
-		if ($product) {
+		if ($product && !$product->isHidden()) {
 			$quantity = (int)$quantity;
 			if ($quantity > 0 && $quantity < 100) {
 				if ($cart->add($product->id, $quantity)) {

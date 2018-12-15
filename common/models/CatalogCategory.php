@@ -351,6 +351,9 @@ class CatalogCategory extends \yii\db\ActiveRecord
 	public function getFrontProducts()
 	{
 		$query = $this->getProducts();
+		$query->andWhere([
+			'hide' => AppHelper::NO,
+		]);
 		$query->orderBy('ISNULL(image), title');
 
 		return $query->all();

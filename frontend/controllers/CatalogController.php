@@ -104,8 +104,8 @@ class CatalogController extends Controller
 	protected function findProduct(int $id)
 	{
 		$model = CatalogProduct::findOne($id);
-		if (!$model) {
-			throw new NotFoundHttpException('Категория не найдена.');
+		if (!$model || $model->isHidden()) {
+			throw new NotFoundHttpException('Товар не найден.');
 		}
 		return $model;
 	}

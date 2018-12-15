@@ -2,6 +2,7 @@
 
 namespace frontend\widgets;
 
+use common\components\AppHelper;
 use common\models\CatalogProduct;
 use Yii;
 use yii\base\Widget;
@@ -38,7 +39,13 @@ class ProductSearch extends Widget
 			try {
 				$ids = $this->getProductIds($query);
 				if ($ids) {
-					$this->setProducts(CatalogProduct::findAll($ids));
+					$this->setProducts(CatalogProduct::find()
+						->where([
+							'id' => $ids,
+							'hide' => AppHelper::NO,
+						])
+						->all()
+					);
 				} else {
 					$this->setText('Товары не найдены.');
 				}
