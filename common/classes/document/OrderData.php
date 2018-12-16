@@ -86,8 +86,8 @@ class OrderData extends OrderObject
                 $result['userPassport'] = ($user->passport_series && $user->passport_number) ? $user->passport_series . ' ' . $user->passport_number : null;
             }
 		}
+		$k = 0;
 		if ($products) {
-			$k = 0;
 			foreach ($products as $product) {
 				$k++;
 				$result['orderProductNum'][$k] = $k;
@@ -98,6 +98,17 @@ class OrderData extends OrderObject
 				$result['orderProductSum'][$k] = $product->getTotal();
 				$result['orderProductCode'][$k] = $product->getCode();
 			}
+		}
+
+		if ($order->delivery_sum) {
+			$k++;
+			$result['orderProductNum'][$k] = $k;
+			$result['orderProductTitle'][$k] = 'Доставка';
+			$result['orderProductCount'][$k] = 1;
+			$result['orderProductUnit'][$k] = null;
+			$result['orderProductPrice'][$k] = $order->delivery_sum;
+			$result['orderProductSum'][$k] = $order->delivery_sum;
+			$result['orderProductCode'][$k] = null;
 		}
 
 		return $result;

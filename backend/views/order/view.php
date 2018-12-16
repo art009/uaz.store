@@ -9,11 +9,11 @@ use yii\bootstrap\Html;
 
 $this->title = 'Заказ №' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Все заказы', 'url' => ['index']];
-//$this->params['breadcrumbs'][] = ['label' => 'Заказы пользователя #' . $model->user_id, 'url' => ['index', 'userId' => $model->user_id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 $items = $model->orderProducts;
 $user = $model->user;
+$availableStatuses = OrderStatusWorkflow::statusList($model->status);
 
 ?>
 <div class="order-view">
@@ -29,10 +29,11 @@ $user = $model->user;
 		<br/>
 		<h1>Статус <span class="label label-default"><?php echo $model->getStatusName(); ?></span></h1>
 	</div>
+	<?php if ($availableStatuses): ?>
 	<br/>
 	<div>
 		Перевод в статус:
-		<?php foreach (OrderStatusWorkflow::statusList($model->status) as $status): ?>
+		<?php foreach ($availableStatuses as $status): ?>
 			<?php echo Html::a(
 				Order::statusName($status),
 				['change-status', 'id' => $model->id, 'status' => $status],
@@ -40,6 +41,7 @@ $user = $model->user;
 			); ?>
 		<?php endforeach; ?>
 	</div>
+	<?php endif; ?>
 	<br/>
 	<table class="table table-striped table-bordered">
 		<thead>
