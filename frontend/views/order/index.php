@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'nextPageCssClass' => 'next pull-right',
                 'linkContainerOptions' => ['class' => 'text-center'],
                 'class' => '\yii\widgets\LinkPager',
+		        'maxButtonCount' => 5,
             ],
         ]); ?>
 

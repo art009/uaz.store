@@ -200,6 +200,8 @@ class Order extends \yii\db\ActiveRecord
 			if ($this->isAttributeChanged('status')) {
 				$this->changed_at = date('Y-m-d H:i:s');
 			}
+
+			$this->updateSum(true);
 		}
 
 		return true;
@@ -230,19 +232,26 @@ class Order extends \yii\db\ActiveRecord
 	 */
 	public function updateSum($save = false)
 	{
-		$this->sum = 0;
+		$sum = $deliverySum = 0;
 		/* @var $orderProducts OrderProduct[] */
 		$orderProducts = $this->getOrderProducts()->all();
 		$hasOverSized = false;
 		foreach ($orderProducts as $orderProduct) {
-			$this->sum += round($orderProduct->price * $orderProduct->quantity, 2);
+			$sum += round($orderProduct->price * $orderProduct->quantity, 2);
 			if ($orderProduct->product && $orderProduct->product->oversize) {
 				$hasOverSized = true;
 			}
 		}
+		$deliverySum = self::calculateDeliverySum($sum, $hasOverSized, $this->delivery_type);
+
+		$this->sum = $sum;
+		$this->delivery_sum = $deliverySum;
+
 		if ($save) {
-			$this->calculateDeliverySum($this->sum, $hasOverSized);
-			$this->update();
+			$this->updateAttributes([
+				'sum' => $sum,
+				'delivery_sum' => $deliverySum,
+			]);
 		}
 	}
 
@@ -363,20 +372,22 @@ class Order extends \yii\db\ActiveRecord
 	 * Есть крупногабарит и сумма больше 50к - бесплатно
 	 * Есть крупногабарит и сумма меньше 50к - 500р
 	 *
+	 * @param int $deliveryType
 	 * @param float $sum
 	 * @param bool $hasOverSized
+	 *
+	 * @return int
 	 */
-	public function calculateDeliverySum(float $sum, bool $hasOverSized)
+	public static function calculateDeliverySum(float $sum, bool $hasOverSized, int $deliveryType = null): int
 	{
-		if ($this->delivery_type == self::DELIVERY_PICKUP) {
-			$this->delivery_sum = 0;
-			return;
+		if ($deliveryType === self::DELIVERY_PICKUP) {
+			return 0;
 		}
 
 		if ($hasOverSized) {
-			$this->delivery_sum = ($sum >= 50000) ? 0 : 500;
+			return $sum >= 50000 ? 0 : 500;
 		} else {
-			$this->delivery_sum = ($sum >= 5000) ? 0 : 200;
+			return $sum >= 5000 ? 0 : 200;
 		}
 	}
 }

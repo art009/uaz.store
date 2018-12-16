@@ -2,10 +2,8 @@
 
 namespace backend\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Order;
 
 /**
  * OrderSearch represents the model behind the search form about `backend\models\Order`.
@@ -43,6 +41,7 @@ class OrderSearch extends Order
     public function search($params)
     {
         $query = Order::find();
+        $query->orderBy('id DESC');
 
         // add conditions that should always apply here
 
