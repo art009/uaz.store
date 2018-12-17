@@ -353,7 +353,13 @@ class Order extends \yii\db\ActiveRecord
 	 */
 	public function confirm(): bool
 	{
-		return $this->updateAttributes(['status' => self::STATUS_PROCESS]) || $this->status == self::STATUS_PROCESS;
+		$result = $this->updateAttributes(['status' => self::STATUS_PROCESS]) || $this->status == self::STATUS_PROCESS;
+
+		if ($result) {
+			$this->updateSum(true);
+		}
+
+		return $result;
 	}
 
 	/**

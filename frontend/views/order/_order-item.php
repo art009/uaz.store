@@ -19,7 +19,7 @@ use yii\helpers\Html;
     Статус: <span><b>&nbsp;&bull;&nbsp;</b> <?php echo $model->getStatusName(); ?></span>
 </div>
 <div class="order-list__item_row clearfix">
-    Стоимость: <?php echo number_format($model->sum, 2, '.', ' '); ?> руб
+    Стоимость: <?php echo number_format($model->getTotal(), 2, '.', ' '); ?> руб
 </div>
 <div class="order-list__item_row clearfix">
     Дата обновления статуса: <span><?php echo date('d.m.Y', strtotime($model->changed_at)); ?> г.</span>
