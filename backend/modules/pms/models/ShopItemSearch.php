@@ -45,8 +45,8 @@ class ShopItemSearch extends ShopItem
      */
     public function search($params)
     {
-        $query = ShopItem::find()
-	        ->joinWith(['providerItems']);
+        $query = ShopItem::find();
+	        //->joinWith(['providerItems']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -104,6 +104,8 @@ class ShopItemSearch extends ShopItem
 		        $query->andWhere($this::tableName() . '.site_price = 0');
 	        }
         }
+        $query->groupBy($this::tableName() . '.id');
+
 	    $cache->set('shop-item-search-status', $this->tempStatus);
 
         return $dataProvider;
