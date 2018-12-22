@@ -1,8 +1,8 @@
 <?php
 
+use app\modules\pms\models\ShopItem;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
-use app\modules\pms\models\ShopItem;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\pms\models\ShopItemSearch */
@@ -19,7 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Импорт из Excel', ['import'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Пересчитать', ['calculate'], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Пересчитать и выгрузить', ['export'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Пересчитать и выгрузить цены', ['export'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Выгрузить новые товары', ['export-products'], ['class' => 'btn btn-warning']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

@@ -116,14 +116,29 @@ class AppHelper
         $str = preg_replace('|([-]+)|s', '-', $str);
         $str = preg_replace('/[\s\/]/', '-', $str);
         $str = trim($str, '-');
-        if (array_key_exists($str, self::$transliterationLinks)) {
-	        self::$transliterationLinks[$str]++;
-	        $str .= '-' . self::$transliterationLinks[$str];
-        } else {
-	        self::$transliterationLinks[$str] = 1;
-        }
+
+	    $str = self::addTransliterationLink($str);
 
         return $str;
+    }
+
+	/**
+	 * Добавление ссылки в статичное хранилище транслитерационных ссылок
+	 *
+	 * @param string $str
+	 *
+	 * @return string
+	 */
+    public static function addTransliterationLink(string $str)
+    {
+	    if (array_key_exists($str, self::$transliterationLinks)) {
+		    self::$transliterationLinks[$str]++;
+		    $str = self::addTransliterationLink($str . '-' . self::$transliterationLinks[$str]);
+	    } else {
+		    self::$transliterationLinks[$str] = 1;
+	    }
+
+	    return $str;
     }
 
 	/**

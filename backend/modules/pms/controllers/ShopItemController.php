@@ -5,15 +5,16 @@ namespace app\modules\pms\controllers;
 use app\modules\pms\models\Provider;
 use app\modules\pms\models\ProviderItem;
 use app\modules\pms\models\ProviderShopItem;
+use app\modules\pms\models\ShopItem;
+use app\modules\pms\models\ShopItemSearch;
 use backend\modules\pms\components\PriceExporter;
+use backend\modules\pms\components\ProductExporter;
 use backend\modules\pms\components\SimilarPositionResolver;
 use backend\modules\pms\models\ShopImportForm;
 use common\components\AppHelper;
 use common\models\CatalogProduct;
 use common\models\ManualProduct;
 use Yii;
-use app\modules\pms\models\ShopItem;
-use app\modules\pms\models\ShopItemSearch;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -382,5 +383,17 @@ class ShopItemController extends Controller
 		}
 
 		return $this->redirect(['compare', 'id' => $id]);
+	}
+
+	/**
+	 * Выгрузка новых товаров
+	 */
+	public function actionExportProducts()
+	{
+		$exporter = new ProductExporter(Yii::$app->db);
+
+		Yii::$app->session->setFlash('success', 'Добавлено товаров: ' . $exporter->export());
+
+		return $this->redirect('index');
 	}
 }
