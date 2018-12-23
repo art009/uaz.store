@@ -10,14 +10,20 @@ use yii\data\ActiveDataProvider;
  */
 class CatalogProductSearch extends CatalogProduct
 {
+	/** @var array  */
+	public $excludedIds = [];
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'category_id', 'hide', 'on_main', 'length', 'width', 'height', 'weight', 'rest', 'external_id'], 'integer'],
-            [['title', 'link', 'image', 'meta_keywords', 'meta_description', 'shop_title', 'provider_title', 'shop_code', 'provider_code', 'description', 'provider', 'manufacturer', 'unit', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'category_id', 'hide', 'on_main', 'length', 'width', 'height', 'weight', 'rest'], 'integer'],
+            [['title', 'link', 'image', 'meta_keywords', 'meta_description', 'shop_title', 'provider_title',
+	            'shop_code', 'provider_code', 'description', 'provider', 'manufacturer', 'unit', 'external_id',
+	            'excludedIds',
+            ], 'safe'],
             [['price_to', 'price_old'], 'number'],
             [['price', 'cart_counter'], 'match', 'pattern' => '/^(>|<|>=|<=|=|)(\s*[+-]?\d+\s*)$/'],
         ];
@@ -62,7 +68,6 @@ class CatalogProductSearch extends CatalogProduct
 		$query->andFilterWhere(['=', $this::tableName() . '.id', $this->id]);
 		$query->andFilterWhere(['=', $this::tableName() . '.hide', $this->hide]);
 		$query->andFilterWhere(['=', $this::tableName() . '.on_main', $this->on_main]);
-		$query->andFilterWhere(['=', $this::tableName() . '.external_id', $this->external_id]);
 
         if ($this->category_id) {
             $query->andFilterWhere(['catalog_product_to_category.category_id' => $this->category_id]);
@@ -79,6 +84,10 @@ class CatalogProductSearch extends CatalogProduct
             }
         }
 
+        if ($this->excludedIds) {
+	        $query->andFilterWhere(['not in', $this::tableName() . '.id', $this->excludedIds]);
+        }
+
         $query->andFilterWhere(['like', $this::tableName() . '.title', $this->title])
             ->andFilterWhere(['like', $this::tableName() . '.link', $this->link])
             ->andFilterWhere(['like', $this::tableName() . '.meta_keywords', $this->meta_keywords])
@@ -90,7 +99,8 @@ class CatalogProductSearch extends CatalogProduct
             ->andFilterWhere(['like', $this::tableName() . '.description', $this->description])
             ->andFilterWhere(['like', $this::tableName() . '.provider', $this->provider])
             ->andFilterWhere(['like', $this::tableName() . '.manufacturer', $this->manufacturer])
-            ->andFilterWhere(['like', $this::tableName() . '.unit', $this->unit]);
+            ->andFilterWhere(['like', $this::tableName() . '.unit', $this->unit])
+            ->andFilterWhere(['like', $this::tableName() . '.external_id', $this->external_id]);
 
         $query->groupBy($this::tableName() . '.id');
 

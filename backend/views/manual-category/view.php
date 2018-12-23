@@ -1,5 +1,6 @@
 <?php
 
+use common\models\ManualProduct;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
 use yii\widgets\DetailView;
@@ -104,6 +105,13 @@ $this->params['breadcrumbs'] = $model->createBackendBreadcrumbs();
 					'number',
 					'code',
 					'title',
+					[
+						'header' => 'Товары каталога',
+						'format' => 'html',
+						'value' => function(ManualProduct $model) {
+							return Html::a('Список (' . $model->getCatalogProducts()->count() . ')', ['/manual-product/catalog-product', 'id' => $model->id]);
+						},
+					],
 					[
 						'class' => 'yii\grid\ActionColumn',
 						'template' => '{choose} {add} l {view} {update} {delete}',

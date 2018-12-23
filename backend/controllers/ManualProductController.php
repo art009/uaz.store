@@ -2,10 +2,13 @@
 
 namespace backend\controllers;
 
+use backend\models\CatalogProductSearch;
 use backend\models\ManualProductSearch;
+use common\models\CatalogProduct;
 use common\models\ManualCategory;
 use common\models\ManualProduct;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -156,6 +159,22 @@ class ManualProductController extends Controller
     }
 
 	/**
+	 * @param $id
+	 *
+	 * @return CatalogProduct
+	 *
+	 * @throws NotFoundHttpException
+	 */
+    protected function findCatalogProductModel($id)
+    {
+        if (($model = CatalogProduct::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+	/**
 	 * @return bool
 	 *
 	 * @throws NotFoundHttpException
@@ -181,4 +200,68 @@ class ManualProductController extends Controller
 
 	    return (int)$model->save(false);
     }
+
+	/**
+	 * @param int $id
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 */
+    public function actionCatalogProduct(int $id)
+    {
+	    $manualProduct = $this->findModel($id);
+
+	    $dataProvider = new ActiveDataProvider([
+		    'query' => $manualProduct->getCatalogProducts(),
+	    ]);
+
+	    $productSearch = new CatalogProductSearch();
+	    $productSearch->excludedIds = $dataProvider->getKeys();
+	    $productProvider = $productSearch->search(Yii::$app->request->queryParams);
+
+	    return $this->render('catalog-product', [
+		    'manualProduct' => $manualProduct,
+		    'dataProvider' => $dataProvider,
+		    'manualCategory' => $manualProduct->manualCategory,
+		    'productSearch' => $productSearch,
+		    'productProvider' => $productProvider,
+	    ]);
+    }
+
+	/**
+	 * @param int $id
+	 * @param int $catalogProductId
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	public function actionCatalogProductApply(int $id, int $catalogProductId)
+	{
+		$manualProduct = $this->findModel($id);
+		$catalogProduct = $this->findCatalogProductModel($catalogProductId);
+
+		$manualProduct->link('catalogProducts', $catalogProduct);
+
+		return $this->actionCatalogProduct($manualProduct->id);
+	}
+
+	/**
+	 * @param int $id
+	 * @param int $catalogProductId
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 */
+	public function actionCatalogProductRevoke(int $id, int $catalogProductId)
+	{
+		$manualProduct = $this->findModel($id);
+		$catalogProduct = $this->findCatalogProductModel($catalogProductId);
+
+		$manualProduct->unlink('catalogProducts', $catalogProduct);
+
+		return $this->actionCatalogProduct($manualProduct->id);
+	}
 }
