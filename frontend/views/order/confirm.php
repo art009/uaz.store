@@ -4,12 +4,31 @@
 /* @var $order \common\models\Order */
 /* @var $confirmForm \frontend\models\ConfirmOrderForm */
 
+use common\models\Order;
 use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 use yii\widgets\MaskedInput;
 
 $this->title = 'Оформление заказа';
 $this->params['breadcrumbs'][] = $this->title;
+
+$deliverySumHtml = Html::tag('b', number_format($order->delivery_sum, 2, '.', ' ')) . ' руб';
+$freeDeliveryType = Order::DELIVERY_PICKUP;
+
+$this->registerJs(<<<JS
+
+    $(document).on('change', '#confirmorderform-delivery', function() {
+    	var cont = $('span.delivery-price');
+        if (this.value == $freeDeliveryType) {
+        	$(cont).html('<b>бесплатно</b>');
+        } else {
+        	$(cont).html('$deliverySumHtml');
+        }
+    });
+
+JS
+	, yii\web\View::POS_READY);
+
 ?>
 <div class="cart-index">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -98,11 +117,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			Стоимость заказа: <b><?php echo number_format($order->sum, 2, '.', ' '); ?></b> руб
 			<br/>
 			Стоимость доставки:
-			<?php if ($order->delivery_sum > 0): ?>
-				<b><?php echo number_format($order->delivery_sum, 2, '.', ' '); ?></b> руб
-			<?php else: ?>
-				<b>бесплатно</b>
-			<?php endif; ?>
+			<span class="delivery-price">
+				<?php if ($order->delivery_sum > 0): ?>
+					<?php echo $deliverySumHtml; ?>
+				<?php else: ?>
+					<b>бесплатно</b>
+				<?php endif; ?>
+			</span>
 			<br/>
 			<span class="total summary">Итого: <b><?php echo number_format($order->getTotal(), 2, '.', ' '); ?></b> руб</span>
 		</div>
