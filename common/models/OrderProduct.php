@@ -107,7 +107,10 @@ class OrderProduct extends \yii\db\ActiveRecord implements CartProductInterface
 	 *
 	 * @param int $quantity
 	 *
-	 * @return int
+	 * @return bool|int
+	 *
+	 * @throws \Throwable
+	 * @throws \yii\db\StaleObjectException
 	 */
 	public function updateQuantity($quantity)
 	{

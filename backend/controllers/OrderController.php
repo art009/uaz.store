@@ -2,10 +2,13 @@
 
 namespace backend\controllers;
 
+use backend\models\CatalogProductSearch;
 use backend\models\Order;
 use backend\models\OrderSearch;
 use common\classes\document\OrderManager;
 use common\classes\OrderStatusWorkflow;
+use common\models\CatalogProduct;
+use common\models\OrderProduct;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -34,15 +37,27 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Order model.
-     * @param string $id
-     * @return mixed
-     */
+	/**
+	 * Просмотр заказа
+	 *
+	 * @param $id
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 */
     public function actionView($id)
     {
+	    $order = $this->findModel($id);
+
+	    $productSearch = new CatalogProductSearch();
+	    $productSearch->excludedIds = $order->getOrderProducts()->select(['product_id'])->column();
+	    $productProvider = $productSearch->search(Yii::$app->request->queryParams, 10);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'order' => $order,
+	        'productSearch' => $productSearch,
+	        'productProvider' => $productProvider,
         ]);
     }
 
@@ -170,5 +185,120 @@ class OrderController extends Controller
 		}
 
 		return $this->redirect(['/order']);
+	}
+
+	/**
+	 * @param int $orderId
+	 * @param int $productId
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 * @throws \Throwable
+	 * @throws \yii\db\StaleObjectException
+	 */
+	public function actionDeleteProduct(int $orderId, int $productId)
+	{
+		$order = $this->findModel($orderId);
+		$orderProducts = $order->orderProducts;
+		if (count($orderProducts) <= 1) {
+			Yii::$app->session->setFlash('warning', "Нельзя удалить последний товар");
+		} else {
+			foreach ($orderProducts as $orderProduct) {
+				if ($orderProduct->product_id == $productId) {
+					if ($orderProduct->delete()) {
+						$order->updateSum(true);
+					} else {
+						Yii::$app->session->setFlash('danger', "Не удается удалить товар");
+					}
+				}
+			}
+		}
+
+		return $this->actionView($orderId);
+	}
+
+	/**
+	 * @param int $orderId
+	 * @param int $productId
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 * @throws \Throwable
+	 * @throws \yii\db\StaleObjectException
+	 */
+	public function actionIncProduct(int $orderId, int $productId)
+	{
+		$order = $this->findModel($orderId);
+		$orderProducts = $order->orderProducts;
+
+		foreach ($orderProducts as $orderProduct) {
+			if ($orderProduct->product_id == $productId) {
+				if (!$orderProduct->updateQuantity($orderProduct->getQuantity() + 1)) {
+					Yii::$app->session->setFlash('danger', "Не удается изменить количество товара");
+				}
+			}
+		}
+
+		return $this->actionView($orderId);
+	}
+
+	/**
+	 * @param int $orderId
+	 * @param int $productId
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 * @throws \Throwable
+	 * @throws \yii\db\StaleObjectException
+	 */
+	public function actionDecProduct(int $orderId, int $productId)
+	{
+		$order = $this->findModel($orderId);
+		$orderProducts = $order->orderProducts;
+
+		foreach ($orderProducts as $orderProduct) {
+			if ($orderProduct->product_id == $productId) {
+				$quantity = $orderProduct->getQuantity();
+				if ($quantity <= 1 || !$orderProduct->updateQuantity($quantity - 1)) {
+					Yii::$app->session->setFlash('danger', "Не удается изменить количество товара");
+				}
+			}
+		}
+
+		return $this->actionView($orderId);
+	}
+
+	/**
+	 * @param int $orderId
+	 * @param int $productId
+	 *
+	 * @return string
+	 *
+	 * @throws NotFoundHttpException
+	 * @throws \Throwable
+	 * @throws \yii\db\StaleObjectException
+	 */
+	public function actionAddProduct(int $orderId, int $productId)
+	{
+		$order = $this->findModel($orderId);
+		$product = CatalogProduct::findOne($productId);
+
+		if ($product) {
+			$orderProduct = new OrderProduct();
+			$orderProduct->product_id = $product->id;
+			$orderProduct->order_id = $order->id;
+			$orderProduct->quantity = 1;
+			$orderProduct->price = $product->price;
+			if (!$orderProduct->save()) {
+				Yii::$app->session->setFlash('danger', "Не удается добавить товар");
+			}
+		} else {
+			Yii::$app->session->setFlash('danger', "Товар не найден.");
+		}
+
+		return $this->actionView($orderId);
 	}
 }

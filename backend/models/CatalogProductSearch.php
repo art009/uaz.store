@@ -42,10 +42,11 @@ class CatalogProductSearch extends CatalogProduct
      * Creates data provider instance with search query applied
      *
      * @param array $params
+     * @param int $pageSize
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, int $pageSize = 20)
     {
         $query = CatalogProduct::find()
 			->joinWith(['categories'], false);
@@ -54,6 +55,9 @@ class CatalogProductSearch extends CatalogProduct
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+	        'pagination' => [
+	        	'pageSize' => $pageSize,
+	        ],
         ]);
 
         $this->load($params);
