@@ -131,6 +131,7 @@ class BaseCashbox extends Component
 		$this->initRequest();
 
 		$response = $this->executeRequest();
+
 		if ($response !== false) {
 			$this->response = json_decode($response);
 		} else {
@@ -139,6 +140,7 @@ class BaseCashbox extends Component
 
 		$status = $this->getRequestStatus();
 		if ($status !== 200) {
+			echo $this->getRequestError();
 			throw new Exception($this->getRequestError(), $status);
 		}
 
@@ -184,10 +186,11 @@ class BaseCashbox extends Component
 		curl_setopt($this->curl, CURLOPT_POST, true);
 		curl_setopt($this->curl, CURLOPT_POSTFIELDS, $this->getRequestData());
 		curl_setopt($this->curl, CURLOPT_URL, $this->url);
+		curl_setopt($this->curl, CURLOPT_VERBOSE, true);
 		// Сертификат
-		curl_setopt($this->curl, CURLOPT_SSLCERT, $this->certificatePath);
+		//curl_setopt($this->curl, CURLOPT_SSLCERT, $this->certificatePath);
 		// Закрытый ключ
-		curl_setopt($this->curl, CURLOPT_SSLKEY, $this->privateKeyPath);
+		//curl_setopt($this->curl, CURLOPT_SSLKEY, $this->privateKeyPath);
 	}
 
 	/**

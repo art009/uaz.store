@@ -7,6 +7,7 @@ use backend\models\Order;
 use backend\models\OrderSearch;
 use common\classes\document\OrderManager;
 use common\classes\OrderStatusWorkflow;
+use common\components\cashbox\Cashbox;
 use common\models\CatalogProduct;
 use common\models\OrderProduct;
 use Yii;
@@ -20,6 +21,8 @@ use yii\web\Response;
  */
 class OrderController extends Controller
 {
+	private const RETURN_PASSWORD_HASH = '56004f688056b0a55d8c898f40371fdb31939f79';
+
 	/**
 	 * @param int|null $userId
 	 *
@@ -106,12 +109,14 @@ class OrderController extends Controller
     }
 
 	/**
-	 * TODO: Пересмотреть контроллер. Реализован в качестве тестирования кассы
-	 *
 	 * @param $id
-	 * @return \yii\web\Response
+	 *
+	 * @return Response
+	 *
+	 * @throws NotFoundHttpException
+	 * @throws \yii\base\Exception
 	 */
-	public function actionCashbox($id)
+	public function actionCashBox($id)
 	{
 		$model = $this->findModel($id);
 		$cashbox = Yii::$app->cashbox;
@@ -133,9 +138,71 @@ class OrderController extends Controller
 
 		$result = $cashbox->execute();
 		if ($result === true) {
+			$model->updateAttributes([
+				'cash_box_sent_at' => date('Y-m-d H:i:s'),
+			]);
 			Yii::$app->session->setFlash('success', "Заказ успешно отправлен в кассу");
 		} else {
+			$model->updateAttributes([
+				'cash_box_sent_error' => $result,
+			]);
 			Yii::$app->session->setFlash('error', "Ошибка при отправке в кассу. Код ошибки: $result");
+		}
+
+		return $this->redirect(['/order']);
+    }
+
+	/**
+	 * @param int $id
+	 *
+	 * @return string|Response
+	 *
+	 * @throws NotFoundHttpException
+	 * @throws \yii\base\Exception
+	 */
+	public function actionCashBoxReturn(int $id)
+	{
+		$model = $this->findModel($id);
+
+		$password = Yii::$app->request->getBodyParam('password');
+		$hash = sha1($password);
+		if ($hash != self::RETURN_PASSWORD_HASH) {
+			Yii::$app->session->setFlash('error', 'Некорректный пароль подтверждения возврата');
+			return $this->render('return-password', [
+				'order' => $model,
+			]);
+		}
+
+		$cashBox = Yii::$app->cashbox;
+		$cashBox->documentType = Cashbox::DOCUMENT_TYPE_RETURN_COMING;
+
+
+		$orderProducts = $model->orderProducts;
+		$user = $model->user;
+		if ($orderProducts and $user) {
+
+			$cashBox->setPhoneOrEmail($user->email);
+
+			foreach ($orderProducts as $orderProduct) {
+
+				$product = $orderProduct->product;
+				if ($product) {
+					$cashBox->setProduct($orderProduct->price, $orderProduct->quantity, $product->title);
+				}
+			}
+		}
+
+		$result = $cashBox->execute();
+		if ($result === true) {
+			$model->updateAttributes([
+				'cash_box_return_at' => date('Y-m-d H:i:s'),
+			]);
+			Yii::$app->session->setFlash('success', "Возврат успешно оформлен по заказу");
+		} else {
+			$model->updateAttributes([
+				'cash_box_return_error' => $result,
+			]);
+			Yii::$app->session->setFlash('error', "Ошибка при оформлении возврата. Код ошибки: $result");
 		}
 
 		return $this->redirect(['/order']);

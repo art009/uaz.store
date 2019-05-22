@@ -17,6 +17,10 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $delivery_type
  * @property integer $payment_type
  * @property string $payment_id
+ * @property string $cash_box_sent_at
+ * @property string $cash_box_sent_error
+ * @property string $cash_box_return_at
+ * @property string $cash_box_return_error
  * @property string $changed_at
  * @property string $created_at
  * @property string $updated_at
@@ -145,6 +149,10 @@ class Order extends \yii\db\ActiveRecord
             'delivery_type' => 'Способ доставки',
             'payment_type' => 'Метод оплаты',
             'payment_id' => 'ID оплаты',
+            'cash_box_sent_at' => 'Время отправки чека в кассу',
+            'cash_box_sent_error' => 'Ошибка отправки чека в кассу',
+            'cash_box_return_at' => 'Время отправки возврата в кассу',
+            'cash_box_return_error' => 'Ошибка отправки возврата в кассу',
             'changed_at' => 'Время изменения статуса',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',
