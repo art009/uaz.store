@@ -7,7 +7,6 @@ use backend\models\Order;
 use backend\models\OrderSearch;
 use common\classes\document\OrderManager;
 use common\classes\OrderStatusWorkflow;
-use common\components\cashbox\Cashbox;
 use common\models\CatalogProduct;
 use common\models\OrderProduct;
 use Yii;
@@ -136,6 +135,10 @@ class OrderController extends Controller
 			}
 		}
 
+		$model->updateAttributes([
+			'cash_box_sent_error' => null,
+		]);
+
 		$result = $cashbox->execute();
 		if ($result === true) {
 			$model->updateAttributes([
@@ -174,7 +177,7 @@ class OrderController extends Controller
 		}
 
 		$cashBox = Yii::$app->cashbox;
-		$cashBox->documentType = Cashbox::DOCUMENT_TYPE_RETURN_COMING;
+		$cashBox->applyReturnDocumentType();
 
 
 		$orderProducts = $model->orderProducts;
@@ -191,6 +194,10 @@ class OrderController extends Controller
 				}
 			}
 		}
+
+		$model->updateAttributes([
+			'cash_box_return_error' => null,
+		]);
 
 		$result = $cashBox->execute();
 		if ($result === true) {

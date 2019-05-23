@@ -70,7 +70,7 @@ class Cashbox extends BaseCashbox
 	 *
 	 * @var int
 	 */
-	public $taxId = 1;
+	public $taxId = 4;
 
 
 	/**
@@ -163,6 +163,11 @@ class Cashbox extends BaseCashbox
 		}
 
 		$this->data['NonCash'] = [$total];
+	}
+
+	public function applyReturnDocumentType(): void
+	{
+		$this->data['DocumentType'] = self::DOCUMENT_TYPE_RETURN_COMING;
 	}
 
 	/**

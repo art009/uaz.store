@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			        /* @var $model Order */
 			        $result = '';
 
-			        if (in_array($model->status, [Order::STATUS_PICKUP, Order::STATUS_PAYMENT_DONE])) {
+			        if (in_array($model->status, [Order::STATUS_PICKUP, Order::STATUS_PAYMENT_DONE]) && strtotime($model->cash_box_sent_at) <= 0) {
 			        	$result .= Html::a(
 					        'Отправить чек',
 					        ['cash-box', 'id' => $model->id],
