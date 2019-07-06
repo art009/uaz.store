@@ -64,7 +64,7 @@ class CallbackForm extends Model implements JsonSerializable
             if ($counterOfRequest > \Yii::$app->params['maxCallbackAttempts']) {
                 $timeToOpenForm = time() + \Yii::$app->params['delayBetweenCallbackAttempts'];
                 \Yii::$app->session->set($this->getSessionTimeKey(), $timeToOpenForm);
-                $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenCallbackAttemts']));
+                $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenCallbackAttempts']));
             }
             \Yii::$app->session->set($this->getSessionKey(), $counterOfRequest + 1);
         }

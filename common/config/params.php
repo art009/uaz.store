@@ -13,6 +13,8 @@ return [
 	'payment.secretSeed' => 'zyr5v1wTe',
     'maxCallbackAttempts' => 3,
     'maxQuestionAttempts' => 3,
+    'maxOrderAttempts' => 3,
     'delayBetweenCallbackAttempts' => 300,
-    'delayBetweenQuestionAttempts' => 300
+    'delayBetweenQuestionAttempts' => 300,
+    'delayBetweenOrderAttempts' => 300
 ];

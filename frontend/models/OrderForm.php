@@ -53,21 +53,33 @@ class OrderForm extends Model implements JsonSerializable
 		];
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function afterValidate()
-	{
-		if (mb_strlen(preg_replace('/[^0-9]/', '', $this->phone)) < 11) {
-			$this->addError('phone', 'Необходим 10-значный номер телефона.');
-		}
-		if (\Yii::$app->cache->exists($this->getCacheKey())) {
-			$this->addError('phone', 'Вы недавно оставляли запрос! Попробуйте позже.');
-		}
+    /**
+     * @inheritdoc
+     */
+    public function afterValidate()
+    {
+        $timeToOpenForm = \Yii::$app->session->get($this->getSessionTimeKey(), 0);
+        if (($timeToOpenForm > 0) && ($timeToOpenForm > time())) {
+            $waitFor = $timeToOpenForm - time();
+            $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте через '.\Yii::$app->formatter->asDuration($waitFor));
+        } else if (\Yii::$app->cache->exists($this->getCacheKey())) {
+            $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте позже.');
+        } else {
+            $counterOfRequest = \Yii::$app->session->get($this->getSessionKey(), 0);
+            if ($counterOfRequest > \Yii::$app->params['maxOrderAttempts']) {
+                $timeToOpenForm = time() + \Yii::$app->params['delayBetweenOrderAttempts'];
+                \Yii::$app->session->set($this->getSessionTimeKey(), $timeToOpenForm);
+                $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenOrderAttempts']));
+            }
+            \Yii::$app->session->set($this->getSessionKey(), $counterOfRequest + 1);
+        }
 
+        if (mb_strlen(preg_replace('/[^0-9]/', '', $this->phone)) < 11) {
+            $this->addError('phone', 'Необходим 10-значный номер телефона.');
+        }
 
-		return parent::afterValidate();
-	}
+        return parent::afterValidate();
+    }
 
 	/**
 	 * @return array
@@ -105,4 +117,14 @@ class OrderForm extends Model implements JsonSerializable
 	{
 		return 'Order' . preg_replace('/[^0-9]/', '', $this->phone);
 	}
+
+    public function getSessionKey()
+    {
+        return 'order';
+    }
+
+    public function getSessionTimeKey()
+    {
+        return 'orderTime';
+    }
 }
