@@ -54,6 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     const LEGAL_NO = 0;
     const LEGAL_YES = 1;
+    const LEGAL_IP = 2;
 
 	/**
 	 * Список статусов
@@ -84,6 +85,7 @@ class User extends ActiveRecord implements IdentityInterface
     static $legalList = [
     	self::LEGAL_NO => 'Физ лицо',
     	self::LEGAL_YES => 'Юр лицо',
+    	self::LEGAL_IP => 'ИП',
 	];
 
     /**
@@ -305,6 +307,6 @@ class User extends ActiveRecord implements IdentityInterface
 	 */
 	public function isLegal(): bool
 	{
-		return $this->legal == self::LEGAL_YES;
+		return in_array($this->legal, [self::LEGAL_YES, self::LEGAL_IP]);
 	}
 }
