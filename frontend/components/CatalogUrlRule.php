@@ -12,7 +12,7 @@ use common\models\ManualCategory;
  *
  * @package frontend\components
  */
-class CatalogUrlRule extends \yii\base\Object implements \yii\web\UrlRuleInterface
+class CatalogUrlRule extends \yii\base\BaseObject implements \yii\web\UrlRuleInterface
 {
     /**
      * @inheritdoc

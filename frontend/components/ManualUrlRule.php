@@ -10,7 +10,7 @@ use common\models\ManualCategory;
  *
  * @package frontend\components
  */
-class ManualUrlRule extends \yii\base\Object implements \yii\web\UrlRuleInterface
+class ManualUrlRule extends \yii\base\BaseObject implements \yii\web\UrlRuleInterface
 {
     /**
      * @inheritdoc

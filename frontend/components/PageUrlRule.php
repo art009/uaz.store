@@ -9,7 +9,7 @@ use common\models\Page;
  *
  * @package frontend\components
  */
-class PageUrlRule extends \yii\base\Object implements \yii\web\UrlRuleInterface
+class PageUrlRule extends \yii\base\BaseObject implements \yii\web\UrlRuleInterface
 {
     /**
      * @inheritdoc
