@@ -504,6 +504,7 @@ $(document).ready(function($){
 				}
 				if (data.success) {
 					$(modal).find('input').val('');
+					$(modal).find('textarea').val('');
 					$(modal).find(':input').prop('disabled', false);
 					$(modal).modal('hide');
 					showAlert('success', data.success);

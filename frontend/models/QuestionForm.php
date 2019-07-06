@@ -54,18 +54,29 @@ class QuestionForm extends Model implements JsonSerializable
 		];
 	}
 
-	/**
-	 * @inheritdoc
-	 */
-	public function afterValidate()
-	{
-		if (\Yii::$app->cache->exists($this->getCacheKey())) {
-			$this->addError('email', 'Вы недавно задавали вопрос! Попробуйте позже.');
-		}
+    /**
+     * @inheritdoc
+     */
+    public function afterValidate()
+    {
+        $timeToOpenForm = \Yii::$app->session->get($this->getSessionTimeKey(), 0);
+        if (($timeToOpenForm > 0) && ($timeToOpenForm > time())) {
+            $waitFor = $timeToOpenForm - time();
+            $this->addError('email', 'Вы недавно задавали вопрос! Попробуйте через '.\Yii::$app->formatter->asDuration($waitFor));
+        } else if (\Yii::$app->cache->exists($this->getCacheKey())) {
+            $this->addError('email', 'Вы недавно задавали вопрос! Попробуйте позже.');
+        } else {
+            $counterOfRequest = \Yii::$app->session->get($this->getSessionKey(), 0);
+            if ($counterOfRequest > \Yii::$app->params['maxQuestionAttempts']) {
+                $timeToOpenForm = time() + \Yii::$app->params['delayBetweenQuestionAttempts'];
+                \Yii::$app->session->set($this->getSessionTimeKey(), $timeToOpenForm);
+                $this->addError('email', 'Вы недавно задавали вопрос! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenCallbackAttemts']));
+            }
+            \Yii::$app->session->set($this->getSessionKey(), $counterOfRequest + 1);
+        }
 
-
-		return parent::afterValidate();
-	}
+        return parent::afterValidate();
+    }
 
 	/**
 	 * @return array
@@ -103,4 +114,14 @@ class QuestionForm extends Model implements JsonSerializable
 	{
 		return 'Question' . $this->email;
 	}
+
+    public function getSessionKey()
+    {
+        return 'question';
+    }
+
+    public function getSessionTimeKey()
+    {
+        return 'questionTime';
+    }
 }

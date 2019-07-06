@@ -12,5 +12,7 @@ return [
     'frontendUrl' => 'http://uaz.store/',
 	'payment.secretSeed' => 'zyr5v1wTe',
     'maxCallbackAttempts' => 3,
-    'delayBetweenCallbackAttemts' => 300
+    'maxQuestionAttempts' => 3,
+    'delayBetweenCallbackAttempts' => 300,
+    'delayBetweenQuestionAttempts' => 300
 ];
