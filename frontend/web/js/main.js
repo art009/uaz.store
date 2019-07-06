@@ -545,7 +545,7 @@ $(document).ready(function($){
         });
     });
 
-    $(document).on('click', '.manual-product-row', function (event) {
+	$(document).on('click', '.manual-product-row', function (event) {
 
         event.preventDefault();
         $('.chosen').removeClass('chosen');
@@ -566,6 +566,18 @@ $(document).ready(function($){
 	$("[data-fancybox]").fancybox({
 		'padding': 0
 	});
+
+	let rebuildDom = function (val) {
+		if (val === 1) {
+			$('.business').closest('div').hide();
+		} else {
+			$('.business').closest('div').show();
+		}
+	}
+
+	$(document).on('change', '#user-signup-form input[type=radio]', rebuildDom)
+
+	rebuildDom('#user-signup-form input[type=radio]:checked');
 });
 
 $(window).load(function() {

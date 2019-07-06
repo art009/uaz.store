@@ -16,8 +16,8 @@ $this->registerJs(<<<JS
         var role = $('#user-role').val(),
             legal = $('#user-legal').val();
         
+        if (legal == 2) { legal = 1}; //ИП тоже юр.лицо
         
-    
         $.each($('[data-role]'), function(i, element) {
             if ($(element).data('role') == role) {
                 $(element).show();
@@ -81,6 +81,12 @@ JS
 	<?php endif; ?>
 
     <?php echo $form->field($model, 'name') ?>
+
+    <?php echo $form->field($model, 'representive_name', ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?php echo $form->field($model, 'repsesentive_position', ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?php echo $form->field($model, 'bank_name', ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?php echo $form->field($model, 'bik', ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?php echo $form->field($model, 'account_number', ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
 
     <div class="form-group field-user-image">
 		<?php if ($model->photo): ?>

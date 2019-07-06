@@ -17,6 +17,13 @@ class SignupForm extends Model
     public $legal;
     public $offer_accepted;
 
+    //необязательный для юр.лиц/ИП
+    public $representive_name;
+    public $repsesentive_position;
+    public $account_number;
+    public $bank_name;
+    public $bik;
+
     /**
      * @inheritdoc
      */
@@ -46,6 +53,8 @@ class SignupForm extends Model
 	        ['legal', 'required'],
 
 	        ['offer_accepted', 'required', 'requiredValue' => 1, 'message' => 'Необходимо согласие с условиями'],
+
+            [['representive_name', 'repsesentive_position', 'account_number', 'bank_name', 'bik'], 'string', 'max' => 255]
         ];
     }
 
@@ -61,6 +70,11 @@ class SignupForm extends Model
 			'name' => 'ФИО/Название компании',
 			'offer_accepted' => 'Согласие с условиями',
 			'password' => 'Пароль',
+            'representive_name' => 'ФИО уполномоченного представителя',
+            'repsesentive_position' => 'Должность уполномоченного представителя',
+            'bank_name' => 'Наименование банка ЮЛ',
+            'bik' => 'БИК Банка ЮЛ',
+            'account_number' => 'Расчетный счет ЮЛ',
 		];
 	}
 
@@ -96,6 +110,11 @@ class SignupForm extends Model
         $user->name = $this->name;
         $user->email = $this->email;
         $user->offer_accepted = $this->offer_accepted;
+        $user->representive_name = $this->representive_name;
+        $user->repsesentive_position = $this->repsesentive_position;
+        $user->account_number = $this->account_number;
+        $user->bank_name = $this->bank_name;
+        $user->bik = $this->bik;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         

@@ -33,6 +33,11 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property string $representive_name
+ * @property string $repsesentive_position
+ * @property string $bank_name
+ * @property string $bik
+ * @property string $account_number
  *
  * @property Order[] $orders
  */
@@ -149,6 +154,11 @@ class User extends ActiveRecord implements IdentityInterface
 			'created_at' => 'Время создания',
 			'updated_at' => 'Время обновления',
 			'password' => 'Пароль',
+            'representive_name' => 'ФИО уполномоченного представителя',
+            'repsesentive_position' => 'Должность уполномоченного представителя',
+            'bank_name' => 'Наименование банка ЮЛ',
+            'bik' => 'БИК Банка ЮЛ',
+            'account_number' => 'Расчетный счет ЮЛ',
 		];
 	}
 

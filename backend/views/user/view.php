@@ -74,9 +74,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			$attributes[] = 'passport_number';
         }
 
-        if ($model->role == User::ROLE_CLIENT && $model->legal == User::LEGAL_YES) {
+        if ($model->role == User::ROLE_CLIENT && $model->isLegal()) {
 			$attributes[] = 'inn';
 			$attributes[] = 'kpp';
+			$attributes[] = 'representive_name';
+			$attributes[] = 'repsesentive_position';
+			$attributes[] = 'bank_name';
+			$attributes[] = 'bik';
+            $attributes[] = 'account_number';
         }
 
         if ($model->role == User::ROLE_CLIENT) {
