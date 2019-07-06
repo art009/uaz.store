@@ -130,7 +130,7 @@ class ProfileEditForm extends Model
     public function rules()
     {
         return [
-            [['name', 'phone', 'email'], 'required'],
+            [['name', 'phone', 'email', 'address', 'postcode'], 'required'],
             [['name', 'email', 'address', 'fax'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 10],
             [['postcode'], 'string', 'length' => 6],
