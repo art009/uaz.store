@@ -57,7 +57,9 @@ class User extends \common\models\User
             'repsesentive_position',
             'account_number',
             'bank_name',
-            'bik'
+            'bik',
+            'inn1',
+            'inn2'
         ];
         $scenarios[self::SCENARIO_UPDATE] = [
             'phone',
@@ -79,7 +81,9 @@ class User extends \common\models\User
             'repsesentive_position',
             'account_number',
             'bank_name',
-            'bik'
+            'bik',
+            'inn1',
+            'inn2'
         ];
 
         return $scenarios;
@@ -133,12 +137,12 @@ class User extends \common\models\User
                 ],
                 'safe'
             ],
-
             [
                 ['representive_name', 'repsesentive_position', 'account_number', 'bank_name', 'bik'],
                 'string',
                 'max' => 255
-            ]
+            ],
+            ['inn', 'checkInn']
         ];
     }
 
@@ -152,6 +156,20 @@ class User extends \common\models\User
         ]);
     }
 
+    public function checkInn()
+    {
+        if ($this->legal == 1) {
+            if (strlen($this->inn) != 10) {
+                $this->addError('inn1', 'Ошибка в ИНН, проверьте ввод');
+            }
+        }
+        if ($this->legal == 2) {
+            if (strlen($this->inn) != 12) {
+                $this->addError('inn2', 'Ошибка в ИНН, проверьте ввод');
+            }
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -161,10 +179,15 @@ class User extends \common\models\User
 
             $this->phone = mb_substr(preg_replace('/[^0-9]/', '', $this->phone), -10);
 
+            if ($this->legal == 1) {
+                $this->inn = str_replace([' ', '_'], '', $this->inn1);
+            }
+            if ($this->legal == 2) {
+                $this->inn = str_replace([' ','_'], '', $this->inn2);
+            }
+
             return true;
         }
-
-        return false;
     }
 
     /**
