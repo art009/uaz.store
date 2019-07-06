@@ -19,6 +19,11 @@ class CallbackForm extends Model implements JsonSerializable
 	 */
 	public $phone;
 
+    /**
+     * @var string
+     */
+    public $name;
+
 	/**
 	 * @inheritdoc
 	 */
@@ -27,6 +32,8 @@ class CallbackForm extends Model implements JsonSerializable
 		return [
 			['phone', 'required'],
 			['phone', 'trim'],
+            ['name', 'required'],
+            ['name', 'trim'],
 		];
 	}
 
@@ -37,6 +44,7 @@ class CallbackForm extends Model implements JsonSerializable
 	{
 		return [
 			'phone' => 'Телефон',
+			'name' => 'Имя',
 		];
 	}
 
@@ -63,6 +71,7 @@ class CallbackForm extends Model implements JsonSerializable
 	{
 		return [
 			'phone' => $this->phone,
+			'name' => $this->name,
 		];
 	}
 

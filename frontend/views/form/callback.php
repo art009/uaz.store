@@ -19,6 +19,14 @@ use yii\widgets\MaskedInput;
 	'enableClientValidation' => false,
 ]); ?>
 
+<?= $form->field($model, 'name', [
+	'template' => '{input}{error}{hint}',
+	'inputOptions' => [
+		'class' => 'form-control tel_input',
+		'placeholder' => $model->getAttributeLabel('name'),
+	],
+])->textInput(); ?>
+
 <?= $form->field($model, 'phone', [
 	'template' => '{input}{error}{hint}'
 ])->widget(MaskedInput::className(), [

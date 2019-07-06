@@ -37,7 +37,11 @@ $data = $model->getData();
 
 	<?php if ($model->type == Notice::TYPE_CALLBACK): ?>
 		<p>
-			Необходимо перезвонить по телефону:<br/> <a href="tel:<?php echo $data['phone'] ?? null; ?>"><?php echo $data['phone'] ?? null; ?></a>
+			Необходимо перезвонить по телефону:<br/>
+            <?php if (isset($data['name'])): ?>
+                Имя: <b><?php echo $data['name'] ?? null; ?></b><br>
+            <?php endif; ?>
+                Телефон: <b><a href="tel:<?php echo $data['phone'] ?? null; ?>"><?php echo $data['phone'] ?? null; ?></b></a>
 		</p>
 	<?php endif; ?>
 
