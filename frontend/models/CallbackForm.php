@@ -53,13 +53,25 @@ class CallbackForm extends Model implements JsonSerializable
 	 */
 	public function afterValidate()
 	{
+	    $timeToOpenForm = \Yii::$app->session->get($this->getSessionTimeKey(), 0);
+        if (($timeToOpenForm > 0) && ($timeToOpenForm > time())) {
+            $waitFor = $timeToOpenForm - time();
+            $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте через '.\Yii::$app->formatter->asDuration($waitFor));
+        } else if (\Yii::$app->cache->exists($this->getCacheKey())) {
+            $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте позже.');
+        } else {
+            $counterOfRequest = \Yii::$app->session->get($this->getSessionKey(), 0);
+            if ($counterOfRequest > \Yii::$app->params['maxCallbackAttempts']) {
+                $timeToOpenForm = time() + \Yii::$app->params['delayBetweenCallbackAttemts'];
+                \Yii::$app->session->set($this->getSessionTimeKey(), $timeToOpenForm);
+                $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenCallbackAttemts']));
+            }
+            \Yii::$app->session->set($this->getSessionKey(), $counterOfRequest + 1);
+        }
+
 		if (mb_strlen(preg_replace('/[^0-9]/', '', $this->phone)) < 11) {
 			$this->addError('phone', 'Необходим 10-значный номер телефона.');
 		}
-		if (\Yii::$app->cache->exists($this->getCacheKey())) {
-			$this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте позже.');
-		}
-
 
 		return parent::afterValidate();
 	}
@@ -99,4 +111,14 @@ class CallbackForm extends Model implements JsonSerializable
 	{
 		return 'Callback' . preg_replace('/[^0-9]/', '', $this->phone);
 	}
+
+	public function getSessionKey()
+    {
+        return 'callback';
+    }
+
+    public function getSessionTimeKey()
+    {
+        return 'callbackTime';
+    }
 }

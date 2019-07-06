@@ -503,6 +503,8 @@ $(document).ready(function($){
 					$(form).find('.help-block-error').html('');
 				}
 				if (data.success) {
+					$(modal).find('input').val('');
+					$(modal).find(':input').prop('disabled', false);
 					$(modal).modal('hide');
 					showAlert('success', data.success);
 				}
