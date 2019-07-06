@@ -66,7 +66,7 @@ class OrderForm extends Model implements JsonSerializable
             $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте позже.');
         } else {
             $counterOfRequest = \Yii::$app->session->get($this->getSessionKey(), 0);
-            if ($counterOfRequest > \Yii::$app->params['maxOrderAttempts']) {
+            if ($counterOfRequest >= \Yii::$app->params['maxOrderAttempts']) {
                 $timeToOpenForm = time() + \Yii::$app->params['delayBetweenOrderAttempts'];
                 \Yii::$app->session->set($this->getSessionTimeKey(), $timeToOpenForm);
                 $this->addError('phone', 'Вы недавно оставляли заявку! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenOrderAttempts']));
