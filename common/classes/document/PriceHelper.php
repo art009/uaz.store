@@ -71,7 +71,12 @@ class PriceHelper
             ['миллиард', 'милиарда', 'миллиардов', 0],
         ];
         //
-        list($rub, $kop) = explode('.', sprintf("%015.2f", floatval($num)));
+        $rubAndKop = sprintf("%015.2f", floatval($num));
+        if (strpos($rubAndKop, '.') !== false) {
+            list($rub, $kop) = explode('.', $rubAndKop);
+        } else {
+            list($rub, $kop) = explode(',', $rubAndKop);
+        }
         $out = array();
         if (intval($rub) > 0) {
             foreach (str_split($rub, 3) as $uk => $v) { // by 3 symbols
