@@ -568,7 +568,7 @@ $(document).ready(function($){
 	});
 
 	let rebuildDom = function (val) {
-		if (val === 1) {
+		if (val == 0) {
 			$('.business').closest('div').hide();
 		} else {
 			$('.business').closest('div').show();
@@ -577,7 +577,8 @@ $(document).ready(function($){
 
 	$(document).on('change', '#user-signup-form input[type=radio]', rebuildDom)
 
-	rebuildDom('#user-signup-form input[type=radio]:checked');
+	let $currentChosen = $('#user-signup-form input[type=radio]:checked');
+	rebuildDom($currentChosen.val());
 });
 
 $(window).load(function() {
