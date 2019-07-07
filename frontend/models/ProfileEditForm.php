@@ -246,11 +246,11 @@ class ProfileEditForm extends Model
     public function attributeLabels()
     {
         return [
-            'name' => 'ФИО',
-            'email' => 'E-mail',
-            'phone' => 'Телефон',
-            'postcode' => 'Почтовый индекс',
-            'address' => 'Полный адрес',
+            'name' => 'ФИО *',
+            'email' => 'E-mail *',
+            'phone' => 'Телефон *',
+            'postcode' => 'Почтовый индекс *',
+            'address' => 'Полный адрес *',
             'fax' => 'Факс',
             'passportSeries' => 'Серия паспорта',
             'passportNumber' => 'Номер паспорта',

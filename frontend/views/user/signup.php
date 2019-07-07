@@ -89,6 +89,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'template' => '{input} {label}{error}',
     ])->label('Согласие с условиями <a href="/offer" target="_blank">оферты</a>') ?>
 
+    <div class="form-group">
+        <p class="help-block" style="color: whitesmoke">Для регистрации нужно ввести телефон или email</p>
+    </div>
+
+    <div class="form-group">
+        <p class="help-block" style="color: whitesmoke">Поля отмеченные * обязательны</p>
+    </div>
+
     <?= Html::submitButton('Зарегистрироваться', ['class' => 'site-btn', 'name' => 'signup-button']) ?>
 
     <?php ActiveForm::end(); ?>

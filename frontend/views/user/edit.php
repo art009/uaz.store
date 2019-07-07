@@ -225,6 +225,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php echo Html::a('Сменить пароль', ['change-password']) ?>
     </div>
 
+    <br>
+    <div class="form-group pull-left">
+        <p class="help-block" style="color: whitesmoke">Поля отмеченные * обязательны</p>
+    </div>
+
     <?php echo Html::submitButton('Сохранить', ['class' => 'site-btn', 'name' => 'login-button']) ?>
 
     <?php ActiveForm::end(); ?>
