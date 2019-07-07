@@ -136,8 +136,8 @@ class ProfileEditForm extends Model
             [['postcode'], 'string', 'length' => 6],
             [['passportSeries'], 'string', 'length' => 4],
             [['passportNumber'], 'string', 'length' => 6],
-            [['inn'], 'string', 'min' => 10, 'max' => 12],
-            [['kpp'], 'string', 'length' => 9],
+            [['inn'], 'checkInn'],
+            [['kpp'], 'checkKpp'],
             [['phone', 'name', 'email'], 'trim'],
             ['email', 'email'],
             ['phone', 'unique', 'targetClass' => '\common\models\User',
@@ -151,6 +151,29 @@ class ProfileEditForm extends Model
                     return $model->email != $this->user->email;
                 }],
         ];
+    }
+
+    public function checkInn()
+    {
+        if ($this->legal > 0) {
+            $innLength = strlen($this->inn);
+            if ($innLength<10) {
+                $this->addError('inn', 'Значение «ИНН» должно содержать минимум 10 символов.');
+            }
+            if ($innLength>12) {
+                $this->addError('inn', 'Значение «ИНН» должно содержать максимум 12 символов.');
+            }
+        }
+    }
+
+    public function checkKpp()
+    {
+        if ($this->legal > 0) {
+            $kppLength = strlen($this->kpp);
+            if ($kppLength != 9) {
+                $this->addError('kpp', 'Значение «КПП» должно содержать 9 символов.');
+            }
+        }
     }
 
     /**
