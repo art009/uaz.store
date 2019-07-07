@@ -83,51 +83,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'placeholder' => $model->getAttributeLabel('password')
     ]) ?>
 
-    <?= $form->field($model, 'representive_name', [
-        'template' => '{input}{error}{hint}',
-        'inputOptions' => [
-            'class' => 'form-control business'
-        ]
-    ])->textInput([
-        'placeholder' => $model->getAttributeLabel('representive_name'),
-    ]) ?>
-
-    <?= $form->field($model, 'representive_position', [
-        'template' => '{input}{error}{hint}',
-        'inputOptions' => [
-            'class' => 'form-control business'
-        ]
-    ])->textInput([
-        'placeholder' => $model->getAttributeLabel('representive_position'),
-    ]) ?>
-
-    <?= $form->field($model, 'bank_name', [
-        'template' => '{input}{error}{hint}',
-        'inputOptions' => [
-            'class' => 'form-control business'
-        ]
-    ])->textInput([
-        'placeholder' => $model->getAttributeLabel('bank_name'),
-    ]) ?>
-
-    <?= $form->field($model, 'bik', [
-        'template' => '{input}{error}{hint}',
-        'inputOptions' => [
-            'class' => 'form-control business'
-        ]
-    ])->textInput([
-        'placeholder' => $model->getAttributeLabel('bik'),
-    ]) ?>
-
-    <?= $form->field($model, 'account_number', [
-        'template' => '{input}{error}{hint}',
-        'inputOptions' => [
-            'class' => 'form-control business'
-        ]
-    ])->textInput([
-        'placeholder' => $model->getAttributeLabel('account_number'),
-    ]) ?>
-
     <?= $form->field($model, 'offer_accepted', [
         'template' => '{input}{error}{hint}'
     ])->checkbox([

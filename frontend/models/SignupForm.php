@@ -66,22 +66,6 @@ class SignupForm extends Model
             ['legal', 'required'],
 
             ['offer_accepted', 'required', 'requiredValue' => 1, 'message' => 'Необходимо согласие с условиями'],
-
-            [
-                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'],
-                'string',
-                'max' => 255
-            ],
-            [
-                [
-                    'representive_name',
-                    'representive_position',
-                    'account_number',
-                    'bank_name',
-                    'bik'
-                ],
-                'trim'
-            ],
         ];
     }
 
