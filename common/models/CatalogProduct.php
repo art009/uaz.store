@@ -43,6 +43,9 @@ use yii\behaviors\TimestampBehavior;
  * @property CatalogCategory[] $categories
  * @property CatalogProductImage[] $images
  * @property ManualProduct[] $manualProducts
+ *
+ * @property integer $categoriesCount
+ * @property integer $hasCategories
  */
 class CatalogProduct extends \yii\db\ActiveRecord
 {
@@ -122,6 +125,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
             'oversize' => 'Крупногабаритный',
             'created_at' => 'Время создания',
             'updated_at' => 'Время обновления',
+            'hasCategories' => 'Есть категории',
         ];
     }
 
@@ -237,4 +241,19 @@ class CatalogProduct extends \yii\db\ActiveRecord
 	{
 		return $this->hide;
 	}
+
+    public function getCategoriesCount()
+    {
+        return sizeof($this->categories);
+    }
+
+    public function getHasCategories()
+    {
+        return $this->categoriesCount > 0;
+    }
+
+    public function getHasCategoriesLabel()
+    {
+        return AppHelper::$yesNoList[(int)$this->hasCategories];
+    }
 }

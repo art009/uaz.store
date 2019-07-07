@@ -30,10 +30,12 @@ if ($parentModel) {
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить категорию', ['create', 'id' => $parentModel ? $parentModel->id : null], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Добавить товар', ['catalog-product/create', 'id' => $parentModel ? $parentModel->id : null], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Добавить категорию', ['create', 'id' => $parentModel ? $parentModel->id : null],
+            ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить товар', ['catalog-product/create', 'id' => $parentModel ? $parentModel->id : null],
+            ['class' => 'btn btn-primary']) ?>
         <?php if ($parentModel == null): ?>
-        <?= Html::a('Импорт товаров', ['catalog-product/import'], ['class' => 'btn btn-warning']) ?>
+            <?= Html::a('Импорт товаров', ['catalog-product/import'], ['class' => 'btn btn-warning']) ?>
         <?php endif; ?>
     </p>
     <?= GridView::widget([
@@ -96,8 +98,6 @@ if ($parentModel) {
                     //'width' => '350px;'
                 ],
             ],
-            //'title',
-            //'link',
             [
                 'attribute' => 'image',
                 'format' => 'raw',
@@ -109,6 +109,11 @@ if ($parentModel) {
             ],
             'price',
             'cart_counter',
+            [
+                'attribute' => 'hasCategories',
+                'value' => 'hasCategoriesLabel',
+                'filter' => AppHelper::$yesNoList,
+            ],
             [
                 'attribute' => 'hide',
                 'value' => function ($model) {

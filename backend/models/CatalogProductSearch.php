@@ -2,6 +2,8 @@
 
 namespace backend\models;
 
+use common\components\AppHelper;
+use Minify\App;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -13,6 +15,8 @@ class CatalogProductSearch extends CatalogProduct
 	/** @var array  */
 	public $excludedIds = [];
 
+	public $hasCategories;
+
     /**
      * @inheritdoc
      */
@@ -22,7 +26,7 @@ class CatalogProductSearch extends CatalogProduct
             [['id', 'category_id', 'hide', 'on_main', 'length', 'width', 'height', 'weight', 'rest'], 'integer'],
             [['title', 'link', 'image', 'meta_keywords', 'meta_description', 'shop_title', 'provider_title',
 	            'shop_code', 'provider_code', 'description', 'provider', 'manufacturer', 'unit', 'external_id',
-	            'excludedIds',
+	            'excludedIds', 'hasCategories'
             ], 'safe'],
             [['price_to', 'price_old'], 'number'],
             [['price', 'cart_counter'], 'match', 'pattern' => '/^(>|<|>=|<=|=|)(\s*[+-]?\d+\s*)$/'],
@@ -49,6 +53,7 @@ class CatalogProductSearch extends CatalogProduct
     public function search($params, int $pageSize = 20)
     {
         $query = CatalogProduct::find()
+            ->select([self::tableName().'.*', "COUNT(catalog_category.id) as categoryCount"])
 			->joinWith(['categories'], false);
 
         // add conditions that should always apply here
@@ -75,6 +80,14 @@ class CatalogProductSearch extends CatalogProduct
 
         if ($this->category_id) {
             $query->andFilterWhere(['catalog_product_to_category.category_id' => $this->category_id]);
+        }
+
+        if ($this->hasCategories !== "") {
+            if ($this->hasCategories == AppHelper::NO) {
+                $query->having(['=', 'categoryCount', 0]);
+            } else {
+                $query->having(['>', 'categoryCount', 0]);
+            }
         }
 
         $query->andFilterCompare('price', $this->price);
@@ -107,6 +120,22 @@ class CatalogProductSearch extends CatalogProduct
             ->andFilterWhere(['like', $this::tableName() . '.external_id', $this->external_id]);
 
         $query->groupBy($this::tableName() . '.id');
+
+        $dataProvider->setSort([
+            'attributes' => [
+                'id',
+                'title',
+                'image',
+                'price',
+                'cart_counter',
+                'hasCategories' => [
+                    'asc' => ['categoryCount' => SORT_ASC ],
+                    'desc' => ['categoryCount' => SORT_DESC],
+                    'default' => SORT_ASC
+                ],
+                'hide'
+            ]
+        ]);
 
         return $dataProvider;
     }
