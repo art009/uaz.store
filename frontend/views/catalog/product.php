@@ -113,8 +113,7 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
                                     <?php $productImage = $similarProduct->images[0] ?>
                                     <div class="product-image">
                                         <a href="<?php echo $similarProduct->getImagePath(false); ?>">
-                                            <img style="width: 285px;" <?php echo $similarProduct->getImagePath(); ?>"
-                                                 alt="<?php echo $similarProduct->title; ?>"/>
+                                            <img src="<?php echo $similarProduct->getImagePath(); ?>" style="width: 285px;" alt="<?php echo $similarProduct->title; ?>"/>
                                         </a>
                                     </div>
                                 <?php else: ?>
