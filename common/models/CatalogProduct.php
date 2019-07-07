@@ -43,6 +43,7 @@ use yii\behaviors\TimestampBehavior;
  * @property CatalogCategory[] $categories
  * @property CatalogProductImage[] $images
  * @property ManualProduct[] $manualProducts
+ * @property ManualProduct[] $manuals
  *
  * @property integer $categoriesCount
  * @property integer $hasCategories
@@ -168,6 +169,11 @@ class CatalogProduct extends \yii\db\ActiveRecord
 		return $this->hasMany(ManualProduct::className(), ['id' => 'manual_product_id'])
 			->viaTable('manual_product_to_catalog_product', ['catalog_product_id' => 'id']);
 	}
+
+	public function getManuals()
+    {
+        return $this->hasMany(ManualProduct::className(), ['product_id' => 'id']);
+    }
 
     /**
      * @inheritdoc

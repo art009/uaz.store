@@ -629,3 +629,30 @@ form#order-form .form-group b { color: #ecb52d; }
 
 	.category-products-list .product-item { margin: 0 3px 25px; }
 }
+
+.manual-product-view .manual-product-row td {
+	vertical-align: middle !important;
+	text-align: left;
+}
+
+.manual-product-view .manual-product-row .breadcrumb {
+	margin: 0;
+	padding: 0;
+	background: inherit;
+}
+
+.manual-product-view .manual-product-row .breadcrumb > li.active {
+	font-weight: bold;
+}
+
+.manual-product-view .manual-product-row .breadcrumb > li a {
+	color: inherit;
+}
+
+.manual-product-view table tr:nth-child(even) {
+	color: #ffffff;
+}
+
+.manual-product-view table tr:nth-child(odd) {
+	color: #000;
+}
