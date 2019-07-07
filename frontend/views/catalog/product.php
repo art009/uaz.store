@@ -17,7 +17,7 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
     <div style="display: flex">
         <div style="width: 60%">
             <div class="product-content">
-                <div class="product-images">
+                <div class="product-images" style="vertical-align: center; text-align: center">
                     <?php if ($product->images): ?>
                         <?php foreach ($product->images as $productImage): ?>
                             <div class="product-image">
@@ -113,7 +113,7 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
                                     <?php $productImage = $similarProduct->images[0] ?>
                                     <div class="product-image">
                                         <a href="<?php echo $similarProduct->getImagePath(false); ?>">
-                                            <img src="<?php echo $similarProduct->getImagePath(); ?>"
+                                            <img style="width: 285px;" <?php echo $similarProduct->getImagePath(); ?>"
                                                  alt="<?php echo $similarProduct->title; ?>"/>
                                         </a>
                                     </div>
