@@ -72,17 +72,17 @@ class ProfileEditForm extends Model
     protected $legal;
 
     //необязательный для юр.лиц/ИП
-    public $representive_name;
-    public $representive_position;
-    public $account_number;
     public $bank_name;
     public $bik;
+    public $account_number;
+    public $correspondent_account;
+    public $representive_name;
+    public $representive_position;
 
     /**
      * @var boolean
      */
     public $isLegal;
-    public $correspondent_account;
 
     /**
      * ProfileEditForm constructor.
@@ -217,27 +217,12 @@ class ProfileEditForm extends Model
 
     public function checkInn()
     {
-        $innLength = strlen($this->inn);
-        if ($this->legal == User::LEGAL_IP) {
-            if ($innLength != 12) {
-                $this->addError('inn', 'Значение «ИНН» должно содержать 12 символов.');
-            }
-        }
-        if ($this->legal == User::LEGAL_YES) {
-            if ($innLength != 10) {
-                $this->addError('inn', 'Значение «ИНН» должно содержать 10 символов.');
-            }
-        }
+        return \Validator::checkInn($this);
     }
 
     public function checkKpp()
     {
-        if ($this->legal > 0) {
-            $kppLength = strlen($this->kpp);
-            if ($kppLength != 9) {
-                $this->addError('kpp', 'Значение «КПП» должно содержать 9 символов.');
-            }
-        }
+        return \Validator::checkKpp($this);
     }
 
     /**

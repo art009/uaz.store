@@ -113,6 +113,101 @@ JS
 			'template' => '{input}{error}{hint}'
 		])->dropDownList($order::$paymentList, ['prompt' => $confirmForm->getAttributeLabel('payment')]) ?>
 
+        <?php if ($confirmForm->isLegal): ?>
+            <?php if ($confirmForm->getIsLegalIp()) {
+                echo $form->field($confirmForm, 'inn', [
+                    'template' => '{input}{error}{hint}'
+                ])->widget(MaskedInput::className(), [
+                    'options' => [
+                        'class' => 'form-control tel_input',
+                        'placeholder' => $confirmForm->getAttributeLabel('inn') . ' (12 цифр)',
+                    ],
+                    'clientOptions' => [
+                        'alias' => '999 999 999 999',
+                    ],
+                ]);
+            } else {
+                echo $form->field($confirmForm, 'inn', [
+                    'template' => '{input}{error}{hint}'
+                ])->widget(MaskedInput::className(), [
+                    'options' => [
+                        'class' => 'form-control tel_input',
+                        'placeholder' => $confirmForm->getAttributeLabel('inn') . ' (10 цифр)',
+                    ],
+                    'clientOptions' => [
+                        'alias' => '999 999 9999',
+                    ],
+                ]);
+            } ?>
+
+            <?php echo $form->field($model, 'kpp', [
+                'template' => '{input}{error}{hint}'
+            ])->widget(MaskedInput::className(), [
+                'mask' => '999 999 999',
+                'options' => [
+                    'class' => 'form-control tel_input',
+                    'placeholder' => $model->getAttributeLabel('kpp'),
+                ],
+                'clientOptions' => [
+                    'clearIncomplete' => false
+                ],
+            ]); ?>
+
+            <?= $form->field($confirmForm, 'bank_name', [
+                'template' => '{input}{error}{hint}',
+                'inputOptions' => [
+                    'class' => 'form-control business'
+                ]
+            ])->textInput([
+                'placeholder' => $confirmForm->getAttributeLabel('bank_name'),
+            ]) ?>
+
+            <?= $form->field($confirmForm, 'bik', [
+                'template' => '{input}{error}{hint}',
+                'inputOptions' => [
+                    'class' => 'form-control business'
+                ]
+            ])->textInput([
+                'placeholder' => $confirmForm->getAttributeLabel('bik'),
+            ]) ?>
+
+            <?= $form->field($confirmForm, 'account_number', [
+                'template' => '{input}{error}{hint}',
+                'inputOptions' => [
+                    'class' => 'form-control business'
+                ]
+            ])->textInput([
+                'placeholder' => $confirmForm->getAttributeLabel('account_number'),
+            ]) ?>
+
+            <?= $form->field($confirmForm, 'correspondent_account', [
+                'template' => '{input}{error}{hint}',
+                'inputOptions' => [
+                    'class' => 'form-control business'
+                ]
+            ])->textInput([
+                'placeholder' => $confirmForm->getAttributeLabel('correspondent_account'),
+            ]) ?>
+
+            <?= $form->field($confirmForm, 'representive_name', [
+                'template' => '{input}{error}{hint}',
+                'inputOptions' => [
+                    'class' => 'form-control business'
+                ]
+            ])->textInput([
+                'placeholder' => $confirmForm->getAttributeLabel('representive_name'),
+            ]) ?>
+
+            <?= $form->field($confirmForm, 'representive_position', [
+                'template' => '{input}{error}{hint}',
+                'inputOptions' => [
+                    'class' => 'form-control business'
+                ]
+            ])->textInput([
+                'placeholder' => $confirmForm->getAttributeLabel('representive_position'),
+            ]) ?>
+        <?php endif; ?>
+
 		<div class="form-group">
 			Стоимость заказа: <b><?php echo number_format($order->sum, 2, '.', ' '); ?></b> руб
 			<br/>

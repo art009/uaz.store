@@ -190,6 +190,43 @@ JS
 				Телефон: <b class="color-yellow">+7<?php echo $user->phone; ?></b>
 				<br/>
 				E-mail: <b class="color-yellow"><?php echo $user->email; ?></b>
+                <?php if ($user->isLegal()): ?>
+                    <?php if ($user->inn): ?>
+                        <br/>
+                        ИНН: <b class="color-yellow"><?php echo $user->inn; ?></b>
+                    <?php endif; ?>
+                    <?php if ($user->kpp): ?>
+                        <br/>
+                        КПП: <b class="color-yellow"><?php echo $user->kpp; ?></b>
+                    <?php endif; ?>
+                    <?php if ($user->bank_name): ?>
+                        <br/>
+                        Наименование банка ЮЛ: <b class="color-yellow"><?php echo $user->bank_name; ?></b>
+                    <?php endif; ?>
+                    <?php if ($user->bik): ?>
+                        <br/>
+                        БИК: <b class="color-yellow"><?php echo $user->bik; ?></b>
+                    <?php endif; ?>
+                    <?php if ($user->account_number): ?>
+                        <br/>
+                        Расчетный счет ЮЛ: <b class="color-yellow"><?php echo $user->account_number; ?></b>
+                    <?php endif; ?>
+                    <?php if ($user->correspondent_account): ?>
+                        <br/>
+                        Корреспондентский счет ЮЛ: <b
+                                class="color-yellow"><?php echo $user->correspondent_account; ?></b>
+                    <?php endif; ?>
+                    <?php if ($user->kpp): ?>
+                        <br/>
+                        ФИО уполномоченного представителя: <b
+                                class="color-yellow"><?php echo $user->representive_name; ?></b>
+                    <?php endif; ?>
+                    <?php if ($user->representive_position): ?>
+                        <br/>
+                        Должность уполномоченного представителя: <b
+                                class="color-yellow"><?php echo $user->representive_position; ?></b>
+                    <?php endif; ?>
+                <?php endif; ?>
 			</div>
 			<div class="form-group">
 				Способ доставки:
