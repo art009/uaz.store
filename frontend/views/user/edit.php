@@ -166,24 +166,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
 
-        <?= $form->field($model, 'representive_name', [
-            'template' => '{input}{error}{hint}',
-            'inputOptions' => [
-                'class' => 'form-control business'
-            ]
-        ])->textInput([
-            'placeholder' => $model->getAttributeLabel('representive_name'),
-        ]) ?>
-
-        <?= $form->field($model, 'representive_position', [
-            'template' => '{input}{error}{hint}',
-            'inputOptions' => [
-                'class' => 'form-control business'
-            ]
-        ])->textInput([
-            'placeholder' => $model->getAttributeLabel('repsesentive_position'),
-        ]) ?>
-
         <?= $form->field($model, 'bank_name', [
             'template' => '{input}{error}{hint}',
             'inputOptions' => [
@@ -209,6 +191,33 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ])->textInput([
             'placeholder' => $model->getAttributeLabel('account_number'),
+        ]) ?>
+
+        <?= $form->field($model, 'correspondent_account', [
+            'template' => '{input}{error}{hint}',
+            'inputOptions' => [
+                'class' => 'form-control business'
+            ]
+        ])->textInput([
+            'placeholder' => $model->getAttributeLabel('correspondent_account'),
+        ]) ?>
+
+        <?= $form->field($model, 'representive_name', [
+            'template' => '{input}{error}{hint}',
+            'inputOptions' => [
+                'class' => 'form-control business'
+            ]
+        ])->textInput([
+            'placeholder' => $model->getAttributeLabel('representive_name'),
+        ]) ?>
+
+        <?= $form->field($model, 'representive_position', [
+            'template' => '{input}{error}{hint}',
+            'inputOptions' => [
+                'class' => 'form-control business'
+            ]
+        ])->textInput([
+            'placeholder' => $model->getAttributeLabel('representive_position'),
         ]) ?>
     <?php endif; ?>
 

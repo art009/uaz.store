@@ -82,6 +82,7 @@ class ProfileEditForm extends Model
      * @var boolean
      */
     public $isLegal;
+    public $correspondent_account;
 
     /**
      * ProfileEditForm constructor.
@@ -119,6 +120,7 @@ class ProfileEditForm extends Model
         $this->bank_name = $user->bank_name;
         $this->bik = $user->bik;
         $this->account_number = $user->account_number;
+        $this->correspondent_account = $user->correspondent_account;
         $this->isLegal = $user->isLegal();
     }
 
@@ -181,12 +183,13 @@ class ProfileEditForm extends Model
                     'representive_position',
                     'account_number',
                     'bank_name',
-                    'bik'
+                    'bik',
+                    'correspondent_account'
                 ],
                 'trim'
             ],
             [
-                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'],
+                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik', 'correspondent_account'],
                 'string',
                 'max' => 255
             ],
@@ -254,6 +257,12 @@ class ProfileEditForm extends Model
             'inn' => 'ИНН',
             'kpp' => 'КПП',
             'legal' => 'Физ/Юр лицо',
+            'representive_name' => 'ФИО уполномоченного представителя',
+            'correspondent_account' => 'Корреспондентский счет ЮЛ',
+            'representive_position' => 'Должность уполномоченного представителя',
+            'bank_name' => 'Наименование банка ЮЛ',
+            'bik' => 'БИК Банка ЮЛ',
+            'account_number' => 'Расчетный счет ЮЛ',
         ];
     }
 

@@ -160,6 +160,7 @@ class User extends ActiveRecord implements IdentityInterface
 			'updated_at' => 'Время обновления',
 			'password' => 'Пароль',
             'representive_name' => 'ФИО уполномоченного представителя',
+            'correspondent_account' => 'Корреспондентский счет ЮЛ',
             'representive_position' => 'Должность уполномоченного представителя',
             'bank_name' => 'Наименование банка ЮЛ',
             'bik' => 'БИК Банка ЮЛ',

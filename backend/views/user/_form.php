@@ -92,15 +92,28 @@ JS
 
     <?php echo $form->field($model, 'name') ?>
 
-    <?php echo $form->field($model, 'representive_name',
-        ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
-    <?php echo $form->field($model, 'representive_position',
-        ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
     <?php echo $form->field($model, 'bank_name',
         ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
     <?php echo $form->field($model, 'bik',
         ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?= $form->field($model, 'kpp',
+        ['options' => ['data-role' => 0, 'data-legal' => 1]])->widget(MaskedInput::className(), [
+        'mask' => '999999999',
+        'options' => [
+            'class' => 'form-control',
+            'placeholder' => '9 цифр',
+        ],
+        'clientOptions' => [
+            'clearIncomplete' => false
+        ]
+    ]); ?>
     <?php echo $form->field($model, 'account_number',
+        ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?php echo $form->field($model, 'correspondent_account',
+        ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?php echo $form->field($model, 'representive_name',
+        ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
+    <?php echo $form->field($model, 'representive_position',
         ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
 
     <div class="form-group field-user-image">
@@ -154,17 +167,6 @@ JS
             'options' => [
                 'class' => 'form-control inn-2',
                 'placeholder' => '12 цифр',
-            ],
-            'clientOptions' => [
-                'clearIncomplete' => false
-            ]
-        ]); ?>
-        <?= $form->field($model, 'kpp',
-            ['options' => ['data-role' => 0, 'data-legal' => 1]])->widget(MaskedInput::className(), [
-            'mask' => '999999999',
-            'options' => [
-                'class' => 'form-control',
-                'placeholder' => '9 цифр',
             ],
             'clientOptions' => [
                 'clearIncomplete' => false

@@ -138,7 +138,7 @@ class User extends \common\models\User
                 'safe'
             ],
             [
-                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'],
+                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik', 'correspondent_account'],
                 'string',
                 'max' => 255
             ],
