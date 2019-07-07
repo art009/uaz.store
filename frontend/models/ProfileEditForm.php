@@ -172,7 +172,24 @@ class ProfileEditForm extends Model
             [['passportNumber'], 'string', 'length' => 6],
             [['inn'], 'checkInn'],
             [['kpp'], 'checkKpp'],
-            [['phone', 'name', 'email'], 'trim'],
+            [
+                [
+                    'phone',
+                    'name',
+                    'email',
+                    'representive_name',
+                    'representive_position',
+                    'account_number',
+                    'bank_name',
+                    'bik'
+                ],
+                'trim'
+            ],
+            [
+                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'],
+                'string',
+                'max' => 255
+            ],
             ['email', 'email'],
             [
                 'phone',
@@ -299,6 +316,11 @@ class ProfileEditForm extends Model
             $user->inn = $this->inn;
             $user->kpp = $this->kpp;
             $user->legal = $this->legal;
+            $user->representive_name = $this->representive_name;
+            $user->representive_position = $this->representive_position;
+            $user->account_number = $this->account_number;
+            $user->bank_name = $this->bank_name;
+            $user->bik = $this->bik;
 
             return $user->save();
 

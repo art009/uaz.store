@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\models;
 
 use codeonyii\yii2validators\AtLeastValidator;
@@ -34,64 +35,90 @@ class SignupForm extends Model
             ['name', 'required'],
             ['name', 'string', 'min' => 2, 'max' => 255],
 
-	        [['phone', 'email'], AtLeastValidator::className(), 'in' => ['phone', 'email'],
-		        'message' => 'Необходимо заполнить E-mail или Телефон'],
+            [
+                ['phone', 'email'],
+                AtLeastValidator::className(),
+                'in' => ['phone', 'email'],
+                'message' => 'Необходимо заполнить E-mail или Телефон'
+            ],
 
-	        ['phone', 'trim'],
-	        ['phone', 'unique', 'targetClass' => '\common\models\User',
-		        'message' => 'Пользователь с таким телефоном уже существует.'],
+            ['phone', 'trim'],
+            [
+                'phone',
+                'unique',
+                'targetClass' => '\common\models\User',
+                'message' => 'Пользователь с таким телефоном уже существует.'
+            ],
 
             ['email', 'trim'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User',
-	            'message' => 'Пользователь с таким E-mail уже существует.'],
+            [
+                'email',
+                'unique',
+                'targetClass' => '\common\models\User',
+                'message' => 'Пользователь с таким E-mail уже существует.'
+            ],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],
 
-	        ['legal', 'required'],
+            ['legal', 'required'],
 
-	        ['offer_accepted', 'required', 'requiredValue' => 1, 'message' => 'Необходимо согласие с условиями'],
+            ['offer_accepted', 'required', 'requiredValue' => 1, 'message' => 'Необходимо согласие с условиями'],
 
-            [['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'], 'string', 'max' => 255]
+            [
+                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'],
+                'string',
+                'max' => 255
+            ],
+            [
+                [
+                    'representive_name',
+                    'representive_position',
+                    'account_number',
+                    'bank_name',
+                    'bik'
+                ],
+                'trim'
+            ],
         ];
     }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function attributeLabels()
-	{
-		return [
-			'email' => 'E-mail',
-			'phone' => 'Телефон',
-			'legal' => 'Физ/Юр лицо',
-			'name' => 'ФИО/Название компании',
-			'offer_accepted' => 'Согласие с условиями',
-			'password' => 'Пароль',
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'email' => 'E-mail',
+            'phone' => 'Телефон',
+            'legal' => 'Физ/Юр лицо',
+            'name' => 'ФИО/Название компании',
+            'offer_accepted' => 'Согласие с условиями',
+            'password' => 'Пароль',
             'representive_name' => 'ФИО уполномоченного представителя',
             'representive_position' => 'Должность уполномоченного представителя',
             'bank_name' => 'Наименование банка ЮЛ',
             'bik' => 'БИК Банка ЮЛ',
             'account_number' => 'Расчетный счет ЮЛ',
-		];
-	}
+        ];
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function beforeValidate()
-	{
-		if (parent::beforeValidate()) {
+    /**
+     * @inheritdoc
+     */
+    public function beforeValidate()
+    {
+        if (parent::beforeValidate()) {
 
-			$this->phone = mb_substr(preg_replace('/[^0-9]/', '', $this->phone), -10);
+            $this->phone = mb_substr(preg_replace('/[^0-9]/', '', $this->phone), -10);
 
-			return true;
-		}
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * Signs user up.
@@ -103,7 +130,7 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new User();
         $user->legal = $this->legal;
         $user->phone = $this->phone;
@@ -117,7 +144,7 @@ class SignupForm extends Model
         $user->bik = $this->bik;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        
+
         return $user->save() ? $user : null;
     }
 }
