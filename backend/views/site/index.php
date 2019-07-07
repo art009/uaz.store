@@ -30,6 +30,9 @@ $this->title = 'Административная панель';
         <a class="btn btn-md btn-primary btn-block" href="/order">Заказы</a>
     </p>
     <p>
+        <a class="btn btn-md btn-primary btn-block" href="/catalog-product-similar">Аналогичные товары</a>
+    </p>
+    <p>
         <a class="btn btn-md btn-default btn-block" href="/mail-queue">Очередь писем</a>
     </p>
 </div>

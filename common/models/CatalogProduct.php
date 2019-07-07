@@ -44,6 +44,7 @@ use yii\behaviors\TimestampBehavior;
  * @property CatalogProductImage[] $images
  * @property ManualProduct[] $manualProducts
  * @property ManualProduct[] $manuals
+ * @property CatalogProduct[] $similarProducts
  *
  * @property integer $categoriesCount
  * @property integer $hasCategories
@@ -169,6 +170,48 @@ class CatalogProduct extends \yii\db\ActiveRecord
 		return $this->hasMany(ManualProduct::className(), ['id' => 'manual_product_id'])
 			->viaTable('manual_product_to_catalog_product', ['catalog_product_id' => 'id']);
 	}
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSimilarProducts()
+    {
+        return $this->hasMany(CatalogProduct::className(), ['id' => 'similar_product_id'])
+            ->viaTable('catalog_product_similar', ['product_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function setSimilarProducts(array $productIds, $delete = true)
+    {
+        if ($delete) {
+            CatalogProductSimilar::deleteAll('id = :id', [':id' => $this->id]);
+            CatalogProductSimilar::deleteAll('similar_product_id = :id', [':id' => $this->id]);
+        }
+        foreach ($productIds as $productId) {
+            if ($this->id == $productId) {
+                continue;
+            }
+            try {
+                $catalogProductSimilar = new CatalogProductSimilar();
+                $catalogProductSimilar->product_id = $this->id;
+                $catalogProductSimilar->similar_product_id = $productId;
+                $catalogProductSimilar->save();
+            }
+            catch (\Exception $e) {
+                //do nothing cause it's because something goes wrong at console job. Ufff
+            }
+            try {
+                $catalogProductSimilar = new CatalogProductSimilar();
+                $catalogProductSimilar->product_id = $productId;
+                $catalogProductSimilar->similar_product_id = $this->id;
+                $catalogProductSimilar->save();
+            } catch (\Exception $e) {
+                //do nothing cause it's because something goes wrong at console job. Ufff
+            }
+        }
+    }
 
 	public function getManuals()
     {

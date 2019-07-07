@@ -128,4 +128,12 @@ class CatalogController extends Controller
 			'category' => $category,
 		]);
 	}
+
+	public function actionSimilar(int $id = null)
+    {
+        $product = $this->findProduct($id);
+        return $this->render('similar', [
+            'product' => $product,
+        ]);
+    }
 }

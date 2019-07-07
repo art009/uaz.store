@@ -649,6 +649,14 @@ form#order-form .form-group b { color: #ecb52d; }
 	color: inherit;
 }
 
+.manual-product-view table tr:nth-child(even) a {
+	color: inherit;
+}
+
+.manual-product-view table tr:nth-child(odd) a {
+	color: inherit;
+}
+
 .manual-product-view table tr:nth-child(even) {
 	color: #ffffff;
 }
