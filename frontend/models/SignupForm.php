@@ -19,7 +19,7 @@ class SignupForm extends Model
 
     //необязательный для юр.лиц/ИП
     public $representive_name;
-    public $repsesentive_position;
+    public $representive_position;
     public $account_number;
     public $bank_name;
     public $bik;
@@ -54,7 +54,7 @@ class SignupForm extends Model
 
 	        ['offer_accepted', 'required', 'requiredValue' => 1, 'message' => 'Необходимо согласие с условиями'],
 
-            [['representive_name', 'repsesentive_position', 'account_number', 'bank_name', 'bik'], 'string', 'max' => 255]
+            [['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'], 'string', 'max' => 255]
         ];
     }
 
@@ -71,7 +71,7 @@ class SignupForm extends Model
 			'offer_accepted' => 'Согласие с условиями',
 			'password' => 'Пароль',
             'representive_name' => 'ФИО уполномоченного представителя',
-            'repsesentive_position' => 'Должность уполномоченного представителя',
+            'representive_position' => 'Должность уполномоченного представителя',
             'bank_name' => 'Наименование банка ЮЛ',
             'bik' => 'БИК Банка ЮЛ',
             'account_number' => 'Расчетный счет ЮЛ',
@@ -111,7 +111,7 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->offer_accepted = $this->offer_accepted;
         $user->representive_name = $this->representive_name;
-        $user->repsesentive_position = $this->repsesentive_position;
+        $user->representive_position = $this->representive_position;
         $user->account_number = $this->account_number;
         $user->bank_name = $this->bank_name;
         $user->bik = $this->bik;

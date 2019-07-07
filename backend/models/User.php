@@ -54,7 +54,7 @@ class User extends \common\models\User
             'offer_accepted',
             'fax',
             'representive_name',
-            'repsesentive_position',
+            'representive_position',
             'account_number',
             'bank_name',
             'bik',
@@ -78,7 +78,7 @@ class User extends \common\models\User
             'offer_accepted',
             'fax',
             'representive_name',
-            'repsesentive_position',
+            'representive_position',
             'account_number',
             'bank_name',
             'bik',
@@ -138,7 +138,7 @@ class User extends \common\models\User
                 'safe'
             ],
             [
-                ['representive_name', 'repsesentive_position', 'account_number', 'bank_name', 'bik'],
+                ['representive_name', 'representive_position', 'account_number', 'bank_name', 'bik'],
                 'string',
                 'max' => 255
             ],

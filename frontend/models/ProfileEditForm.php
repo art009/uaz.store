@@ -71,6 +71,18 @@ class ProfileEditForm extends Model
      */
     protected $legal;
 
+    //необязательный для юр.лиц/ИП
+    public $representive_name;
+    public $representive_position;
+    public $account_number;
+    public $bank_name;
+    public $bik;
+
+    /**
+     * @var boolean
+     */
+    public $isLegal;
+
     /**
      * ProfileEditForm constructor.
      * @param int $userId
@@ -102,6 +114,12 @@ class ProfileEditForm extends Model
         $this->inn = $user->inn;
         $this->kpp = $user->kpp;
         $this->legal = $user->legal;
+        $this->representive_name = $user->representive_name;
+        $this->representive_position = $user->representive_position;
+        $this->bank_name = $user->bank_name;
+        $this->bik = $user->bik;
+        $this->account_number = $user->account_number;
+        $this->isLegal = $user->isLegal();
     }
 
     /**
@@ -125,6 +143,22 @@ class ProfileEditForm extends Model
     }
 
     /**
+     * @return int
+     */
+    public function getIsLegalIp()
+    {
+        return (int)$this->legal == User::LEGAL_IP;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIsLegal()
+    {
+        return (int)$this->legal == User::LEGAL_YES;
+    }
+
+    /**
      * @inheritdoc
      */
     public function rules()
@@ -140,28 +174,38 @@ class ProfileEditForm extends Model
             [['kpp'], 'checkKpp'],
             [['phone', 'name', 'email'], 'trim'],
             ['email', 'email'],
-            ['phone', 'unique', 'targetClass' => '\common\models\User',
+            [
+                'phone',
+                'unique',
+                'targetClass' => '\common\models\User',
                 'message' => 'Пользователь с таким телефоном уже существует.',
-                'when' => function($model) {
+                'when' => function ($model) {
                     return $model->phone != $this->user->phone;
-                }],
-            ['email', 'unique', 'targetClass' => '\common\models\User',
+                }
+            ],
+            [
+                'email',
+                'unique',
+                'targetClass' => '\common\models\User',
                 'message' => 'Пользователь с таким E-mail уже существует.',
-                'when' => function($model) {
+                'when' => function ($model) {
                     return $model->email != $this->user->email;
-                }],
+                }
+            ],
         ];
     }
 
     public function checkInn()
     {
-        if ($this->legal > 0) {
-            $innLength = strlen($this->inn);
-            if ($innLength<10) {
-                $this->addError('inn', 'Значение «ИНН» должно содержать минимум 10 символов.');
+        $innLength = strlen($this->inn);
+        if ($this->legal == User::LEGAL_IP) {
+            if ($innLength != 12) {
+                $this->addError('inn', 'Значение «ИНН» должно содержать 12 символов.');
             }
-            if ($innLength>12) {
-                $this->addError('inn', 'Значение «ИНН» должно содержать максимум 12 символов.');
+        }
+        if ($this->legal == User::LEGAL_YES) {
+            if ($innLength != 10) {
+                $this->addError('inn', 'Значение «ИНН» должно содержать 10 символов.');
             }
         }
     }

@@ -94,7 +94,7 @@ JS
 
     <?php echo $form->field($model, 'representive_name',
         ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
-    <?php echo $form->field($model, 'repsesentive_position',
+    <?php echo $form->field($model, 'representive_position',
         ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>
     <?php echo $form->field($model, 'bank_name',
         ['options' => ['data-role' => 0, 'data-legal' => 1]])->textInput(['class' => 'form-control business']) ?>

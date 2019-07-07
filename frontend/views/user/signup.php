@@ -92,13 +92,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'placeholder' => $model->getAttributeLabel('representive_name'),
     ]) ?>
 
-    <?= $form->field($model, 'repsesentive_position', [
+    <?= $form->field($model, 'representive_position', [
         'template' => '{input}{error}{hint}',
         'inputOptions' => [
             'class' => 'form-control business'
         ]
     ])->textInput([
-        'placeholder' => $model->getAttributeLabel('repsesentive_position'),
+        'placeholder' => $model->getAttributeLabel('representive_position'),
     ]) ?>
 
     <?= $form->field($model, 'bank_name', [
