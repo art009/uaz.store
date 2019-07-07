@@ -5,6 +5,7 @@
 /* @var $category \common\models\ManualCategory */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
@@ -68,15 +69,36 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 				'title',
 				[
 					'class' => 'yii\grid\ActionColumn',
-
 					'template' => '{buy}',
-
+                    'urlCreator' => function ($action, $model, $key, $index) {
+                        if ($action == 'buy') {
+                            if ($model->product_id) {
+                                $catalogProduct = \common\models\CatalogProduct::findOne($model->product_id);
+                                if (!$catalogProduct) {
+                                    return false;
+                                }
+                                $category = $catalogProduct->categories[0];
+                                if (!$category) {
+                                    return false;
+                                }
+                                return \yii\helpers\Url::to(['catalog/product', 'id' => $model->product_id, 'categoryId' => $category->id]);
+                            }
+                        }
+                    },
 					'buttons' => [
 						'buy' => function ($url,$model) {
 	                        if ($model->product_id){
+                                $catalogProduct = \common\models\CatalogProduct::findOne($model->product_id);
+                                if (!$catalogProduct) {
+                                    return '';
+                                }
+                                $category = $catalogProduct->categories[0];
+                                if (!$category) {
+                                    return '';
+                                }
 								return Html::a(
-									'<div class="site-btn add-cart-product" data-id="' . $model->id . '">Купить</div>',
-									$url);
+									'<div class="site-btn open-catalog" data-id="' . $model->id . '">Купить</div>',
+									$url, ['class' => 'open-catalog', 'target' => '_blank']);
 							}
 							return null;
 						},
