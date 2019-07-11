@@ -45,6 +45,11 @@ return [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
                 [
+                    'class' => 'notamedia\sentry\SentryTarget',
+                    'dsn' => 'https://88a792f1db2f49e2815dbd2e0b79ff84@sentry.io/1503002',
+                    'levels' => ['error', 'warning'],
+                ],
+                [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
