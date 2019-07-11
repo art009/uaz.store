@@ -3,6 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 /* @var $controllerId string */
+
 /* @var $actionId string */
 
 use frontend\assets\AppAsset;
@@ -34,14 +35,15 @@ $actionId = Yii::$app->controller->action->id;
 <body>
 <?php $this->beginBody() ?>
 <?php if ($GATrackingID = (Yii::$app->params['GATrackingID'] ?? null)): ?>
-	<!-- Google Analytics -->
-	<script>
-		window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-		//ga('create', 'UA-93217412-1', 'auto')
-		//ga('send', 'pageview');
-	</script>
-	<script async src="/js/analytics.js"></script>
-	<!-- End Google Analytics -->
+    <!-- Google Analytics -->
+    <script>
+      window.ga = window.ga || function () {(ga.q = ga.q || []).push(arguments)}
+      ga.l = +new Date
+      //ga('create', 'UA-93217412-1', 'auto')
+      //ga('send', 'pageview');
+    </script>
+    <script async src="/js/analytics.js"></script>
+    <!-- End Google Analytics -->
 <?php endif; ?>
 <div class="wrap">
     <?php NavBar::begin([
@@ -50,59 +52,60 @@ $actionId = Yii::$app->controller->action->id;
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
-    ]);?>
-	<?php echo NavMenu::widget(); ?>
-	<?php echo Nav::widget([
-		'encodeLabels' => false,
+    ]); ?>
+    <?php echo NavMenu::widget(); ?>
+    <?php echo Nav::widget([
+        'encodeLabels' => false,
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-			[
+            [
                 'label' => Html::icon('search'),
                 'url' => ['/search'],
-				'active' => ($controllerId == 'catalog' && $actionId == 'search'),
-				'linkOptions' => [
-					'data-tooltip' => 'tooltip',
-					'data-trigger' => 'hover',
-					'data-placement' => 'bottom',
-					'title' => 'Поиск товара',
-				],
+                'active' => ($controllerId == 'catalog' && $actionId == 'search'),
+                'linkOptions' => [
+                    'data-tooltip' => 'tooltip',
+                    'data-trigger' => 'hover',
+                    'data-placement' => 'bottom',
+                    'title' => 'Поиск товара',
+                ],
             ],
-			[
+            [
                 'label' => Html::icon('shopping-cart'),
                 'url' => ['/cart'],
                 'linkOptions' => [
                     'class' => 'cart-link',
-                    'data-count' => Yii::$app->cart->getQuantity() ? : null,
-	                'data-tooltip' => 'tooltip',
-	                'data-trigger' => 'hover',
-	                'data-placement' => 'bottom',
-	                'title' => 'Корзина',
+                    'data-count' => Yii::$app->cart->getQuantity() ?: null,
+                    'data-tooltip' => 'tooltip',
+                    'data-trigger' => 'hover',
+                    'data-placement' => 'bottom',
+                    'title' => 'Корзина',
                 ],
                 'active' => ($controllerId == 'cart'),
             ],
-			[
+            [
                 'label' => Html::icon('user'),
                 'url' => ['/user'],
-				'linkOptions' => [
-					'data-tooltip' => 'tooltip',
-					'data-trigger' => 'hover',
-					'data-placement' => 'bottom',
-					'title' => 'Личный кабинет',
-				],
-				'active' => ($controllerId == 'user'),
+                'linkOptions' => [
+                    'data-tooltip' => 'tooltip',
+                    'data-trigger' => 'hover',
+                    'data-placement' => 'bottom',
+                    'title' => 'Личный кабинет',
+                ],
+                'active' => ($controllerId == 'user'),
             ],
-		],
-    ]);?>
+        ],
+    ]); ?>
 
     <div class="nav-contacts">
         <div class="nav-phone">
-            <span>+7 965 </span>632 32 62
+            <a href="tel:88002016095">8 800 201-60-95</a>
         </div>
+        <small>Звонок по России бесплатный</small>
         <div class="nav-email">
             <a href="mailto:support@uaz.store">support@uaz.store</a>
         </div>
     </div>
-    <?php NavBar::end();?>
+    <?php NavBar::end(); ?>
 
     <div class="container">
         <?= Breadcrumbs::widget([
@@ -110,7 +113,7 @@ $actionId = Yii::$app->controller->action->id;
         ]) ?>
         <?= $content ?>
     </div>
-	<?php echo Alert::widget(); ?>
+    <?php echo Alert::widget(); ?>
 </div>
 
 <footer class="footer">
@@ -119,24 +122,24 @@ $actionId = Yii::$app->controller->action->id;
             <p class="pull-left">
                 <span class="icon-link-outer">
                     <?php echo Html::a(Html::icon('earphone'), '#callback-form-modal', [
-						'class' => 'link-icon',
-						'data-toggle' => 'modal',
-						'data-tooltip' => 'tooltip',
-						'data-trigger' => 'hover',
-						'data-placement' => 'top',
-						'title' => 'Заказать обратный звонок',
-	                    'data-target' => '#callback-form-modal',
-					]); ?>
+                        'class' => 'link-icon',
+                        'data-toggle' => 'modal',
+                        'data-tooltip' => 'tooltip',
+                        'data-trigger' => 'hover',
+                        'data-placement' => 'top',
+                        'title' => 'Заказать обратный звонок',
+                        'data-target' => '#callback-form-modal',
+                    ]); ?>
                 </span>
                 <span class="icon-link-outer">
                     <?php echo Html::a(Html::icon('envelope'), '#', [
                         'class' => 'link-icon',
-	                    'data-toggle' => 'modal',
+                        'data-toggle' => 'modal',
                         'data-tooltip' => 'tooltip',
-	                    'data-trigger' => 'hover',
+                        'data-trigger' => 'hover',
                         'data-placement' => 'top',
                         'title' => 'Задать вопрос',
-	                    'data-target' => '#question-form-modal',
+                        'data-target' => '#question-form-modal',
                     ]); ?>
                 </span>
             </p>
@@ -146,19 +149,20 @@ $actionId = Yii::$app->controller->action->id;
         </div>
         <div class="col-xs-12 col-sm-6 footer-right">
             <p class="pull-left">
-				<a href="/price-list"><?php echo Html::icon('download-alt'); ?>Прайс-лист <i>от  <?= date('d.m.Y') ?>г.</i></a>
+                <a href="/price-list"><?php echo Html::icon('download-alt'); ?>Прайс-лист <i>от <?= date('d.m.Y') ?>
+                        г.</i></a>
             </p>
             <p class="pull-right">
                 <span class="icon-link-outer">
 				    <?php echo Html::a('В', 'https://vk.com/uaz.store', [
-						'target' => '_blank',
+                        'target' => '_blank',
                         'rel' => 'nofollow',
-						'class' => 'link-icon social',
-						'data-tooltip' => 'tooltip',
-					    'data-trigger' => 'hover',
-						'data-placement' => 'top',
-						'title' => 'Перейти в группу ВКонтакте',
-					]); ?>
+                        'class' => 'link-icon social',
+                        'data-tooltip' => 'tooltip',
+                        'data-trigger' => 'hover',
+                        'data-placement' => 'top',
+                        'title' => 'Перейти в группу ВКонтакте',
+                    ]); ?>
                 </span>
             </p>
         </div>
@@ -168,15 +172,15 @@ $actionId = Yii::$app->controller->action->id;
 <?php echo QuestionWidget::widget(); ?>
 <?php echo FastOrderWidget::widget(); ?>
 <script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Organization",
-  "name" : "UAZ.STORE",
-  "url" : "https://uaz.store",
-  "sameAs" : [
-    "https://vk.com/uaz.store",
-  ]
-}
+    {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "UAZ.STORE",
+        "url": "https://uaz.store",
+        "sameAs": [
+            "https://vk.com/uaz.store"
+        ]
+    }
 </script>
 <?php $this->endBody() ?>
 </body>
