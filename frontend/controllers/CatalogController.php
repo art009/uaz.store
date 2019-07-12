@@ -136,4 +136,12 @@ class CatalogController extends Controller
             'product' => $product,
         ]);
     }
+
+    public function actionRelated(int $id = null)
+    {
+        $product = $this->findProduct($id);
+        return $this->render('related', [
+            'product' => $product,
+        ]);
+    }
 }

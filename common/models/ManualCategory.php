@@ -263,7 +263,8 @@ class ManualCategory extends \yii\db\ActiveRecord
 	 */
 	public function getImagePath($small = false)
 	{
-		if ($this->image && file_exists(AppHelper::uploadsFolder() . '/' . ($small ? self::FOLDER_MEDIUM : self::FOLDER) . '/' . $this->image)) {
+	    $filePath = AppHelper::uploadsFolder() . '/' . ($small ? self::FOLDER_MEDIUM : self::FOLDER) . '/' . $this->image;
+		if ($this->image && file_exists($filePath)) {
 			return AppHelper::uploadsPath() . '/' . ($small ? self::FOLDER_MEDIUM : self::FOLDER) . '/' . $this->image;
 		} else {
 			return null;

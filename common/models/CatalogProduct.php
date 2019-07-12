@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use backend\models\ManualProductSearch;
 use common\components\AppHelper;
+use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -45,6 +47,7 @@ use yii\behaviors\TimestampBehavior;
  * @property ManualProduct[] $manualProducts
  * @property ManualProduct[] $manuals
  * @property CatalogProduct[] $similarProducts
+ * @property CatalogProduct[] $relatedProducts
  *
  * @property integer $categoriesCount
  * @property integer $hasCategories
@@ -178,6 +181,27 @@ class CatalogProduct extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CatalogProduct::className(), ['id' => 'similar_product_id'])
             ->viaTable('catalog_product_similar', ['product_id' => 'id']);
+    }
+
+    public function getRelatedProducts()
+    {
+        $manualProductIds = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('manual_product_id')->all();
+        $manualProductIds = array_keys($manualProductIds);
+        $manualProducts = ManualProduct::find()->where(['in', 'id', $manualProductIds])->indexBy('manual_category_id')->all();
+        $ids = array_keys($manualProducts);
+        $result = [];
+        foreach ($ids as $id) {
+            $searchModel = new ManualProductSearch();
+            $searchModel->manual_category_id = $id;
+
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->setPagination(false);
+            foreach ($dataProvider->getModels() as $model) {
+                $result[] = $model;
+            }
+        }
+
+        return $result;
     }
 
     /**

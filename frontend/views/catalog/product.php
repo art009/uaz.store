@@ -100,7 +100,39 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
                     <?php echo ProductItem::widget(['product' => $similarProduct]); ?>
                 <?php endforeach; ?>
                 <?php if (sizeof($product->similarProducts) > 5): ?>
-                    <?php echo Html::a('Все аналогичные товары', ['/catalog/similar', 'id' => $product->id], ['class' => 'similar-product-btn site-btn']) ?>
+                    <?php echo Html::a('Все аналогичные товары', ['/catalog/similar', 'id' => $product->id],
+                        ['class' => 'similar-product-btn site-btn']) ?>
+                <?php endif; ?>
+            </div>
+        <?php endif ?>
+        <?php if (sizeof($product->relatedProducts) > 0): ?>
+            <h2>Сопутствующие товары</h2>
+            <div id="related-products" class="related-product-view grid-view">
+                <table class="table table-striped">
+                    <?php
+                    /**
+                     * @var $relatedProduct ManualProduct
+                     */
+                    ?>
+                    <tr>
+                        <th>Номер на чертеже</th>
+                        <th>Артикул завода</th>
+                        <th>Название</th>
+                    </tr>
+                    <?php foreach ($product->relatedProducts as $i => $relatedProduct): ?>
+                        <?php if ($i >= 5) {
+                            continue;
+                        } ?>
+                        <tr>
+                            <td><?= $relatedProduct->number ?></td>
+                            <td><?= $relatedProduct->code ?></td>
+                            <td><?= $relatedProduct->title ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+                <?php if (sizeof($product->relatedProducts) > 5): ?>
+                    <?php echo Html::a('Все сопутствующие товары', ['/catalog/related', 'id' => $product->id],
+                        ['class' => 'related-product-btn site-btn']) ?>
                 <?php endif; ?>
             </div>
         <?php endif ?>

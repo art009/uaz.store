@@ -56,7 +56,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 			</div>
 		</div>
 
-	    <?=GridView::widget([
+	    <?= GridView::widget([
 			'dataProvider' => $dataProvider,
 			'rowOptions' => function ($model, $key, $index, $grid) {
 
