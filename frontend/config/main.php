@@ -31,6 +31,7 @@ return [
                     'class' => 'notamedia\sentry\SentryTarget',
                     'dsn' => 'https://88a792f1db2f49e2815dbd2e0b79ff84@sentry.io/1503002',
                     'levels' => ['error', 'warning'],
+                    'context' => true,
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
