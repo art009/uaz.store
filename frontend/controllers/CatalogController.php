@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use common\components\PriceList;
 use common\models\CatalogCategory;
 use common\models\CatalogProduct;
+use common\models\ManualProduct;
+use common\models\ManualProductToCatalogProduct;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -142,6 +144,21 @@ class CatalogController extends Controller
         $product = $this->findProduct($id);
         return $this->render('related', [
             'product' => $product,
+        ]);
+    }
+
+    public function actionProductList(int $manual_product_id = null)
+    {
+        $manualProduct = ManualProduct::findOne($manual_product_id);
+        if ($manualProduct) {
+            $catalogManualProduct = ManualProductToCatalogProduct::find()->where(['manual_product_id' => $manual_product_id])->indexBy('catalog_product_id')->all();
+            $catalogProducts = CatalogProduct::find()->where(['in', 'id', array_keys($catalogManualProduct)])->all();
+        } else {
+            $catalogProducts = [];
+        }
+        return $this->render('product-list', [
+            'products' => $catalogProducts,
+            'manualProduct' => $manualProduct
         ]);
     }
 }

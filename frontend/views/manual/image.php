@@ -72,24 +72,30 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 					'template' => '{buy}',
                     'urlCreator' => function ($action, $model, $key, $index) {
                         if ($action == 'buy') {
-                            if ($model->product_id) {
-                                $catalogProduct = \common\models\CatalogProduct::findOne($model->product_id);
-                                if (!$catalogProduct) {
-                                    return false;
+                            if (sizeof($model->catalogProducts)>0) {
+                                if (sizeof($model->catalogProducts)>1) {
+                                    return \yii\helpers\Url::to(['catalog/product-list', 'manual_product_id' => $model->id]);
+                                } else {
+                                    $catalogProduct = $model->catalogProducts[0];
+                                    if (!$catalogProduct || !isset($catalogProduct->categories[0])) {
+                                        return false;
+                                    }
+                                    $category = $catalogProduct->categories[0];
+                                    if (!$category) {
+                                        return false;
+                                    }
+                                    return \yii\helpers\Url::to(['catalog/product', 'id' => $catalogProduct->id, 'categoryId' => $category->id]);
                                 }
-                                $category = $catalogProduct->categories[0];
-                                if (!$category) {
-                                    return false;
-                                }
-                                return \yii\helpers\Url::to(['catalog/product', 'id' => $model->product_id, 'categoryId' => $category->id]);
                             }
+
+                            return false;
                         }
                     },
 					'buttons' => [
-						'buy' => function ($url,$model) {
-	                        if ($model->product_id){
-                                $catalogProduct = \common\models\CatalogProduct::findOne($model->product_id);
-                                if (!$catalogProduct) {
+						'buy' => function ($url, $model) {
+	                        if (sizeof($model->catalogProducts)>0) {
+                                $catalogProduct = $model->catalogProducts[0];
+                                if (!$catalogProduct || !isset($catalogProduct->categories[0])) {
                                     return '';
                                 }
                                 $category = $catalogProduct->categories[0];
@@ -97,7 +103,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
                                     return '';
                                 }
 								return Html::a(
-									'<div class="site-btn open-catalog" data-id="' . $model->id . '">Купить</div>',
+									'<div class="site-btn open-catalog" data-id="' . $model->id . '">Узнать цену</div>',
 									$url, ['class' => 'open-catalog', 'target' => '_blank']);
 							}
 							return null;
