@@ -178,6 +178,7 @@ class ConfirmOrderForm extends Model
             'bik' => 'БИК Банка ЮЛ',
             'account_number' => 'Расчетный счет ЮЛ',
             'inn' => 'ИНН',
+            'kpp' => 'КПП',
         ];
     }
 

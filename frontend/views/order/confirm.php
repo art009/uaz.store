@@ -140,13 +140,13 @@ JS
                 ]);
             } ?>
 
-            <?php echo $form->field($model, 'kpp', [
+            <?php echo $form->field($confirmForm, 'kpp', [
                 'template' => '{input}{error}{hint}'
             ])->widget(MaskedInput::className(), [
                 'mask' => '999 999 999',
                 'options' => [
                     'class' => 'form-control tel_input',
-                    'placeholder' => $model->getAttributeLabel('kpp'),
+                    'placeholder' => $confirmForm->getAttributeLabel('kpp'),
                 ],
                 'clientOptions' => [
                     'clearIncomplete' => false
