@@ -239,7 +239,9 @@ class CatalogProduct extends \yii\db\ActiveRecord
 
 	public function getManuals()
     {
-        return $this->hasMany(ManualProduct::className(), ['product_id' => 'id']);
+        $manualProductIds = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('manual_product_id')->all();
+        $manualProductIds = array_keys($manualProductIds);
+        return ManualProduct::find()->where(['in', 'id', $manualProductIds])->all();
     }
 
     /**
