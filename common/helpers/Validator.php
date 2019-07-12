@@ -1,5 +1,7 @@
 <?php
 
+namespace common\helpers;
+
 use common\models\User;
 use yii\base\Model;
 

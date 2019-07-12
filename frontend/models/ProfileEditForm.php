@@ -2,10 +2,10 @@
 
 namespace frontend\models;
 
-
 use common\models\User;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
+use common\helpers\Validator;
 
 class ProfileEditForm extends Model
 {
@@ -217,12 +217,12 @@ class ProfileEditForm extends Model
 
     public function checkInn()
     {
-        return \Validator::checkInn($this);
+        return Validator::checkInn($this);
     }
 
     public function checkKpp()
     {
-        return \Validator::checkKpp($this);
+        return Validator::checkKpp($this);
     }
 
     /**
