@@ -183,25 +183,27 @@ class CatalogProduct extends \yii\db\ActiveRecord
             ->viaTable('catalog_product_similar', ['product_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getRelatedProducts()
     {
-        $manualProductIds = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('manual_product_id')->all();
-        $manualProductIds = array_keys($manualProductIds);
-        $manualProducts = ManualProduct::find()->where(['in', 'id', $manualProductIds])->indexBy('manual_category_id')->all();
-        $ids = array_keys($manualProducts);
-        $result = [];
-        foreach ($ids as $id) {
-            $searchModel = new ManualProductSearch();
-            $searchModel->manual_category_id = $id;
+        return $this->hasMany(CatalogProduct::className(), ['id' => 'similar_product_id'])
+            ->viaTable('catalog_product_related', ['product_id' => 'id']);
+    }
 
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->setPagination(false);
-            foreach ($dataProvider->getModels() as $model) {
-                $result[] = $model;
-            }
+    public function getInternalRelatedProducts()
+    {
+        $tmp = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('catalog_product_id')->all();
+        $catalogProductIds = array_keys($tmp);
+        $finalCatalogProductIds = [];
+        foreach ($catalogProductIds as $catalogProductId) {
+            $tmp = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('manual_product_id')->all();
+            $manualProductsIds = array_keys($tmp);
+            $finalCatalogProductIds = array_keys(ManualProductToCatalogProduct::find()->where(['in', 'manual_product_id', $manualProductsIds])->indexBy('catalog_product_id')->all());
         }
 
-        return $result;
+        return CatalogProduct::find()->where(['in', 'id', $finalCatalogProductIds]);
     }
 
     /**
@@ -231,6 +233,36 @@ class CatalogProduct extends \yii\db\ActiveRecord
                 $catalogProductSimilar->product_id = $productId;
                 $catalogProductSimilar->similar_product_id = $this->id;
                 $catalogProductSimilar->save();
+            } catch (\Exception $e) {
+                //do nothing cause it's because something goes wrong at console job. Ufff
+            }
+        }
+    }
+
+    public function setRelatedProducts(array $productIds, $delete = true)
+    {
+        if ($delete) {
+            CatalogProductRelated::deleteAll('id = :id', [':id' => $this->id]);
+            CatalogProductRelated::deleteAll('similar_product_id = :id', [':id' => $this->id]);
+        }
+        foreach ($productIds as $productId) {
+            if ($this->id == $productId) {
+                continue;
+            }
+            try {
+                $catalogProductRelated = new CatalogProductRelated();
+                $catalogProductRelated->product_id = $this->id;
+                $catalogProductRelated->related_product_id = $productId;
+                $catalogProductRelated->save();
+            }
+            catch (\Exception $e) {
+                //do nothing cause it's because something goes wrong at console job. Ufff
+            }
+            try {
+                $catalogProductRelated = new CatalogProductRelated();
+                $catalogProductRelated->product_id = $productId;
+                $catalogProductRelated->related_product_id = $this->id;
+                $catalogProductRelated->save();
             } catch (\Exception $e) {
                 //do nothing cause it's because something goes wrong at console job. Ufff
             }

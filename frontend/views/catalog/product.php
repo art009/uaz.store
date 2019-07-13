@@ -77,7 +77,7 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
                                         'links' => $breadcrumbs,
                                         'homeLink' => false
                                     ]); ?></td>
-                                <td>
+                                <td style="text-align: center">
                                     <?= Html::a('<div class="site-btn open-catalog">Перейти</div>', [
                                         'manual/image',
                                         'id' => $manualProduct->manualCategory->manual_id,
@@ -95,13 +95,14 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
         <?php if (sizeof($product->similarProducts) > 0): ?>
             <h2 style="margin-top: 0">Аналогичные товары</h2>
             <div id="similar-products" class="similar-product-view grid-view">
-                <?php foreach ($product->similarProducts as $i => $similarProduct): ?>
-                    <?php if ($i >= 5) {
+                <?php $similarProductsMaxItems = 5;
+                foreach ($product->similarProducts as $i => $similarProduct): ?>
+                    <?php if ($i >= $similarProductsMaxItems) {
                         continue;
                     } ?>
                     <?php echo ProductItem::widget(['product' => $similarProduct]); ?>
                 <?php endforeach; ?>
-                <?php if (sizeof($product->similarProducts) > 5): ?>
+                <?php if (sizeof($product->similarProducts) > $similarProductsMaxItems): ?>
                     <?php echo Html::a('Все аналогичные товары', ['/catalog/similar', 'id' => $product->id],
                         ['class' => 'similar-product-btn site-btn']) ?>
                 <?php endif; ?>
@@ -110,29 +111,14 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
         <?php if (sizeof($product->relatedProducts) > 0): ?>
             <h2>Сопутствующие товары</h2>
             <div id="related-products" class="related-product-view grid-view">
-                <table class="table table-striped">
-                    <?php
-                    /**
-                     * @var $relatedProduct ManualProduct
-                     */
-                    ?>
-                    <tr>
-                        <th>Номер на чертеже</th>
-                        <th>Артикул завода</th>
-                        <th>Название</th>
-                    </tr>
-                    <?php foreach ($product->relatedProducts as $i => $relatedProduct): ?>
-                        <?php if ($i >= 5) {
-                            continue;
-                        } ?>
-                        <tr>
-                            <td><?= $relatedProduct->number ?></td>
-                            <td><?= $relatedProduct->code ?></td>
-                            <td><?= $relatedProduct->title ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
-                <?php if (sizeof($product->relatedProducts) > 5): ?>
+                <?php $relatedProductsMaxItems = 20;
+                foreach ($product->relatedProducts as $i => $relatedProduct): ?>
+                    <?php if ($i >= $relatedProductsMaxItems) {
+                        continue;
+                    } ?>
+                    <?php echo ProductItem::widget(['product' => $relatedProduct]); ?>
+                <?php endforeach; ?>
+                <?php if (sizeof($product->relatedProducts) > $relatedProductsMaxItems): ?>
                     <?php echo Html::a('Все сопутствующие товары', ['/catalog/related', 'id' => $product->id],
                         ['class' => 'related-product-btn site-btn']) ?>
                 <?php endif; ?>

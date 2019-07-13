@@ -44,4 +44,31 @@ class ProductController extends Controller
             BaseConsole::output("Assigned items for {$catalogProductId}: ".implode(", ", $items));
         }
     }
+
+    public function actionFillRelatedProducts()
+    {
+        $catalogProducts = CatalogProduct::find();
+        $catalogProductsRelated = [];
+        foreach ($catalogProducts->each() as $catalogProduct) {
+            $products = $catalogProduct->getInternalRelatedProducts()->all();
+            foreach ($products as $product) {
+                if ($catalogProduct->id == $product->id) {
+                    continue;
+                }
+                if (!isset($catalogProductsRelated[$catalogProduct->id])) {
+                    $catalogProductsRelated[$catalogProduct->id] = [];
+                }
+                if ($catalogProduct->id != $product->id) {
+                    $catalogProductsRelated[$catalogProduct->id][] =  $product->id;
+                    $catalogProductsRelated[$product->id][] =  $catalogProduct->id;
+                }
+            }
+            BaseConsole::output("Built items for {$catalogProduct->id}");
+        }
+        foreach ($catalogProductsRelated as $catalogProductId => $items) {
+            $items = array_unique($items);
+            CatalogProduct::findOne($catalogProductId)->setRelatedProducts($items, false);
+            BaseConsole::output("Assigned related items for {$catalogProductId}: ".implode(", ", $items));
+        }
+    }
 }
