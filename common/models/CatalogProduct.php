@@ -314,6 +314,9 @@ class CatalogProduct extends \yii\db\ActiveRecord
                 CatalogProductRelated::deleteAll('product_id = :id and related_product_id = :related_product_id',
                     [':id' => $this->id, ':related_product_id' => $product->id]
                 );
+                CatalogProductRelated::deleteAll('product_id = :id and related_product_id = :related_product_id',
+                    [':id' => $product->id, ':related_product_id' => $this->id]
+                );
             }
             if ($this->id == $product->id) {
                 continue;

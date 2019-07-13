@@ -194,4 +194,43 @@ class ManualProduct extends \yii\db\ActiveRecord
             $addTo->addRelatedProducts($products);
         }
     }
+
+    public function removeRelated(CatalogProduct $catalogProduct)
+    {
+        $searchModel = new ManualProductSearch();
+        $searchModel->manual_category_id = $this->manual_category_id;
+        $dataProvider = $searchModel->search([]);
+        $dataProvider->pagination = false;
+        $manualProducts = $dataProvider->getModels();
+        /**
+         * @var ManualProduct $manualProduct
+         */
+        $productsToUpdate = [];
+        foreach ($manualProducts as $manualProduct) {
+            $currentCatalogProducts = $manualProduct->catalogProducts;
+            foreach ($currentCatalogProducts as $currentCatalogProduct) {
+                $tmp = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $currentCatalogProduct->id])->indexBy('manual_product_id')->all();
+                $manualProductsIds = array_keys($tmp);
+                foreach ($manualProductsIds as $manualProductsId) {
+                    $catalogProductsIds = array_keys(ManualProductToCatalogProduct::find()->where(['manual_product_id' => $manualProductsId])->indexBy('catalog_product_id')->all());
+                    foreach ($catalogProductsIds as $catalogProductsId) {
+                        if (!isset($productsToUpdate[$catalogProduct->id])) {
+                            $productsToUpdate[$catalogProductsId] = [$catalogProduct];
+                        }
+                        $productsToUpdate[$catalogProductsId][] = CatalogProduct::findOne($catalogProductsId);
+                    }
+                }
+            }
+        }
+        foreach ($productsToUpdate as $catalogProductsId => $products) {
+            foreach ($products as $catalogProduct) {
+                CatalogProductRelated::deleteAll('product_id = :id and related_product_id = :related_product_id',
+                    [':id' => $this->id, ':related_product_id' => $catalogProduct->id]
+                );
+                CatalogProductRelated::deleteAll('product_id = :id and related_product_id = :related_product_id',
+                    [':id' => $catalogProduct->id, ':related_product_id' => $this->id]
+                );
+            }
+        }
+    }
 }

@@ -263,7 +263,8 @@ class ManualProductController extends Controller
 		$catalogProduct = $this->findCatalogProductModel($catalogProductId);
 
 		$manualProduct->unlink('catalogProducts', $catalogProduct);
+		$manualProduct->removeRelated($catalogProduct);
 
-		return $this->actionCatalogProduct($manualProduct->id);
+        return $this->redirect(['catalog-product', 'id' => $id]);
 	}
 }
