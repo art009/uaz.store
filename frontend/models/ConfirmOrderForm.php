@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\helpers\Validator;
 use common\models\Order;
 use common\models\User;
 use yii\base\Model;
@@ -184,12 +185,12 @@ class ConfirmOrderForm extends Model
 
     public function checkInn()
     {
-        return \Validator::checkInn($this);
+        return Validator::checkInn($this);
     }
 
     public function checkKpp()
     {
-        return \Validator::checkKpp($this);
+        return Validator::checkKpp($this);
     }
 
     /**
@@ -315,5 +316,16 @@ class ConfirmOrderForm extends Model
                 $this->$attribute = str_replace([' ', '_'], '', $this->$attribute);
             }
         }
+    }
+
+    public function getAttributeLabel($attribute)
+    {
+        if ($this->user->isLegal()) {
+            if ($attribute == 'name') {
+                return 'Название организации';
+            }
+        }
+
+        return parent::getAttributeLabel($attribute);
     }
 }
