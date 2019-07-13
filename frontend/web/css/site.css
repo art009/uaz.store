@@ -218,12 +218,12 @@ footer > .container {
 
 footer .footer-left {
     padding-left: 0;
-    padding-right: 25px;
+    padding-right: 50px;
 }
 
 footer .footer-right {
     padding-right: 0;
-    padding-left: 25px;
+    padding-left: 0px;
 }
 
 footer a.link-icon.social {
@@ -419,13 +419,15 @@ footer .footer-right .pull-left a:hover {
     font-size: 14px;
 }
 
-.nav-contacts .nav-email {
+.footer-right .nav-email {
     font-size: 14px;
     color: #b3b3b3;
+    display: inline;
+    margin-left: 50px;
 }
 
-.nav-contacts .nav-email a {
-    color: #b3b3b3;
+.footer-right .nav-email a {
+    color: #fff;
 }
 
 .breadcrumb {

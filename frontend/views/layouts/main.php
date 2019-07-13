@@ -101,9 +101,6 @@ $actionId = Yii::$app->controller->action->id;
             <a href="tel:88002016095">8 800 201-60-95</a>
         </div>
         <small>Звонок по России бесплатный</small>
-        <div class="nav-email">
-            <a href="mailto:support@uaz.store">support@uaz.store</a>
-        </div>
     </div>
     <?php NavBar::end(); ?>
 
@@ -151,6 +148,9 @@ $actionId = Yii::$app->controller->action->id;
             <p class="pull-left">
                 <a href="/price-list"><?php echo Html::icon('download-alt'); ?>Прайс-лист <i>от <?= date('d.m.Y') ?>
                         г.</i></a>
+            </p>
+            <p class="nav-email">
+                <a href="mailto:support@uaz.store">support@uaz.store</a>
             </p>
             <p class="pull-right">
                 <span class="icon-link-outer">
