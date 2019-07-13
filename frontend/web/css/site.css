@@ -1865,3 +1865,16 @@ form#order-form .form-group b {
     text-align: center;
 	border: 1px solid black;
 }
+
+.manual-product-view .manual-product-row td {
+    text-align: left;
+    vertical-align: middle;
+}
+
+.manual-product-view tr:nth-child(odd) td .breadcrumb {
+    background-color: rgb(249, 249, 249);
+}
+
+.manual-product-view tr:nth-child(odd) td .breadcrumb > li a {
+    color: black;
+}
