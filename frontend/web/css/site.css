@@ -1850,7 +1850,7 @@ form#order-form .form-group b {
     }
 }
 
-.similar-product-view {
+.similar-product-view, .related-product-view {
     margin-left: -5px;
 }
 

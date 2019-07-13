@@ -50,6 +50,8 @@ class CatalogProductSimilar extends \yii\db\ActiveRecord
             'similar_product_id' => 'Аналогичный товар',
             'created_at' => 'Добавлен',
             'updated_at' => 'Отредактирован',
+            'similarProductTitle' => 'Аналогичный товар',
+            'productTitle' => 'Товар',
         ];
     }
 

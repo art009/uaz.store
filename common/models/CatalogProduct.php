@@ -188,7 +188,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
      */
     public function getRelatedProducts()
     {
-        return $this->hasMany(CatalogProduct::className(), ['id' => 'similar_product_id'])
+        return $this->hasMany(CatalogProduct::className(), ['id' => 'related_product_id'])
             ->viaTable('catalog_product_related', ['product_id' => 'id']);
     }
 
@@ -243,7 +243,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
     {
         if ($delete) {
             CatalogProductRelated::deleteAll('id = :id', [':id' => $this->id]);
-            CatalogProductRelated::deleteAll('similar_product_id = :id', [':id' => $this->id]);
+            CatalogProductRelated::deleteAll('related_product_id = :id', [':id' => $this->id]);
         }
         foreach ($productIds as $productId) {
             if ($this->id == $productId) {
