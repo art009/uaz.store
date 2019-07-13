@@ -5,7 +5,6 @@ use common\models\ManualCategory;
 use common\models\ManualProduct;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -26,9 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="manual-category-index">
     <h1>Добавление товаров к позиции: <?= Html::encode($this->title) ?></h1>
 	<h2>Добавленные товары</h2>
-	<?php Pjax::begin([
-		'enablePushState' => false,
-	]); ?>
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
 		'columns' => [
@@ -116,5 +112,4 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 		],
 	]); ?>
-	<?php Pjax::end(); ?>
 </div>

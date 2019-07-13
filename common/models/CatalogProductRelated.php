@@ -34,11 +34,7 @@ class CatalogProductRelated extends \yii\db\ActiveRecord
     {
         return [
             [['product_id', 'related_product_id'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
-            [['product_id', 'related_product_id'], 'unique', 'targetAttribute' => ['product_id', 'related_product_id']],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogProduct::className(), 'targetAttribute' => ['product_id' => 'id']],
-            [['related_product_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogProduct::className(), 'targetAttribute' => ['related_product_id' => 'id']],
-        ];
+            [['created_at', 'updated_at'], 'safe']];
     }
 
     /**

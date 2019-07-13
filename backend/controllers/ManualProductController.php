@@ -78,6 +78,7 @@ class ManualProductController extends Controller
         $model->manual_category_id = $category->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->saveRelated();
             return $this->redirect(['manual-category/view', 'id' => $model->manual_category_id]);
         }
 
@@ -243,8 +244,9 @@ class ManualProductController extends Controller
 		$catalogProduct = $this->findCatalogProductModel($catalogProductId);
 
 		$manualProduct->link('catalogProducts', $catalogProduct);
+        $manualProduct->saveRelated($catalogProduct);
 
-		return $this->actionCatalogProduct($manualProduct->id);
+		return $this->redirect(['catalog-product', 'id' => $id]);
 	}
 
 	/**

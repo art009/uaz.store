@@ -58,13 +58,13 @@ class CatalogProduct extends \yii\db\ActiveRecord
     const FOLDER_SMALL = self::FOLDER . '/s';
     const FOLDER_MEDIUM = self::FOLDER . '/m';
 
-	const SMALL_IMAGE_WIDTH = 88;
-	const SMALL_IMAGE_HEIGHT = 88;
+    const SMALL_IMAGE_WIDTH = 88;
+    const SMALL_IMAGE_HEIGHT = 88;
 
-	const MEDIUM_IMAGE_WIDTH = 285;
-	const MEDIUM_IMAGE_HEIGHT = 285;
+    const MEDIUM_IMAGE_WIDTH = 285;
+    const MEDIUM_IMAGE_HEIGHT = 285;
 
-	const MAX_HEIGHT = 720;
+    const MAX_HEIGHT = 720;
 
     const ON_MAIN_CACHE_TAG = 'catalog-product-on-main-tag';
 
@@ -82,14 +82,50 @@ class CatalogProduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'hide', 'on_main', 'cart_counter', 'length', 'width', 'height', 'weight', 'rest', 'oversize'], 'integer'],
+            [
+                [
+                    'category_id',
+                    'hide',
+                    'on_main',
+                    'cart_counter',
+                    'length',
+                    'width',
+                    'height',
+                    'weight',
+                    'rest',
+                    'oversize'
+                ],
+                'integer'
+            ],
             [['title', 'link'], 'required'],
             [['meta_keywords', 'meta_description', 'description'], 'string'],
             [['price', 'price_to', 'price_old'], 'number'],
             [['created_at', 'updated_at', 'external_id'], 'safe'],
-            [['title', 'link', 'image', 'shop_title', 'provider_title', 'shop_code', 'provider_code', 'manufacturer_code', 'provider', 'manufacturer', 'unit'], 'string', 'max' => 255],
+            [
+                [
+                    'title',
+                    'link',
+                    'image',
+                    'shop_title',
+                    'provider_title',
+                    'shop_code',
+                    'provider_code',
+                    'manufacturer_code',
+                    'provider',
+                    'manufacturer',
+                    'unit'
+                ],
+                'string',
+                'max' => 255
+            ],
             [['link'], 'unique'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogCategory::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [
+                ['category_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => CatalogCategory::className(),
+                'targetAttribute' => ['category_id' => 'id']
+            ],
         ];
     }
 
@@ -152,8 +188,8 @@ class CatalogProduct extends \yii\db\ActiveRecord
      */
     public function getCategories()
     {
-		return $this->hasMany(CatalogCategory::className(), ['id' => 'category_id'])
-			->viaTable('catalog_product_to_category', ['product_id' => 'id']);
+        return $this->hasMany(CatalogCategory::className(), ['id' => 'category_id'])
+            ->viaTable('catalog_product_to_category', ['product_id' => 'id']);
     }
 
     /**
@@ -162,17 +198,17 @@ class CatalogProduct extends \yii\db\ActiveRecord
     public function getImages()
     {
         return $this->hasMany(CatalogProductImage::className(), ['product_id' => 'id'])
-	        ->orderBy('main DESC');
+            ->orderBy('main DESC');
     }
 
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getManualProducts()
-	{
-		return $this->hasMany(ManualProduct::className(), ['id' => 'manual_product_id'])
-			->viaTable('manual_product_to_catalog_product', ['catalog_product_id' => 'id']);
-	}
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getManualProducts()
+    {
+        return $this->hasMany(ManualProduct::className(), ['id' => 'manual_product_id'])
+            ->viaTable('manual_product_to_catalog_product', ['catalog_product_id' => 'id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -200,7 +236,11 @@ class CatalogProduct extends \yii\db\ActiveRecord
         foreach ($catalogProductIds as $catalogProductId) {
             $tmp = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('manual_product_id')->all();
             $manualProductsIds = array_keys($tmp);
-            $finalCatalogProductIds = array_keys(ManualProductToCatalogProduct::find()->where(['in', 'manual_product_id', $manualProductsIds])->indexBy('catalog_product_id')->all());
+            $finalCatalogProductIds = array_keys(ManualProductToCatalogProduct::find()->where([
+                'in',
+                'manual_product_id',
+                $manualProductsIds
+            ])->indexBy('catalog_product_id')->all());
         }
 
         return CatalogProduct::find()->where(['in', 'id', $finalCatalogProductIds]);
@@ -212,7 +252,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
     public function setSimilarProducts(array $productIds, $delete = true)
     {
         if ($delete) {
-            CatalogProductSimilar::deleteAll('id = :id', [':id' => $this->id]);
+            CatalogProductSimilar::deleteAll('product_id = :id', [':id' => $this->id]);
             CatalogProductSimilar::deleteAll('similar_product_id = :id', [':id' => $this->id]);
         }
         foreach ($productIds as $productId) {
@@ -224,8 +264,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
                 $catalogProductSimilar->product_id = $this->id;
                 $catalogProductSimilar->similar_product_id = $productId;
                 $catalogProductSimilar->save();
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 //do nothing cause it's because something goes wrong at console job. Ufff
             }
             try {
@@ -242,7 +281,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
     public function setRelatedProducts(array $productIds, $delete = true)
     {
         if ($delete) {
-            CatalogProductRelated::deleteAll('id = :id', [':id' => $this->id]);
+            CatalogProductRelated::deleteAll('product_id = :id', [':id' => $this->id]);
             CatalogProductRelated::deleteAll('related_product_id = :id', [':id' => $this->id]);
         }
         foreach ($productIds as $productId) {
@@ -254,8 +293,7 @@ class CatalogProduct extends \yii\db\ActiveRecord
                 $catalogProductRelated->product_id = $this->id;
                 $catalogProductRelated->related_product_id = $productId;
                 $catalogProductRelated->save();
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 //do nothing cause it's because something goes wrong at console job. Ufff
             }
             try {
@@ -269,7 +307,37 @@ class CatalogProduct extends \yii\db\ActiveRecord
         }
     }
 
-	public function getManuals()
+    public function addRelatedProducts($products, $delete = true)
+    {
+        foreach ($products as $product) {
+            if ($delete) {
+                CatalogProductRelated::deleteAll('product_id = :id and related_product_id = :related_product_id',
+                    [':id' => $this->id, ':related_product_id' => $product->id]
+                );
+            }
+            if ($this->id == $product->id) {
+                continue;
+            }
+            try {
+                $catalogProductRelated = new CatalogProductRelated();
+                $catalogProductRelated->product_id = $this->id;
+                $catalogProductRelated->related_product_id = $product->id;
+                $catalogProductRelated->save();
+            } catch (\Exception $e) {
+                //do nothing cause it's because something goes wrong at console job. Ufff
+            }
+            try {
+                $catalogProductRelated = new CatalogProductRelated();
+                $catalogProductRelated->product_id = $product->id;
+                $catalogProductRelated->related_product_id = $this->id;
+                $catalogProductRelated->save();
+            } catch (\Exception $e) {
+                //do nothing cause it's because something goes wrong at console job. Ufff
+            }
+        }
+    }
+
+    public function getManuals()
     {
         $manualProductIds = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('manual_product_id')->all();
         $manualProductIds = array_keys($manualProductIds);
@@ -285,69 +353,69 @@ class CatalogProduct extends \yii\db\ActiveRecord
         return new CatalogProductQuery(get_called_class());
     }
 
-	/**
-	 * Возвращает код для сайта
-	 *
-	 * @return string
-	 */
+    /**
+     * Возвращает код для сайта
+     *
+     * @return string
+     */
     public function getCode()
     {
-	    return str_pad($this->id, 5, '0', STR_PAD_LEFT);
+        return str_pad($this->id, 5, '0', STR_PAD_LEFT);
     }
 
-	/**
-	 * Возвращает путь до картинки
-	 *
-	 * @param bool $small
-	 *
-	 * @return null|string
-	 */
+    /**
+     * Возвращает путь до картинки
+     *
+     * @param bool $small
+     *
+     * @return null|string
+     */
     public function getImagePath($small = true)
     {
-    	if ($this->image) {
-    		return AppHelper::getImagePath($this->image, $small ? self::FOLDER_MEDIUM : self::FOLDER);
-	    } else {
-    		return '/img/empty-s.png';
-	    }
+        if ($this->image) {
+            return AppHelper::getImagePath($this->image, $small ? self::FOLDER_MEDIUM : self::FOLDER);
+        } else {
+            return '/img/empty-s.png';
+        }
     }
 
-	/**
-	 * @return string
-	 */
-	public function getFullLink()
-	{
-		$result = '';
-		if ($this->categories) {
-			$result = '/catalog' . $this->categories[0]->getFullLink() . '/' . $this->link;
-		}
+    /**
+     * @return string
+     */
+    public function getFullLink()
+    {
+        $result = '';
+        if ($this->categories) {
+            $result = '/catalog' . $this->categories[0]->getFullLink() . '/' . $this->link;
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * @param int|null $categoryId
-	 * @return array
-	 */
-	public function createBreadcrumbs(int $categoryId = null): array
-	{
-		$result = [];
-		if ($this->categories) {
-			$result = $this->categories[0]->createBreadcrumbs(true);
-		}
-		$result[] = $this->title;
+    /**
+     * @param int|null $categoryId
+     * @return array
+     */
+    public function createBreadcrumbs(int $categoryId = null): array
+    {
+        $result = [];
+        if ($this->categories) {
+            $result = $this->categories[0]->createBreadcrumbs(true);
+        }
+        $result[] = $this->title;
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * Скрыт ли товар
-	 *
-	 * @return bool
-	 */
-	public function isHidden(): bool
-	{
-		return $this->hide;
-	}
+    /**
+     * Скрыт ли товар
+     *
+     * @return bool
+     */
+    public function isHidden(): bool
+    {
+        return $this->hide;
+    }
 
     public function getCategoriesCount()
     {

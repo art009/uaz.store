@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\models\ManualProductSearch;
 use yii\behaviors\TimestampBehavior;
 
 /**
@@ -45,8 +46,20 @@ class ManualProduct extends \yii\db\ActiveRecord
             [['manual_category_id', 'product_id', 'left', 'top', 'width', 'height', 'hide'], 'integer'],
             [['created_at', 'updated_at', 'positions'], 'safe'],
             [['number', 'code', 'title'], 'string', 'max' => 255],
-            [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => CatalogProduct::className(), 'targetAttribute' => ['product_id' => 'id']],
-            [['manual_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => ManualCategory::className(), 'targetAttribute' => ['manual_category_id' => 'id']],
+            [
+                ['product_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => CatalogProduct::className(),
+                'targetAttribute' => ['product_id' => 'id']
+            ],
+            [
+                ['manual_category_id'],
+                'exist',
+                'skipOnError' => true,
+                'targetClass' => ManualCategory::className(),
+                'targetAttribute' => ['manual_category_id' => 'id']
+            ],
         ];
     }
 
@@ -73,18 +86,18 @@ class ManualProduct extends \yii\db\ActiveRecord
         ];
     }
 
-	/**
-	 * @inheritdoc
-	 */
-	public function behaviors()
-	{
-		return [
-			[
-				'class' => TimestampBehavior::className(),
-				'value' => date('Y-m-d H:i:s'),
-			],
-		];
-	}
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'value' => date('Y-m-d H:i:s'),
+            ],
+        ];
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -102,50 +115,83 @@ class ManualProduct extends \yii\db\ActiveRecord
         return $this->hasOne(ManualCategory::className(), ['id' => 'manual_category_id']);
     }
 
-	/**
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function getCatalogProducts()
-	{
-		return $this->hasMany(CatalogProduct::className(), ['id' => 'catalog_product_id'])
-			->viaTable('manual_product_to_catalog_product', ['manual_product_id' => 'id']);
-	}
-
-	/**
-	 * @return array
-	 */
-    public function getPositionsArray()
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCatalogProducts()
     {
-    	$result = [];
-    	if ($this->positions) {
-    		$json = json_decode($this->positions, true);
-    		if (is_array($json)) {
-    			$result = $json;
-		    }
-	    }
-
-	    return $result;
+        return $this->hasMany(CatalogProduct::className(), ['id' => 'catalog_product_id'])
+            ->viaTable('manual_product_to_catalog_product', ['manual_product_id' => 'id']);
     }
 
-	/**
-	 * @param bool $insert
-	 *
-	 * @return bool
-	 *
-	 * @throws \Exception
-	 */
-	public function beforeSave($insert)
-	{
-		$result = true;
-		if (parent::beforeSave($insert)) {
-			if ($this->getIsNewRecord() && !$this->left) {
-				$this->left = 10;
-				$this->top = 10;
-				$this->width = 60;
-				$this->height = 20;
-			}
-		}
+    /**
+     * @return array
+     */
+    public function getPositionsArray()
+    {
+        $result = [];
+        if ($this->positions) {
+            $json = json_decode($this->positions, true);
+            if (is_array($json)) {
+                $result = $json;
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
+
+    /**
+     * @param bool $insert
+     *
+     * @return bool
+     *
+     * @throws \Exception
+     */
+    public function beforeSave($insert)
+    {
+        $result = true;
+        if (parent::beforeSave($insert)) {
+            if ($this->getIsNewRecord() && !$this->left) {
+                $this->left = 10;
+                $this->top = 10;
+                $this->width = 60;
+                $this->height = 20;
+            }
+        }
+
+        return $result;
+    }
+
+    public function saveRelated($catalogProduct)
+    {
+        $searchModel = new ManualProductSearch();
+        $searchModel->manual_category_id = $this->manual_category_id;
+        $dataProvider = $searchModel->search([]);
+        $dataProvider->pagination = false;
+        $manualProducts = $dataProvider->getModels();
+        /**
+         * @var ManualProduct $manualProduct
+         */
+        $productsToUpdate = [];
+        foreach ($manualProducts as $manualProduct) {
+            $currentCatalogProducts = $manualProduct->catalogProducts;
+            foreach ($currentCatalogProducts as $currentCatalogProduct) {
+                $tmp = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $currentCatalogProduct->id])->indexBy('manual_product_id')->all();
+                $manualProductsIds = array_keys($tmp);
+                foreach ($manualProductsIds as $manualProductsId) {
+                    $catalogProductsIds = array_keys(ManualProductToCatalogProduct::find()->where(['manual_product_id' => $manualProductsId])->indexBy('catalog_product_id')->all());
+                    foreach ($catalogProductsIds as $catalogProductsId) {
+                        if (!isset($productsToUpdate[$catalogProduct->id])) {
+                            $productsToUpdate[$catalogProductsId] = [$catalogProduct];
+                        }
+                        $productsToUpdate[$catalogProductsId][] = CatalogProduct::findOne($catalogProductsId);
+                    }
+                }
+            }
+        }
+        foreach ($productsToUpdate as $catalogProductsId => $products) {
+            $addTo = CatalogProduct::findOne($catalogProductsId);
+            $addTo->addRelatedProducts($products);
+        }
+    }
 }
