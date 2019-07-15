@@ -129,7 +129,9 @@ class CatalogProductRelatedController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $modelToDelete = $this->findModel($id);
+        CatalogProductRelated::deleteAll(['related_product_id' => $modelToDelete->related_product_id, 'product_id' => $modelToDelete->id]);
+        CatalogProductRelated::deleteAll(['related_product_id' => $modelToDelete->id, 'product_id' => $modelToDelete->related_product_id]);
 
         return $this->redirect(['index']);
     }
