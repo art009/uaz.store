@@ -230,17 +230,20 @@ class CatalogProduct extends \yii\db\ActiveRecord
 
     public function getInternalRelatedProducts()
     {
-        $tmp = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('catalog_product_id')->all();
-        $catalogProductIds = array_keys($tmp);
+        $tmp = ManualProductToCatalogProduct::find()
+            ->where(['catalog_product_id' => $this->id])
+            ->indexBy('manual_product_id')->all();
+        $manualProductIds = array_keys($tmp);
         $finalCatalogProductIds = [];
-        foreach ($catalogProductIds as $catalogProductId) {
-            $tmp = ManualProductToCatalogProduct::find()->where(['catalog_product_id' => $this->id])->indexBy('manual_product_id')->all();
-            $manualProductsIds = array_keys($tmp);
-            $finalCatalogProductIds = array_keys(ManualProductToCatalogProduct::find()->where([
-                'in',
-                'manual_product_id',
-                $manualProductsIds
-            ])->indexBy('catalog_product_id')->all());
+        foreach ($manualProductIds as $manualId) {
+            $tmp = ManualProductToCatalogProduct::find()
+                ->where(['manual_product_id' => $manualId])
+                ->andWhere(['!=', 'catalog_product_id', $this->id])
+                ->indexBy('catalog_product_id')->all();
+            $catalogProductIds = array_keys($tmp);
+            foreach ($catalogProductIds as $catalogProductId) {
+                $finalCatalogProductIds[] = $catalogProductId;
+            }
         }
 
         return CatalogProduct::find()->where(['in', 'id', $finalCatalogProductIds]);

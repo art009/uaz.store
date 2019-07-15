@@ -60,6 +60,9 @@ class ProductController extends Controller
                 if (!isset($catalogProductsRelated[$catalogProduct->id])) {
                     $catalogProductsRelated[$catalogProduct->id] = [];
                 }
+                if (!isset($catalogProductsRelated[$product->id])) {
+                    $catalogProductsRelated[$product->id] = [];
+                }
                 if ($catalogProduct->id != $product->id) {
                     $catalogProductsRelated[$catalogProduct->id][] =  $product->id;
                     $catalogProductsRelated[$product->id][] =  $catalogProduct->id;
