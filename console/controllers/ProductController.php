@@ -15,6 +15,7 @@ class ProductController extends Controller
 {
     public function actionFillSimilarProducts()
     {
+        Yii::$app->db->createCommand()->truncateTable('catalog_product_similar')->execute();
         $catalogProducts = CatalogProduct::find();
         $catalogProductsSimilar = [];
         foreach ($catalogProducts->each() as $catalogProduct) {
