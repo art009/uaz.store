@@ -25,25 +25,30 @@ class ProductController extends Controller
                 $manualProductIds[] = $manualProductToCatalogProduct->manual_product_id;
             }
             $manualProducts = ManualProduct::find()->where(['in', 'id', $manualProductIds])->all();
-            $products = [];
+            $productsList = [];
             foreach ($manualProducts as $manualProduct) {
-                $products = $manualProduct->catalogProducts;
+                $productsList[] = $manualProduct->catalogProducts;
             }
-            foreach ($products as $product) {
-                if (!isset($catalogProductsSimilar[$catalogProduct->id])) {
-                    $catalogProductsSimilar[$catalogProduct->id] = [];
-                }
-                if ($catalogProduct->id != $product->id) {
-                    $catalogProductsSimilar[$catalogProduct->id][] =  $product->id;
-                    $catalogProductsSimilar[$product->id][] =  $catalogProduct->id;
-                    BaseConsole::output("Build items for {$catalogProduct->id}");
+            foreach ($productsList as $products) {
+                foreach ($products as $product) {
+                    if ($catalogProduct->id != $product->id) {
+                        if (!isset($catalogProductsSimilar[$catalogProduct->id])) {
+                            $catalogProductsSimilar[$catalogProduct->id] = [];
+                        }
+                        if (!isset($catalogProductsSimilar[$product->id])) {
+                            $catalogProductsSimilar[$product->id] = [];
+                        }
+                        $catalogProductsSimilar[$catalogProduct->id][] = $product->id;
+                        $catalogProductsSimilar[$product->id][] = $catalogProduct->id;
+                    }
                 }
             }
+            BaseConsole::output("Build items for {$catalogProduct->id}");
         }
         foreach ($catalogProductsSimilar as $catalogProductId => $items) {
             $items = array_unique($items);
             CatalogProduct::findOne($catalogProductId)->setSimilarProducts($items, false);
-            BaseConsole::output("Assigned items for {$catalogProductId}: ".implode(", ", $items));
+            BaseConsole::output("Assigned items for {$catalogProductId}: " . implode(", ", $items));
         }
     }
 
@@ -65,8 +70,8 @@ class ProductController extends Controller
                     $catalogProductsRelated[$product->id] = [];
                 }
                 if ($catalogProduct->id != $product->id) {
-                    $catalogProductsRelated[$catalogProduct->id][] =  $product->id;
-                    $catalogProductsRelated[$product->id][] =  $catalogProduct->id;
+                    $catalogProductsRelated[$catalogProduct->id][] = $product->id;
+                    $catalogProductsRelated[$product->id][] = $catalogProduct->id;
                 }
             }
             BaseConsole::output("Built items for {$catalogProduct->id}");
@@ -74,7 +79,7 @@ class ProductController extends Controller
         foreach ($catalogProductsRelated as $catalogProductId => $items) {
             $items = array_unique($items);
             CatalogProduct::findOne($catalogProductId)->setRelatedProducts($items, false);
-            BaseConsole::output("Assigned related items for {$catalogProductId}: ".implode(", ", $items));
+            BaseConsole::output("Assigned related items for {$catalogProductId}: " . implode(", ", $items));
         }
     }
 }
