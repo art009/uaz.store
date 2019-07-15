@@ -230,23 +230,42 @@ class CatalogProduct extends \yii\db\ActiveRecord
 
     public function getInternalRelatedProducts()
     {
+        $similarProducts = $this->similarProducts;
         $tmp = ManualProductToCatalogProduct::find()
             ->where(['catalog_product_id' => $this->id])
             ->indexBy('manual_product_id')->all();
         $manualProductIds = array_keys($tmp);
-        $finalCatalogProductIds = [];
-        foreach ($manualProductIds as $manualId) {
-            $tmp = ManualProductToCatalogProduct::find()
-                ->where(['manual_product_id' => $manualId])
-                ->andWhere(['!=', 'catalog_product_id', $this->id])
-                ->indexBy('catalog_product_id')->all();
-            $catalogProductIds = array_keys($tmp);
-            foreach ($catalogProductIds as $catalogProductId) {
-                $finalCatalogProductIds[] = $catalogProductId;
+        $finalCatalogProducts = [];
+        $tmp = ManualProduct::find()
+            ->where(['in', 'id', $manualProductIds])
+            ->indexBy('manual_category_id')
+            ->all();
+        $manualCategoryIds = array_keys($tmp);
+        foreach ($manualCategoryIds as $manualCategoryId) {
+            $manualCategory = ManualCategory::findOne($manualCategoryId);
+            if ($manualCategory) {
+                /**
+                 * @var $manualProducts ManualProduct[]
+                 */
+                $manualProducts = $manualCategory->manualProducts;
+                foreach ($manualProducts as $manualProduct) {
+                    $catalogProducts = $manualProduct->catalogProducts;
+                    foreach ($catalogProducts as $catalogProduct) {
+                        if ($catalogProduct->id == $this->id) {
+                            continue;
+                        }
+                        foreach ($similarProducts as $similarProduct) {
+                            if ($this->id == $similarProduct->id) {
+                                continue;
+                            }
+                        }
+                        $finalCatalogProducts[$catalogProduct->id] = $catalogProduct;
+                    }
+                }
             }
         }
 
-        return CatalogProduct::find()->where(['in', 'id', $finalCatalogProductIds]);
+        return $finalCatalogProducts;
     }
 
     /**

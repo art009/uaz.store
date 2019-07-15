@@ -52,7 +52,7 @@ class ProductController extends Controller
         $catalogProducts = CatalogProduct::find();
         $catalogProductsRelated = [];
         foreach ($catalogProducts->each() as $catalogProduct) {
-            $products = $catalogProduct->getInternalRelatedProducts()->all();
+            $products = $catalogProduct->getInternalRelatedProducts();
             foreach ($products as $product) {
                 if ($catalogProduct->id == $product->id) {
                     continue;
