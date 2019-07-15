@@ -12,8 +12,8 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
 ?>
 <div class="category-product">
     <h1><?php echo $this->title; ?></h1>
-    <?php if (sizeof($product->relatedProducts) > 0): ?>
-        <h2 style="margin-top: 0">Сопутствующие товары</h2>
+    <?php if (sizeof($product->similarProducts) > 0): ?>
+        <h2 style="margin-top: 0">Аналогичные товары</h2>
         <div id="similar-products" class="manual-product-view grid-view">
             <?php foreach ($product->similarProducts as $similarProduct): ?>
                 <?php echo ProductItem::widget(['product' => $similarProduct]); ?>
