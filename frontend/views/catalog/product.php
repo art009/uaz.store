@@ -95,11 +95,12 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
         <?php if (sizeof($product->similarProducts) > 0): ?>
             <h2 style="margin-top: 0">Аналогичные товары</h2>
             <div id="similar-products" class="similar-product-view grid-view">
-                <?php $similarProductsMaxItems = 5;
+                <?php $similarProductsMaxItems = 5; $shown = [];
                 foreach ($product->similarProducts as $i => $similarProduct): ?>
                     <?php if ($i >= $similarProductsMaxItems) {
                         continue;
                     } ?>
+                    <?php $shown[] = $similarProduct->id; ?>
                     <?php echo ProductItem::widget(['product' => $similarProduct]); ?>
                 <?php endforeach; ?>
                 <?php if (sizeof($product->similarProducts) > $similarProductsMaxItems): ?>
@@ -111,12 +112,16 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
         <?php if (sizeof($product->relatedProducts) > 0): ?>
             <h2>Сопутствующие товары</h2>
             <div id="related-products" class="related-product-view grid-view">
-                <?php $relatedProductsMaxItems = 20;
+                <?php $relatedProductsMaxItems = 20; $counter = 0;
                 foreach ($product->relatedProducts as $i => $relatedProduct): ?>
-                    <?php if ($i >= $relatedProductsMaxItems) {
+                    <?php if ($counter >= $relatedProductsMaxItems) {
+                        continue;
+                    } ?>
+                    <?php if (in_array($relatedProduct->id, $shown)) {
                         continue;
                     } ?>
                     <?php echo ProductItem::widget(['product' => $relatedProduct]); ?>
+                    <?php $counter++ ?>
                 <?php endforeach; ?>
                 <?php if (sizeof($product->relatedProducts) > $relatedProductsMaxItems): ?>
                     <?php echo Html::a('Все сопутствующие товары', ['/catalog/related', 'id' => $product->id],
