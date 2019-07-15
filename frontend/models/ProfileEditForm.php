@@ -232,6 +232,7 @@ class ProfileEditForm extends Model
     {
         return [
             'name' => 'ФИО *',
+            'companyName' => 'Название компании *',
             'email' => 'E-mail *',
             'phone' => 'Телефон *',
             'postcode' => 'Почтовый индекс *',

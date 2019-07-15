@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php echo $form->field($model, 'name', [
         'template' => '{input}{error}{hint}'
-    ])->textInput(['placeholder' => $model->getAttributeLabel('name')]); ?>
+    ])->textInput(['placeholder' =>  $model->isLegal ? $model->getAttributeLabel('companyName') : $model->getAttributeLabel('name')]); ?>
 
     <?php echo $form->field($model, 'email', [
         'template' => '{input}{error}{hint}'
