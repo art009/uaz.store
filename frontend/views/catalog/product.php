@@ -11,6 +11,7 @@ use frontend\widgets\ProductItem;
 
 $this->title = $product->title;
 $this->params['breadcrumbs'] = $product->createBreadcrumbs();
+$shown = [];
 
 ?>
 <div class="category-product" style="margin-left: 10px; margin-right: 10px">
@@ -95,7 +96,7 @@ $this->params['breadcrumbs'] = $product->createBreadcrumbs();
         <?php if (sizeof($product->similarProducts) > 0): ?>
             <h2 style="margin-top: 0">Аналогичные товары</h2>
             <div id="similar-products" class="similar-product-view grid-view">
-                <?php $similarProductsMaxItems = 5; $shown = [];
+                <?php $similarProductsMaxItems = 5;
                 foreach ($product->similarProducts as $i => $similarProduct): ?>
                     <?php if ($i >= $similarProductsMaxItems) {
                         continue;
