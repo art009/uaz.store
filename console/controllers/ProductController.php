@@ -7,6 +7,7 @@ use common\models\CatalogProduct;
 use common\models\Manual;
 use common\models\ManualProduct;
 use common\models\ManualProductToCatalogProduct;
+use Yii;
 use yii\console\Controller;
 use yii\helpers\BaseConsole;
 
@@ -47,6 +48,7 @@ class ProductController extends Controller
 
     public function actionFillRelatedProducts()
     {
+        Yii::$app->db->createCommand()->truncateTable('catalog_product_related')->execute();
         $catalogProducts = CatalogProduct::find();
         $catalogProductsRelated = [];
         foreach ($catalogProducts->each() as $catalogProduct) {
