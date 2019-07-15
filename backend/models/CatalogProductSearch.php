@@ -12,10 +12,10 @@ use yii\data\ActiveDataProvider;
  */
 class CatalogProductSearch extends CatalogProduct
 {
-	/** @var array  */
-	public $excludedIds = [];
+    /** @var array  */
+    public $excludedIds = [];
 
-	public $hasCategories;
+    public $hasCategories;
 
     /**
      * @inheritdoc
@@ -25,8 +25,8 @@ class CatalogProductSearch extends CatalogProduct
         return [
             [['id', 'category_id', 'hide', 'on_main', 'length', 'width', 'height', 'weight', 'rest'], 'integer'],
             [['title', 'link', 'image', 'meta_keywords', 'meta_description', 'shop_title', 'provider_title',
-	            'shop_code', 'provider_code', 'description', 'provider', 'manufacturer', 'unit', 'external_id',
-	            'excludedIds', 'hasCategories'
+                'shop_code', 'provider_code', 'description', 'provider', 'manufacturer', 'unit', 'external_id',
+                'excludedIds', 'hasCategories'
             ], 'safe'],
             [['price_to', 'price_old'], 'number'],
             [['price', 'cart_counter'], 'match', 'pattern' => '/^(>|<|>=|<=|=|)(\s*[+-]?\d+\s*)$/'],
@@ -53,16 +53,15 @@ class CatalogProductSearch extends CatalogProduct
     public function search($params, int $pageSize = 20)
     {
         $query = CatalogProduct::find()
-            ->select([self::tableName().'.*', "COUNT(catalog_category.id) as categoryCount"])
-			->joinWith(['categories'], false);
+            ->joinWith(['categories'], false);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-	        'pagination' => [
-	        	'pageSize' => $pageSize,
-	        ],
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ],
         ]);
 
         $this->load($params);
@@ -74,15 +73,16 @@ class CatalogProductSearch extends CatalogProduct
         }
 
         // grid filtering conditions
-		$query->andFilterWhere(['=', $this::tableName() . '.id', $this->id]);
-		$query->andFilterWhere(['=', $this::tableName() . '.hide', $this->hide]);
-		$query->andFilterWhere(['=', $this::tableName() . '.on_main', $this->on_main]);
+        $query->andFilterWhere(['=', $this::tableName() . '.id', $this->id]);
+        $query->andFilterWhere(['=', $this::tableName() . '.hide', $this->hide]);
+        $query->andFilterWhere(['=', $this::tableName() . '.on_main', $this->on_main]);
 
         if ($this->category_id) {
             $query->andFilterWhere(['catalog_product_to_category.category_id' => $this->category_id]);
         }
 
-        if ($this->hasCategories !== "") {
+        if ($this->hasCategories != "") {
+            $query->select([self::tableName().'.*', "COUNT(catalog_category.id) as categoryCount"]);
             if ($this->hasCategories == AppHelper::NO) {
                 $query->having(['=', 'categoryCount', 0]);
             } else {
@@ -102,7 +102,7 @@ class CatalogProductSearch extends CatalogProduct
         }
 
         if ($this->excludedIds) {
-	        $query->andFilterWhere(['not in', $this::tableName() . '.id', $this->excludedIds]);
+            $query->andFilterWhere(['not in', $this::tableName() . '.id', $this->excludedIds]);
         }
 
         $query->andFilterWhere(['like', $this::tableName() . '.title', $this->title])
