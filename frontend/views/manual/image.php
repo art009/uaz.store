@@ -110,6 +110,7 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 	                            if ($result === false) {
 	                                return '';
                                 }
+	                            $catalogProduct = $model->catalogProducts[$result];
                                 $category = $catalogProduct->categories[0];
                                 if (!$category) {
                                     return '';
