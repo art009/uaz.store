@@ -264,6 +264,7 @@ class ManualProductController extends Controller
 
 		$manualProduct->unlink('catalogProducts', $catalogProduct);
 		$manualProduct->removeRelated($catalogProduct);
+		$manualProduct->removeSimilar($catalogProduct);
 
         return $this->redirect(['catalog-product', 'id' => $id]);
 	}
