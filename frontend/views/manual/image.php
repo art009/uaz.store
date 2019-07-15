@@ -76,10 +76,17 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
                                 if (sizeof($model->catalogProducts)>1) {
                                     return \yii\helpers\Url::to(['catalog/product-list', 'manual_product_id' => $model->id]);
                                 } else {
-                                    $catalogProduct = $model->catalogProducts[0];
-                                    if (!$catalogProduct || !isset($catalogProduct->categories[0])) {
+                                    $result = false;
+                                    $resultCatalogProduct = false;
+                                    foreach ($model->catalogProducts as $i => $catalogProduct) {
+                                        if (sizeof($catalogProduct->categories)>0) {
+                                            $result = $i;
+                                        }
+                                    }
+                                    if ($result === false) {
                                         return false;
                                     }
+                                    $catalogProduct = $model->catalogProducts[$result];
                                     $category = $catalogProduct->categories[0];
                                     if (!$category) {
                                         return false;
@@ -94,9 +101,14 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
 					'buttons' => [
 						'buy' => function ($url, $model) {
 	                        if (sizeof($model->catalogProducts)>0) {
-                                $catalogProduct = $model->catalogProducts[0];
-                                if (!$catalogProduct || !isset($catalogProduct->categories[0])) {
-                                    return '';
+	                            $result = false;
+	                            foreach ($model->catalogProducts as $i => $catalogProduct) {
+	                                if (sizeof($catalogProduct->categories)>0) {
+	                                    $result = $i;
+                                    }
+                                }
+	                            if ($result === false) {
+	                                return '';
                                 }
                                 $category = $catalogProduct->categories[0];
                                 if (!$category) {
