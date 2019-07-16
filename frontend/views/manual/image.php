@@ -100,6 +100,11 @@ $this->params['breadcrumbs'] = $category->createBreadcrumbs();
                     },
 					'buttons' => [
 						'buy' => function ($url, $model) {
+	                        if (sizeof($model->catalogProducts)>1) {
+                                return Html::a(
+                                    '<div class="site-btn open-catalog" data-id="' . $model->id . '">Узнать цену</div>',
+                                    $url, ['class' => 'open-catalog', 'target' => '_blank']);
+                            }
 	                        if (sizeof($model->catalogProducts)>0) {
 	                            $result = false;
 	                            foreach ($model->catalogProducts as $i => $catalogProduct) {
