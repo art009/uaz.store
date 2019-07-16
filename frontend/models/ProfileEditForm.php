@@ -96,6 +96,11 @@ class ProfileEditForm extends Model
         parent::__construct($config);
     }
 
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
     /**
      * @inheritdoc
      */
