@@ -6,6 +6,7 @@ use backend\models\ManualProductSearch;
 use common\components\AppHelper;
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "catalog_product".
@@ -67,6 +68,8 @@ class CatalogProduct extends \yii\db\ActiveRecord
     const MAX_HEIGHT = 720;
 
     const ON_MAIN_CACHE_TAG = 'catalog-product-on-main-tag';
+
+    private $manualCategories = [];
 
     /**
      * @inheritdoc
@@ -455,5 +458,51 @@ class CatalogProduct extends \yii\db\ActiveRecord
     public function getHasCategoriesLabel()
     {
         return AppHelper::$yesNoList[(int)$this->hasCategories];
+    }
+
+    public function updateCategories()
+    {
+        $categoriesIds = [];
+        $manualProducts = $this->manualProducts;
+        /**
+         * @var ManualProduct[] $manualProducts
+         */
+        foreach ($manualProducts as $manualProduct) {
+            $manualCategory = $manualProduct->manualCategory;
+            $this->manualCategories[] = $manualCategory;
+            $this->collectParents($manualCategory);
+            $categoriesIds = ArrayHelper::merge($categoriesIds, $this->collectCategories($this->manualCategories));
+        }
+        $currentCategories = $this->categories;
+        foreach ($currentCategories as $category) {
+            $categoriesIds[] = $category->id;
+        }
+        $uniqueCategories = array_unique($categoriesIds);
+        CatalogProductToCategory::deleteAll(['product_id' => $this->id]);
+        foreach ($uniqueCategories as $uniqueCategory) {
+            $cptc = new CatalogProductToCategory();
+            $cptc->product_id = $this->id;
+            $cptc->category_id = $uniqueCategory;
+            $cptc->save();
+        }
+    }
+
+    private function collectParents($manualCategory)
+    {
+        if ($manualCategory->parent) {
+            $this->manualCategories[] = $manualCategory->parent;
+            $this->collectParents($manualCategory->parent);
+        }
+    }
+
+    private function collectCategories($manualCategories)
+    {
+        $categoriesIds = [];
+        foreach ($manualCategories as $manualCategory) {
+            if ($manualCategory && $manualCategory->catalog_category_id) {
+                $categoriesIds[] = $manualCategory->catalog_category_id;
+            }
+        }
+        return $categoriesIds;
     }
 }

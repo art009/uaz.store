@@ -245,6 +245,7 @@ class ManualProductController extends Controller
 
 		$manualProduct->link('catalogProducts', $catalogProduct);
         $manualProduct->saveRelated($catalogProduct);
+        $catalogProduct->updateCategories();
 
 		return $this->redirect(['catalog-product', 'id' => $id]);
 	}
@@ -265,6 +266,7 @@ class ManualProductController extends Controller
 		$manualProduct->unlink('catalogProducts', $catalogProduct);
 		$manualProduct->removeRelated($catalogProduct);
 		$manualProduct->removeSimilar($catalogProduct);
+        $catalogProduct->updateCategories();
 
         return $this->redirect(['catalog-product', 'id' => $id]);
 	}
