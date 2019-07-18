@@ -11,6 +11,7 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property string $id
  * @property integer $user_id
+ * @property integer $original_user_id
  * @property integer $status
  * @property float $sum
  * @property string $delivery_sum
@@ -25,7 +26,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_at
  * @property string $updated_at
  *
- * @property User $user
+ * @property UserOrder $user
  * @property OrderProduct[] $orderProducts
  */
 class Order extends \yii\db\ActiveRecord
@@ -131,7 +132,7 @@ class Order extends \yii\db\ActiveRecord
             [['user_id', 'status', 'delivery_type', 'payment_type'], 'integer'],
             [['sum', 'delivery_sum'], 'number'],
             [['payment_id', 'changed_at', 'created_at', 'updated_at'], 'safe'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserOrder::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -164,7 +165,15 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(UserOrder::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOriginalUser()
+    {
+        return $this->hasOne(UserOrder::className(), ['id' => 'original_user_id']);
     }
 
     /**
@@ -302,7 +311,7 @@ class Order extends \yii\db\ActiveRecord
 
 		if ($order === null && $force == true) {
 			$order = new self();
-			$order->user_id = $userId;
+			$order->original_user_id = $userId;
 			$order->status = self::STATUS_CART;
 			$order = $order->save() ? $order : null;
 		}

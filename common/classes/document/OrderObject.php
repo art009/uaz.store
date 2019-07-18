@@ -4,6 +4,7 @@ namespace common\classes\document;
 
 use common\models\Order;
 use common\models\User;
+use common\models\UserOrder;
 
 /**
  * Class OrderObject
@@ -38,9 +39,9 @@ class OrderObject
 	}
 
 	/**
-	 * @return User
+	 * @return UserOrder
 	 */
-	protected function getUser(): User
+	protected function getUser()
 	{
 		return $this->getOrder()->user;
 	}

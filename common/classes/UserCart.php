@@ -59,7 +59,12 @@ class UserCart extends AbstractCart
 	 */
 	public function clear()
 	{
-		return $this->getOrder() ? $this->getOrder()->getWorkflow()->toStatus(Order::STATUS_CART_CLEAR) : false;
+	    $currentOrder = $this->getOrder();
+	    if ($currentOrder->status > Order::STATUS_CART_CLEAR) {
+	        $newOrder = $this->getOrder(true);
+            return $newOrder->getWorkflow()->toStatus(Order::STATUS_CART_CLEAR);
+        }
+	    return false;
 	}
 
 	/**

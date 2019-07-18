@@ -30,7 +30,7 @@ class OrderQuery extends \yii\db\ActiveQuery
 	 */
     public function byUserId($userId)
     {
-        return $this->andWhere(['user_id' => $userId]);
+        return $this->andWhere(['original_user_id' => $userId]);
     }
 
     /**

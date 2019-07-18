@@ -5,6 +5,7 @@ namespace frontend\models;
 use common\helpers\Validator;
 use common\models\Order;
 use common\models\User;
+use common\models\UserOrder;
 use yii\base\Model;
 
 /**
@@ -111,6 +112,7 @@ class ConfirmOrderForm extends Model
         $this->account_number = $user->account_number;
         $this->correspondent_account = $user->correspondent_account;
         $this->inn = $user->inn;
+        $this->kpp = $user->kpp;
         $this->isLegal = $user->isLegal();
     }
 
@@ -227,21 +229,11 @@ class ConfirmOrderForm extends Model
     /**
      * @return bool
      */
-    protected function checkUser(): bool
-    {
-        $user = $this->getUser();
-
-        return $this->name == $user->name && $this->getPhoneNumber() == $user->phone && $this->email == $user->email;
-    }
-
-    /**
-     * @return bool
-     */
     protected function updateUser(): bool
     {
         $user = $this->getUser();
 
-        return (bool)$user->updateAttributes([
+        $result = (bool)$user->updateAttributes([
             'name' => $this->name,
             'phone' => $this->getPhoneNumber(),
             'email' => $this->email,
@@ -254,6 +246,11 @@ class ConfirmOrderForm extends Model
             'representive_name' => $this->representive_name,
             'representive_position' => $this->representive_position,
         ]);
+
+        $userOrder = new UserOrder();
+        $userOrder->copyFromUser($user);
+        $userOrder->save();
+        return $this->order->updateAttributes(['user_id' => $userOrder->id]);
     }
 
     /**
