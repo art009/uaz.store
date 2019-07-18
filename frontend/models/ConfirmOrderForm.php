@@ -245,13 +245,14 @@ class ConfirmOrderForm extends Model
             'name' => $this->name,
             'phone' => $this->getPhoneNumber(),
             'email' => $this->email,
-            'representive_name' => $this->representive_name,
-            'representive_position' => $this->representive_position,
-            'account_number' => $this->account_number,
+            'inn' => $this->inn,
+            'kpp' => $this->kpp,
             'bank_name' => $this->bank_name,
             'bik' => $this->bik,
-            'inn' => $this->inn,
-            'kpp' => $this->kpp
+            'account_number' => $this->account_number,
+            'correspondent_account' => $this->correspondent_account,
+            'representive_name' => $this->representive_name,
+            'representive_position' => $this->representive_position,
         ]);
     }
 
@@ -287,7 +288,7 @@ class ConfirmOrderForm extends Model
             return false;
         }
 
-        return ($this->checkUser() || $this->updateUser()) && ($this->checkOrder() || $this->updateOrder());
+        return ($this->updateUser()) && ($this->checkOrder() || $this->updateOrder());
     }
 
     /**
