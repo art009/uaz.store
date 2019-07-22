@@ -82,4 +82,15 @@ class ProductController extends Controller
             BaseConsole::output("Assigned related items for {$catalogProductId}: " . implode(", ", $items));
         }
     }
+
+    public function actionFillCategories()
+    {
+        $catalogProducts = CatalogProduct::find();
+        $i = 0;
+        foreach ($catalogProducts->each() as $catalogProduct) {
+            $i++;
+            $catalogProduct->updateCategories();
+            echo $i." processed\n";
+        }
+    }
 }
