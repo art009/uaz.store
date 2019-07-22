@@ -318,6 +318,7 @@ class ProfileEditForm extends Model
             $user->legal = $this->legal;
             $user->representive_name = $this->representive_name;
             $user->representive_position = $this->representive_position;
+            $user->correspondent_account = $this->correspondent_account;
             $user->account_number = $this->account_number;
             $user->bank_name = $this->bank_name;
             $user->bik = $this->bik;
