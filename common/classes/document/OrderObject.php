@@ -5,6 +5,7 @@ namespace common\classes\document;
 use common\models\Order;
 use common\models\User;
 use common\models\UserOrder;
+use yii\db\Exception;
 
 /**
  * Class OrderObject
@@ -69,7 +70,11 @@ class OrderObject
 	{
 		$user = $this->getUser();
 
-		return $user->isLegal();
+		if ($user) {
+            return $user->isLegal();
+        }
+
+		throw new Exception("For order #{$this->getOrderId()} user not defined");
 	}
 
 	/**
