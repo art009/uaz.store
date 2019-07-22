@@ -71,6 +71,8 @@ class OrderSearch extends Order
             'updated_at' => $this->updated_at,
         ]);
 
+        $query->andFilterWhere(['>', 'user_id', 0]);
+
         return $dataProvider;
     }
 }
