@@ -59,6 +59,8 @@ class ConfirmOrderForm extends Model
     public $fax;
     public $postcode;
     public $address;
+    public $passportSeries;
+    public $passportNumber;
 
     public $isLegal;
     public $legal;
@@ -122,6 +124,8 @@ class ConfirmOrderForm extends Model
         $this->address = $user->address;
         $this->isLegal = $user->isLegal();
         $this->legal = $user->legal;
+        $this->passportSeries = $user->passport_series;
+        $this->passportNumber = $user->passport_number;
     }
 
     public function getIsLegalIp()
@@ -168,6 +172,8 @@ class ConfirmOrderForm extends Model
             ['name', 'safe'],
             [['inn'], 'checkInn'],
             [['kpp'], 'checkKpp'],
+            [['passportSeries'], 'string', 'length' => 4],
+            [['passportNumber'], 'string', 'length' => 6],
         ];
     }
 
@@ -190,6 +196,8 @@ class ConfirmOrderForm extends Model
             'account_number' => 'Расчетный счет ЮЛ',
             'inn' => 'ИНН',
             'kpp' => 'КПП',
+            'passportSeries' => 'Серия паспорта',
+            'passportNumber' => 'Номер паспорта',
         ];
     }
 
@@ -255,7 +263,9 @@ class ConfirmOrderForm extends Model
             'fax' => $this->fax,
             'postcode' => $this->postcode,
             'address' => $this->address,
-            'legal' => $this->legal
+            'legal' => $this->legal,
+            'passport_series' => $this->passportSeries,
+            'passport_number' => $this->passportNumber,
         ]);
         $userOrder->save();
         return $this->order->updateAttributes(['user_id' => $userOrder->id]);
@@ -303,7 +313,7 @@ class ConfirmOrderForm extends Model
     {
         if (parent::beforeValidate()) {
 
-            $this->formattingInt(['inn', 'kpp']);
+            $this->formattingInt(['inn', 'kpp', 'passportSeries', 'passportNumber']);
 
             return true;
         }
