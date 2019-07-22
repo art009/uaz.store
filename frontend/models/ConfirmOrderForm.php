@@ -56,8 +56,12 @@ class ConfirmOrderForm extends Model
     public $correspondent_account;
     public $representive_name;
     public $representive_position;
+    public $fax;
+    public $postcode;
+    public $address;
 
     public $isLegal;
+    public $legal;
     /**
      * @var int
      */
@@ -113,7 +117,11 @@ class ConfirmOrderForm extends Model
         $this->correspondent_account = $user->correspondent_account;
         $this->inn = $user->inn;
         $this->kpp = $user->kpp;
+        $this->fax = $user->fax;
+        $this->postcode = $user->postcode;
+        $this->address = $user->address;
         $this->isLegal = $user->isLegal();
+        $this->legal = $user->legal;
     }
 
     public function getIsLegalIp()
@@ -127,7 +135,7 @@ class ConfirmOrderForm extends Model
     public function rules()
     {
         return [
-            [['phone', 'name', 'email', 'delivery', 'payment'], 'required'],
+            [['phone', 'name', 'email', 'delivery', 'payment', 'legal'], 'required'],
             [
                 [
                     'phone',
@@ -229,11 +237,10 @@ class ConfirmOrderForm extends Model
     /**
      * @return bool
      */
-    protected function updateUser(): bool
+    protected function createUserOrder(): bool
     {
-        $user = $this->getUser();
-
-        $result = (bool)$user->updateAttributes([
+        $userOrder = new UserOrder();
+        $userOrder->setAttributes([
             'name' => $this->name,
             'phone' => $this->getPhoneNumber(),
             'email' => $this->email,
@@ -245,10 +252,11 @@ class ConfirmOrderForm extends Model
             'correspondent_account' => $this->correspondent_account,
             'representive_name' => $this->representive_name,
             'representive_position' => $this->representive_position,
+            'fax' => $this->fax,
+            'postcode' => $this->postcode,
+            'address' => $this->address,
+            'legal' => $this->legal
         ]);
-
-        $userOrder = new UserOrder();
-        $userOrder->copyFromUser($user);
         $userOrder->save();
         return $this->order->updateAttributes(['user_id' => $userOrder->id]);
     }
@@ -285,7 +293,7 @@ class ConfirmOrderForm extends Model
             return false;
         }
 
-        return ($this->updateUser()) && ($this->checkOrder() || $this->updateOrder());
+        return ($this->checkOrder() || $this->updateOrder()) && ($this->createUserOrder());
     }
 
     /**
@@ -322,6 +330,12 @@ class ConfirmOrderForm extends Model
             if ($attribute == 'name') {
                 return 'Название организации';
             }
+        }
+        if ($attribute == 'address') {
+            return 'Адрес';
+        }
+        if ($attribute == 'postcode') {
+            return 'Индекс';
         }
 
         return parent::getAttributeLabel($attribute);

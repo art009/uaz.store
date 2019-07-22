@@ -190,6 +190,13 @@ JS
 				Телефон: <b class="color-yellow">+7<?php echo $user->phone; ?></b>
 				<br/>
 				E-mail: <b class="color-yellow"><?php echo $user->email; ?></b>
+                <br/>
+				Факс: <b class="color-yellow"><?php echo $user->fax; ?></b>
+                <br/>
+				Индекс: <b class="color-yellow"><?php echo $user->postcode; ?></b>
+                <br/>
+				Адрес: <b class="color-yellow"><?php echo $user->address; ?></b>
+                <br/>
                 <?php if ($user->isLegal()): ?>
                     <?php if ($user->inn): ?>
                         <br/>

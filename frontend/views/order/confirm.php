@@ -80,6 +80,7 @@ JS
 			'enableClientValidation' => false,
 		]); ?>
 
+        <?= $form->field($confirmForm, 'legal')->hiddenInput(['value' => $confirmForm->legal])->label(false) ?>
 		<?= $form->field($confirmForm, 'name', [
 			'template' => '{input}{error}{hint}'
 		])->textInput([
@@ -98,6 +99,36 @@ JS
 				'clearIncomplete' => false
 			],
 		]);?>
+
+        <?= $form->field($confirmForm, 'fax', [
+            'template' => '{input}{error}{hint}'
+        ])->widget(MaskedInput::className(), [
+            'mask' => '+7(999)999-99-99',
+            'options' => [
+                'class' => 'form-control tel_input',
+                'placeholder' => $confirmForm->getAttributeLabel('phone'),
+            ],
+            'clientOptions' => [
+                'clearIncomplete' => false
+            ],
+        ]);?>
+
+        <?php echo $form->field($confirmForm, 'postcode', [
+            'template' => '{input}{error}{hint}'
+        ])->widget(MaskedInput::className(), [
+            'mask' => '999 999',
+            'options' => [
+                'class' => 'form-control tel_input',
+                'placeholder' => $confirmForm->getAttributeLabel('postcode'),
+            ],
+            'clientOptions' => [
+                'clearIncomplete' => false
+            ],
+        ]); ?>
+
+        <?php echo $form->field($confirmForm, 'address', [
+            'template' => '{input}{error}{hint}'
+        ])->textInput(['placeholder' => $confirmForm->getAttributeLabel('address')]); ?>
 
 		<?= $form->field($confirmForm, 'email', [
 			'template' => '{input}{error}{hint}'
