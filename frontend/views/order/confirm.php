@@ -201,18 +201,20 @@ JS
                 ]);
             } ?>
 
-            <?php echo $form->field($confirmForm, 'kpp', [
-                'template' => '{input}{error}{hint}'
-            ])->widget(MaskedInput::className(), [
-                'mask' => '999 999 999',
-                'options' => [
-                    'class' => 'form-control tel_input',
-                    'placeholder' => $confirmForm->getAttributeLabel('kpp'),
-                ],
-                'clientOptions' => [
-                    'clearIncomplete' => false
-                ],
-            ]); ?>
+            <?php if ($confirmForm->legal == \common\models\User::LEGAL_YES): ?>
+                <?php echo $form->field($confirmForm, 'kpp', [
+                    'template' => '{input}{error}{hint}'
+                ])->widget(MaskedInput::className(), [
+                    'mask' => '999 999 999',
+                    'options' => [
+                        'class' => 'form-control tel_input',
+                        'placeholder' => $confirmForm->getAttributeLabel('kpp'),
+                    ],
+                    'clientOptions' => [
+                        'clearIncomplete' => false
+                    ],
+                ]); ?>
+            <?php endif ?>
 
             <?= $form->field($confirmForm, 'bank_name', [
                 'template' => '{input}{error}{hint}',

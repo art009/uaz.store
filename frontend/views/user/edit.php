@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php echo $form->field($model, 'name', [
         'template' => '{input}{error}{hint}'
-    ])->textInput(['placeholder' =>  $model->isLegal ? $model->getAttributeLabel('companyName') : $model->getAttributeLabel('name')]); ?>
+    ])->textInput(['placeholder' => $model->isLegal ? $model->getAttributeLabel('companyName') : $model->getAttributeLabel('name')]); ?>
 
     <?php echo $form->field($model, 'email', [
         'template' => '{input}{error}{hint}'
@@ -153,18 +153,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
         } ?>
 
-        <?php echo $form->field($model, 'kpp', [
-            'template' => '{input}{error}{hint}'
-        ])->widget(MaskedInput::className(), [
-            'mask' => '999 999 999',
-            'options' => [
-                'class' => 'form-control tel_input',
-                'placeholder' => $model->getAttributeLabel('kpp'),
-            ],
-            'clientOptions' => [
-                'clearIncomplete' => false
-            ],
-        ]); ?>
+        <?php if ($model->legal == \common\models\User::LEGAL_YES): ?>
+            <?php echo $form->field($model, 'kpp', [
+                'template' => '{input}{error}{hint}'
+            ])->widget(MaskedInput::className(), [
+                'mask' => '999 999 999',
+                'options' => [
+                    'class' => 'form-control tel_input',
+                    'placeholder' => $model->getAttributeLabel('kpp'),
+                ],
+                'clientOptions' => [
+                    'clearIncomplete' => false
+                ],
+            ]); ?>
+        <?php endif ?>
 
         <?= $form->field($model, 'bank_name', [
             'template' => '{input}{error}{hint}',
