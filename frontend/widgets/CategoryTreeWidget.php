@@ -64,6 +64,8 @@ class CategoryTreeWidget extends Widget
 	 */
 	protected function getCategories()
 	{
+        TagDependency::invalidate(\Yii::$app->cache, CatalogCategory::CATEGORY_TREE_CACHE_TAG);
+
 		$categories = CatalogCategory::getDb()->cache(function(){
 			return CatalogCategory::find()
 				->select(['id', 'parent_id', 'title', 'link'])
@@ -73,7 +75,7 @@ class CategoryTreeWidget extends Widget
 				->orderBy('parent_id ASC, title ASC')
 				->asArray()
 				->all();
-		}, 3600);
+		}, 0, new TagDependency(['tags' => CatalogCategory::CATEGORY_TREE_CACHE_TAG]));
 
 		return $categories;
 	}
