@@ -82,6 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$attributes[] = 'bank_name';
 			$attributes[] = 'bik';
             $attributes[] = 'account_number';
+            $attributes[] = 'correspondent_account';
         }
 
         if ($model->role == User::ROLE_CLIENT) {
