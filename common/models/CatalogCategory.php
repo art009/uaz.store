@@ -41,7 +41,7 @@ class CatalogCategory extends \yii\db\ActiveRecord
     const MEDIUM_IMAGE_WIDTH = 186;
     const MEDIUM_IMAGE_HEIGHT = 124;
 
-	const CATEGORY_TREE_CACHE_TAG = 'catalog-category-tree-tag';
+	const CATEGORY_TREE_CACHE_TAG = 'catalogCategoryTreeTag';
 
     /**
      * @var UploadedFile
