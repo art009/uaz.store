@@ -2,6 +2,8 @@
 
 namespace common\classes\document;
 
+use common\models\User;
+
 /**
  * Class OrderData
  *
@@ -29,6 +31,12 @@ class OrderData extends OrderObject
             'kpp',
             'address',
         ],
+        'userIp' => [
+            'phone',
+            'name',
+            'inn',
+            'address',
+        ],
 	];
 
 	/**
@@ -41,8 +49,10 @@ class OrderData extends OrderObject
 		$result = [];
 		$user = $this->getUser();
 		if ($user) {
-		    if ($user->isLegal()) {
+		    if ($user->legal == User::LEGAL_YES) {
                 $fields = $this->requiredFields['userLegal'] ?? [];
+            } elseif ($user->legal == User::LEGAL_IP) {
+                $fields = $this->requiredFields['userIp'] ?? [];
             } else {
                 $fields = $this->requiredFields['userIndividual'] ?? [];
             }

@@ -71,11 +71,25 @@ class OrderObject
 		$user = $this->getUser();
 
 		if ($user) {
-            return $user->isLegal();
+            return $user->legal == User::LEGAL_YES;
         }
 
 		throw new Exception("For order #{$this->getOrderId()} user not defined");
 	}
+
+    /**
+     * @return bool
+     */
+    protected function isUserIp(): bool
+    {
+        $user = $this->getUser();
+
+        if ($user) {
+            return $user->legal == User::LEGAL_IP;
+        }
+
+        throw new Exception("For order #{$this->getOrderId()} user not defined");
+    }
 
 	/**
 	 * @param string $template
