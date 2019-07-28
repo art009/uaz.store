@@ -473,10 +473,6 @@ class CatalogProduct extends \yii\db\ActiveRecord
             $this->collectParents($manualCategory);
             $categoriesIds = ArrayHelper::merge($categoriesIds, $this->collectCategories($this->manualCategories));
         }
-        $currentCategories = $this->categories;
-        foreach ($currentCategories as $category) {
-            $categoriesIds[] = $category->id;
-        }
         $uniqueCategories = array_unique($categoriesIds);
         CatalogProductToCategory::deleteAll(['product_id' => $this->id]);
         foreach ($uniqueCategories as $uniqueCategory) {
