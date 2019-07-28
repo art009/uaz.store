@@ -74,7 +74,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">&copy; uaz.store <?= date('Y') ?></p>
 
-        <p class="pull-right">Разработано <a href="http://dvmpnz.ru/" target="_blank">dvmpnz</a></p>
+        <p class="pull-right">Разработано <a href="http://dvmpnz.ru/" target="_blank">dvmpnz</a> & <a href="http://paradox777.ru" target="_blank">Михаилом Куклиным</a></p>
     </div>
 </footer>
 

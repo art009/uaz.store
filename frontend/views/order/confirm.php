@@ -114,7 +114,7 @@ JS
             ],
         ]); ?>
 
-        <?php if (!$confirmForm->getIsLegalIp()): ?>
+        <?php if (!$confirmForm->isLegal): ?>
             <?php echo $form->field($confirmForm, 'passportSeries', [
                 'template' => '{input}{error}{hint}'
             ])->widget(MaskedInput::className(), [
