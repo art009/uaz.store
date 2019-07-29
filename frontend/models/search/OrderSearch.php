@@ -44,7 +44,7 @@ class OrderSearch extends Order
     public function search($userId, $params, $notStatusFilter = null)
     {
         $query = Order::find();
-        $query->where(['user_id' => $userId]);
+        $query->where(['original_user_id' => $userId]);
         $query->orderBy('id DESC');
 
         if ($notStatusFilter) {

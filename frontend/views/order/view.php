@@ -106,6 +106,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 Способ доставки:
                 <b class="color-yellow"><?php echo Order::$deliveryList[$order->delivery_type] ?? 'Не указано'; ?></b>
                 <br/>
+                Адрес доставки:
+                <b class="color-yellow"><?php echo  $user->address ?? 'Не указано'; ?></b>
+                <br/>
                 Вариант оплаты:
                 <b class="color-yellow"><?php echo Order::$paymentList[$order->payment_type] ?? 'Не указано'; ?></b>
             </div>

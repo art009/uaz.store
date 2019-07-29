@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Order;
 use common\models\User;
+use common\models\UserOrder;
 use frontend\components\FrontAppComponentTrait;
 use frontend\models\ConfirmOrderForm;
 use frontend\models\search\OrderSearch;
@@ -82,10 +83,11 @@ class OrderController extends Controller
 	    }
 	    /** @var User $user */
 	    $user = $this->getUserComponent()->getIdentity();
-	    if (!$user || $order->user_id != $user->id) {
+	    if (!$user || $order->original_user_id != $user->id) {
 	    	throw new ForbiddenHttpException('Заказ недоступен.');
 	    }
 
+        $user = UserOrder::findOne($order->user_id);
         return $this->render('view', [
         	'order' => $order,
         	'user' => $user,

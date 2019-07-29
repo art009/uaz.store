@@ -150,7 +150,10 @@ class ConfirmOrderForm extends Model
                     'account_number',
                     'bank_name',
                     'bik',
-                    'correspondent_account'
+                    'correspondent_account',
+                    'address',
+                    'fax',
+                    'postcode'
                 ],
                 'trim'
             ],
@@ -161,7 +164,10 @@ class ConfirmOrderForm extends Model
                     'account_number',
                     'bank_name',
                     'bik',
-                    'correspondent_account'
+                    'correspondent_account',
+                    'address',
+                    'fax',
+                    'postcode'
                 ],
                 'string',
                 'max' => 255
@@ -248,7 +254,7 @@ class ConfirmOrderForm extends Model
     protected function createUserOrder(): bool
     {
         $userOrder = new UserOrder();
-        $userOrder->setAttributes([
+        $attributes = [
             'name' => $this->name,
             'phone' => $this->getPhoneNumber(),
             'email' => $this->email,
@@ -266,7 +272,8 @@ class ConfirmOrderForm extends Model
             'legal' => $this->legal,
             'passport_series' => $this->passportSeries,
             'passport_number' => $this->passportNumber,
-        ]);
+        ];
+        $userOrder->setAttributes($attributes);
         $userOrder->save();
         return $this->order->updateAttributes(['user_id' => $userOrder->id]);
     }
@@ -313,7 +320,7 @@ class ConfirmOrderForm extends Model
     {
         if (parent::beforeValidate()) {
 
-            $this->formattingInt(['inn', 'kpp', 'passportSeries', 'passportNumber']);
+            $this->formattingInt(['inn', 'kpp', 'passportSeries', 'passportNumber', 'postcode']);
 
             return true;
         }
