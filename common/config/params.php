@@ -9,7 +9,7 @@ return [
 	'fromName' => 'UAZ.STORE',
     'user.passwordResetTokenExpire' => 3600,
     'backendUrl' => 'http://manage.uaz.store/',
-    'frontendUrl' => 'http://uaz.store/',
+    'frontendUrl' => 'https://uaz.store/',
 	'payment.secretSeed' => 'zyr5v1wTe',
     'maxCallbackAttempts' => 3,
     'maxQuestionAttempts' => 3,
