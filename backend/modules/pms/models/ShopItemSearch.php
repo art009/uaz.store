@@ -86,9 +86,11 @@ class ShopItemSearch extends ShopItem
 		        } else {
 			        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::YES]);
 		        }
-		        $query->andWhere(ProviderItem::tableName() . '.id IS NULL');
+                $query->leftJoin('provider_item_to_shop_item', 'provider_item_to_shop_item.shop_item_id');
+		        $query->andWhere('provider_item_to_shop_item.provider_item_id IS NULL');
 	        } else {
-		        $query->andWhere(ProviderItem::tableName() . '.id IS NOT NULL');
+        	    $query->leftJoin('provider_item_to_shop_item', 'provider_item_to_shop_item.shop_item_id');
+		        $query->andWhere('provider_item_to_shop_item.provider_item_id IS NOT NULL');
 	        }
         	if ($this->tempStatus == self::STATUS_ACTIVE) {
 		        $query->andFilterWhere([$this::tableName() . '.ignored' => AppHelper::NO]);
