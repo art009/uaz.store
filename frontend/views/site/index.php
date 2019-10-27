@@ -6,14 +6,6 @@ use frontend\widgets\ProductOnMain;
 use frontend\widgets\SeoTextWidget;
 
 $this->title = 'Интернет магазин автозапчастей УАЗ';
-$this->registerMetaTag([
-	'name' => 'description',
-	'content' => 'Продажа запчастей для автомобилей УАЗ всех моделей с доставкой по всей России. У нас Вы сможете купить запчасти УАЗ по лучшим ценам.'
-]);
-$this->registerMetaTag([
-	'name' => 'keywords',
-	'content' => 'запчасти УАЗ, купить запчасти УАЗ, магазин запчастей УАЗ'
-]);
 ?>
 <main class="site-index">
     <section>

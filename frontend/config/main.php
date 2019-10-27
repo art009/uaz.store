@@ -66,7 +66,7 @@ return [
 			'class' => 'yii\redis\Cache',
 		],
 		'view' => [
-			'class' => '\rmrevin\yii\minify\View',
+			'class' => 'frontend\components\SeoView',
 			'enableMinify' => !YII_DEBUG,
 			'webPath' => '@web', // path alias to web base
 			'basePath' => '@frontend/web', // path alias to web base
