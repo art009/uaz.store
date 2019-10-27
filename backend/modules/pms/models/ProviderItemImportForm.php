@@ -116,6 +116,7 @@ class ProviderItemImportForm extends ImportForm
             ->asArray()
             ->all();
 
+        $freshUpload = empty($storedData);
         $existed = ArrayHelper::map($storedData, 'code', 'price');
         $ignored = ArrayHelper::map($storedData, 'code', 'ignored');
         $insertItems = $updateItems = $acceptItems = $deleteItems = [];
@@ -153,6 +154,9 @@ class ProviderItemImportForm extends ImportForm
                 }
                 unset($existed[$item['code']]);
             } else {
+                if ($freshUpload) {
+                    $acceptItems[$item['code']] = $item;
+                }
                 $item['created_at'] = $date;
                 $item['provider_id'] = $this->provider_id;
                 $insertItems[$item['code']] = $item;
