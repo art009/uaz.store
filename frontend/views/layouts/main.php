@@ -29,6 +29,7 @@ $this->addSeoMetatags();
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=0.8">
+    <meta name="yandex-verification" content="57bf07e53461193f" />
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?> - UAZ.STORE</title>
     <?php $this->head() ?>
