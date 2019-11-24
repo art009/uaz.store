@@ -70,7 +70,7 @@ class QuestionForm extends Model implements JsonSerializable
             if ($counterOfRequest >= \Yii::$app->params['maxQuestionAttempts']) {
                 $timeToOpenForm = time() + \Yii::$app->params['delayBetweenQuestionAttempts'];
                 \Yii::$app->session->set($this->getSessionTimeKey(), $timeToOpenForm);
-                $this->addError('email', 'Вы недавно задавали вопрос! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenCallbackAttemts']));
+                $this->addError('email', 'Вы недавно задавали вопрос! Попробуйте через '.\Yii::$app->formatter->asDuration(\Yii::$app->params['delayBetweenCallbackAttempts']));
             }
             \Yii::$app->session->set($this->getSessionKey(), $counterOfRequest + 1);
         }
