@@ -1,7 +1,7 @@
 <?php
 return [
     'adminEmail' => 'admin@example.com',
-    'baseUrl' => 'http://example.com',
+    'baseUrl' => 'https://uaz.store',
     'sitemapPriority' => [
         'main' => '1.0',
         'page' => '1.0',
