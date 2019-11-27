@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5af0160fb17a5c0e7f8a3db1086022f",
+    "content-hash": "ec932d681e601013621a61834795ec61",
     "packages": [
         {
             "name": "2amigos/yii2-tinymce-widget",
@@ -506,7 +506,52 @@
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
             "homepage": "https://github.com/container-interop/container-interop",
+            "abandoned": "psr/container",
             "time": "2017-02-14T19:40:03+00:00"
+        },
+        {
+            "name": "evert/sitemap-php",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/evert/sitemap-php.git",
+                "reference": "be07a062943401067bf0ba62710ca733c838bc24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/evert/sitemap-php/zipball/be07a062943401067bf0ba62710ca733c838bc24",
+                "reference": "be07a062943401067bf0ba62710ca733c838bc24",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SitemapPHP": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Osman Üngür",
+                    "email": "osmanungur@gmail.com"
+                },
+                {
+                    "name": "Evert Pot",
+                    "email": "evert@rooftopsolutions.nl"
+                }
+            ],
+            "description": "Lightweight library for generating Google sitemap XML files",
+            "homepage": "http://code.google.com/p/sabredav/",
+            "keywords": [
+                "Sitemap"
+            ],
+            "time": "2015-04-17T21:45:50+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
