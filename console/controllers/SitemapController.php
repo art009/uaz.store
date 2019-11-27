@@ -4,6 +4,8 @@ namespace console\controllers;
 
 use common\models\CatalogCategory;
 use common\models\CatalogProduct;
+use common\models\ManualCategory;
+use common\models\ManualProduct;
 use common\models\Page;
 use SitemapPHP\Sitemap;
 use yii\console\Controller;
@@ -111,6 +113,12 @@ class SitemapController extends Controller
         /** @var \common\models\CatalogProduct $product */
         foreach ($products as $product) {
             $sitemap->addItem(Url::to($product->getFullLink()), $productPriority, 'daily', 'Today');
+
+            /** @var ManualProduct[] $manual */
+            foreach ($product->getManuals() as $manual) {
+                $url = "/manual/image?id={$manual->manualCategory->manual_id}&categoryId={$manual->manualCategory->id}";
+                $sitemap->addItem(Url::to($url), $productPriority, 'daily', 'Today');
+            }
         }
     }
 
