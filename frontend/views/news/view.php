@@ -9,6 +9,14 @@ use yii\helpers\Html;
 $this->title = $news->title;
 $this->params['breadcrumbs'][] = ['label' => 'Новости', 'url' => ['/news']];
 //$this->params['breadcrumbs'][] = $this->title;
+
+if (!empty($news->meta_keywords)) {
+    $this->params['keywords'] = $news->meta_keywords;
+}
+if (!empty($news->meta_description)) {
+    $this->params['description'] = $news->meta_description;
+}
+
 ?>
 <div class="news">
     <h1>&nbsp;</h1>

@@ -10,10 +10,10 @@ class SeoView extends View
 
     public function addSeoMetatags()
     {
-        $this->keywords = $this->params['breadcrumbs'] ?? [];
+        $this->keywords = $this->params['keywords'] ?? $this->params['breadcrumbs'] ?? [];
         $this->registerMetaTag([
             'name' => 'description',
-            'content' => 'Продажа запчастей для автомобилей УАЗ всех моделей с доставкой по всей России. У нас Вы сможете купить запчасти УАЗ по лучшим ценам.'
+            'content' => $this->params['description'] ?? 'Продажа запчастей для автомобилей УАЗ всех моделей с доставкой по всей России. У нас Вы сможете купить запчасти УАЗ по лучшим ценам.'
         ]);
         $originalKeywords = ['запчасти УАЗ', 'купить запчасти УАЗ', 'магазин запчастей УАЗ'];
         if (isset($this->keywords)) {
