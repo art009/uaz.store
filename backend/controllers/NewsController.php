@@ -2,15 +2,12 @@
 
 namespace backend\controllers;
 
-use common\components\AppHelper;
 use Yii;
 use backend\models\News;
 use backend\models\NewsSearch;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Response;
 use yii\web\UploadedFile;
 
 /**
@@ -32,14 +29,6 @@ class NewsController extends Controller
             ],
         ];
     }
-
-	/**
-	 * @inheritdoc
-	 */
-	public function beforeAction($action)
-	{
-		return parent::beforeAction($action);
-	}
 
     /**
      * Lists all News models.
@@ -85,11 +74,11 @@ class NewsController extends Controller
 
         if ($loaded && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -110,11 +99,11 @@ class NewsController extends Controller
 
         if ($loaded && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -144,8 +133,8 @@ class NewsController extends Controller
     {
         if (($model = News::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested news does not exist.');
         }
+
+        throw new NotFoundHttpException('The requested news does not exist.');
     }
 }

@@ -44,12 +44,13 @@ class News extends \common\models\News
      */
     protected function deleteImages()
     {
-        if ($this->image) {
-            $uploadsFolder = AppHelper::uploadsFolder();
-            @unlink($uploadsFolder . '/' . self::FOLDER . '/' . $this->image);
-            @unlink($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $this->image);
-            @unlink($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $this->image);
+        if (!$this->image) {
+            return;
         }
+        $uploadsFolder = AppHelper::uploadsFolder();
+        @unlink($uploadsFolder . '/' . self::FOLDER . '/' . $this->image);
+        @unlink($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $this->image);
+        @unlink($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $this->image);
     }
 
     /**
@@ -62,25 +63,24 @@ class News extends \common\models\News
      */
     public function beforeSave($insert)
     {
-        $result = false;
-        if (parent::beforeSave($insert)) {
-            if ($this->file) {
-                $name = md5($this->id . time()) . '.' . $this->file->extension;
-                $uploadsFolder = AppHelper::uploadsFolder();
-                if ($this->file->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
-                	$this->saveImage($uploadsFolder . '/' . self::FOLDER . '/' . $name, $name);
-                } else {
-                    throw new InvalidConfigException('Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
-                }
-            }
-            if ($this->sourceFile) {
-	            $name = md5($this->sourceFile . time()) . '.' . pathinfo($this->sourceFile, PATHINFO_EXTENSION);
-	            $this->saveImage($this->sourceFile, $name);
-            }
-
-            $result = true;
+        if (!parent::beforeSave($insert)) {
+            return false;
         }
-        return $result;
+        if ($this->file) {
+            $name = md5($this->id . time()) . '.' . $this->file->extension;
+            $uploadsFolder = AppHelper::uploadsFolder();
+            if ($this->file->saveAs($uploadsFolder . '/' . self::FOLDER . '/' . $name)) {
+                $this->saveImage($uploadsFolder . '/' . self::FOLDER . '/' . $name, $name);
+            } else {
+                throw new InvalidConfigException('Директория недоступна для записи: ' . $uploadsFolder . '/' . self::FOLDER . '/');
+            }
+        }
+        if ($this->sourceFile) {
+            $name = md5($this->sourceFile . time()) . '.' . pathinfo($this->sourceFile, PATHINFO_EXTENSION);
+            $this->saveImage($this->sourceFile, $name);
+        }
+
+        return true;
     }
 
     /**
@@ -90,29 +90,31 @@ class News extends \common\models\News
      */
     protected function saveImage($sourceFile, $name)
     {
-    	if (file_exists($sourceFile)) {
-    	    if (!empty($this->image)) {
-    	        $this->deleteImages();
-            }
-		    $this->image = $name;
-		    $uploadsFolder = AppHelper::uploadsFolder();
-		    $imageHandler = new ImageHandler();
-		    $imageHandler
-			    ->load($sourceFile)
-			    ->resize(false, self::MAX_HEIGHT)
-			    ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
-			    ->save($uploadsFolder . '/' . self::FOLDER . '/' . $name, false, 100)
-			    ->reload()
-			    ->resize(false, self::MAX_HEIGHT)
-			    ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
-			    ->resizeCanvas(self::SMALL_IMAGE_WIDTH, self::SMALL_IMAGE_HEIGHT)
-			    ->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name, false, 100)
-			    ->reload()
-			    ->resize(false, self::MAX_HEIGHT)
-			    ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
-			    ->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
-			    ->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $name, false, 100);
-	    }
+    	if (!file_exists($sourceFile)) {
+    	    return;
+        }
+        if (!empty($this->image)) {
+            $this->deleteImages();
+        }
+        $this->image = $name;
+        $uploadsFolder = AppHelper::uploadsFolder();
+        $imageHandler = new ImageHandler();
+        $imageHandler
+            ->load($sourceFile)
+            ->resize(false, self::MAX_HEIGHT)
+            ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
+            ->save($uploadsFolder . '/' . self::FOLDER . '/' . $name, false, 100)
+            ->reload()
+            ->resize(false, self::MAX_HEIGHT)
+            ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
+            ->resizeCanvas(self::SMALL_IMAGE_WIDTH, self::SMALL_IMAGE_HEIGHT)
+            ->save($uploadsFolder . '/' . self::FOLDER_SMALL . '/' . $name, false, 100)
+            ->reload()
+            ->resize(false, self::MAX_HEIGHT)
+            ->watermark(AppHelper::watermarkFile(), 0, 0, ImageHandler::CORNER_CENTER)
+            ->resizeCanvas(self::MEDIUM_IMAGE_WIDTH, self::MEDIUM_IMAGE_HEIGHT)
+            ->save($uploadsFolder . '/' . self::FOLDER_MEDIUM . '/' . $name, false, 100);
+
     }
 
     /**
@@ -120,14 +122,12 @@ class News extends \common\models\News
      */
     public function beforeDelete()
     {
-        if (parent::beforeDelete()) {
-
-            $this->deleteImages();
-
-            return true;
-        } else {
+        if (!parent::beforeDelete()) {
             return false;
         }
+
+        $this->deleteImages();
+        return true;
     }
 
     /**

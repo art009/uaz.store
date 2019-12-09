@@ -6,6 +6,7 @@ use common\models\CatalogCategory;
 use common\models\CatalogProduct;
 use common\models\ManualCategory;
 use common\models\ManualProduct;
+use common\models\News;
 use common\models\Page;
 use SitemapPHP\Sitemap;
 use yii\console\Controller;
@@ -38,6 +39,7 @@ class SitemapController extends Controller
 	    $pagePriority = $priorityConfig['page'] ?? '1.0';
 	    $categoryPriority = $priorityConfig['category'] ?? '2.0';
 	    $productPriority = $priorityConfig['product'] ?? '3.0';
+	    $newsPriority = $priorityConfig['news'] ?? '3.0';
 
 	    $baseUrl = Yii::$app->params['baseUrl'] ?? 'http://'.gethostname();
 
@@ -56,6 +58,9 @@ class SitemapController extends Controller
 
         $sitemap->addItem('/catalog', $categoryPriority, 'daily', 'Today');
         $this->generateCategories($sitemap, $categoryPriority, $productPriority);
+
+        $sitemap->addItem('/news', $newsPriority, 'daily', 'Today');
+        $this->generateNews($sitemap, $newsPriority);
 
         $sitemap->addItem('/search', $pagePriority, 'daily', 'Today');
         $sitemap->addItem('/login', $pagePriority, 'daily', 'Today');
@@ -133,6 +138,20 @@ class SitemapController extends Controller
         /** @var \common\models\Page $page */
         foreach ($pages as $page) {
             $sitemap->addItem(Url::to('/'.$page->link), $pagePriority, 'daily', 'Today');
+        }
+    }
+
+    /**
+     * @param Sitemap $sitemap
+     * @param string $priority
+     * @return void
+     */
+    protected function generateNews(Sitemap $sitemap, $priority)
+    {
+        $news = News::find()->where(['hide' => false])->orderBy(['created_at' => SORT_DESC])->all();
+        /** @var \common\models\News $item */
+        foreach ($news as $item) {
+            $sitemap->addItem(Url::to('/news/'.$item->id), $priority, 'daily', 'Today');
         }
     }
 }

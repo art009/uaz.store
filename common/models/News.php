@@ -88,7 +88,7 @@ class News extends \yii\db\ActiveRecord
      */
     public function getImagePath($small = true)
     {
-        $image = !empty($this->image) ? $this->image : ('img/empty-'.$small ? 's' : 'm').'.png';
+        $image = !empty($this->image) ? $this->image : ('img/empty-' . $small ? 's' : 'm') . '.png';
         return AppHelper::getImagePath($image, $small ? self::FOLDER_MEDIUM : self::FOLDER);
     }
 }

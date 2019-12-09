@@ -19,11 +19,14 @@ class NewsController extends Controller
      */
     public function actionIndex()
     {
-        $query = News::find()->where(['hide' => AppHelper::NO])->orderBy(['created_at' => SORT_DESC]);
+        $query = News::find()
+            ->where(['hide' => AppHelper::NO])
+            ->orderBy(['created_at' => SORT_DESC]);
         $pages = new Pagination(['totalCount' => $query->count()]);
         $models = $query->offset($pages->offset)
             ->limit($pages->limit)
             ->all();
+
         return $this->render('index', [
             'models' => $models,
             'pages' => $pages,
@@ -61,6 +64,7 @@ class NewsController extends Controller
 		if (!$model) {
 			throw new NotFoundHttpException('Страница не найдена.');
 		}
+
 		return $model;
 	}
 }

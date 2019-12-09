@@ -19,20 +19,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Создать новость', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'title', 'created_at',
-            [
-                'attribute' => 'hide',
-                'value' => function ($model) {
-                    return AppHelper::$yesNoList[$model->hide];
-                },
-                'filter' => AppHelper::$yesNoList,
+
+    <?php Pjax::begin(); ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'title', 'created_at',
+                [
+                    'attribute' => 'hide',
+                    'value' => function ($model) {
+                        return AppHelper::$yesNoList[$model->hide];
+                    },
+                    'filter' => AppHelper::$yesNoList,
+                ],
+                ['class' => 'yii\grid\ActionColumn'],
             ],
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-<?php Pjax::end(); ?></div>
+        ]); ?>
+    <?php Pjax::end(); ?>
+</div>

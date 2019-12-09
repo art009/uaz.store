@@ -3,7 +3,6 @@
 namespace backend\models;
 
 use Yii;
-use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\News;
 
@@ -21,15 +20,6 @@ class NewsSearch extends News
             [['id', 'hide'], 'integer'],
             [['title', 'description', 'meta_keywords', 'meta_description', 'created_at', 'updated_at'], 'safe'],
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
     }
 
     /**
