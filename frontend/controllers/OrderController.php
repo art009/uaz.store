@@ -121,7 +121,7 @@ class OrderController extends Controller
 			if ($confirmForm->confirm() && $order->confirm()) {
 			    Yii::$app->cart->clear();
 				$this->getSessionComponent()->setFlash('success', 'Заказ успешно оформлен. Следите за его исполнением в личном кабинете.');
-				return $this->redirect(['/user']);
+				return $this->redirect('/order/view?id='.$order->id);
 			} else {
 				$this->getSessionComponent()->setFlash('warning', 'Не удалось оформить заказ. Свяжитесь с администрацией.');
 			}

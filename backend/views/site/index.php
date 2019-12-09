@@ -12,6 +12,9 @@ $this->title = 'Административная панель';
 	</p>
 	<br/>
     <p>
+        <a class="btn btn-md btn-primary btn-block" href="/news">Новости</a>
+    </p>
+    <p>
         <a class="btn btn-md btn-info btn-block" href="/menu">Меню</a>
     </p>
     <p>

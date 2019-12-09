@@ -524,20 +524,51 @@ form .form-header > div {
     border: 1px solid transparent;
 }
 
-form .form-header > div:first-child {
+form .form-header:not(.tabs) > div:first-child {
     border-top-color: #ecb52d;
     border-right-color: #ecb52d;
     color: #ecb52d;
 }
 
-form .form-header > div:last-child {
+form .form-header:not(.tabs) > div:last-child {
     border-bottom-color: #ecb52d;
     color: #999999;
 }
 
-form .form-header > div:last-child a {
+form .form-header:not(.tabs) > div:last-child a {
     color: #fff;
 }
+
+form .form-header.tabs.tabs-left > div:first-child {
+    border-top-color: #ecb52d;
+    border-right-color: #ecb52d;
+    color: #ecb52d;
+}
+
+form .form-header.tabs.tabs-left > div:last-child {
+    border-bottom-color: #ecb52d;
+    color: #999999;
+}
+
+form .form-header.tabs.tabs-left > div:last-child a {
+    color: #fff;
+}
+
+form .form-header.tabs.tabs-right > div:last-child {
+    border-top-color: #ecb52d;
+    border-left-color: #ecb52d;
+    color: #ecb52d;
+}
+
+form .form-header.tabs.tabs-right > div:first-child {
+    border-bottom-color: #ecb52d;
+    color: #999999;
+}
+
+form .form-header.tabs.tabs-right > div:first-child a {
+    color: #fff;
+}
+
 
 form input[type='checkbox'], form input[type='radio'] {
     opacity: 0;
@@ -991,18 +1022,18 @@ main.site-index > nav > ul a:hover {
     border: 1px solid transparent;
 }
 
-.order-header > div:first-child {
+.order-header > div:last-child {
     border-top-color: #ecb52d;
-    border-right-color: #ecb52d;
+    border-left-color: #ecb52d;
     color: #ecb52d;
 }
 
-.order-header > div:last-child {
+.order-header > div:first-child {
     border-bottom-color: #ecb52d;
     color: #999999;
 }
 
-.order-header > div:last-child a {
+.order-header > div:first-child a {
     color: #fff;
 }
 
@@ -1879,4 +1910,20 @@ form#order-form .form-group b {
 
 .manual-product-view tr:nth-child(odd) td .breadcrumb > li a {
     color: black;
+}
+
+.news .thumbnail {
+    display: block;
+    padding: 1px;
+    margin-bottom: 10px;
+    line-height: 1.42857143;
+    /*background-color: #fff;*/
+    background: none;
+    /*border: 1px solid #000;*/
+    border: none;
+}
+.news .thumbnail > img,
+.news .thumbnail a > img {
+    margin-right: auto;
+    margin-left: auto;
 }

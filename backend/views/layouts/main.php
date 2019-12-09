@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
+use backend\widgets\NoticeBadge;
 
 AppAsset::register($this);
 ?>
@@ -34,10 +35,15 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-top',
         ],
     ]);
-    $menuItems = [
-        ['label' => 'PMS', 'url' => ['/pms'],  'linkOptions' => ['class' => 'text-success']],
-        ['label' => 'Главная страница', 'url' => Yii::$app->params['frontendUrl'], 'linkOptions' => ['target' => '_blank']],
-    ];
+    $menuItems = [];
+
+    $noticeBadge = NoticeBadge::widget();
+    if (!empty($noticeBadge)) {
+        $menuItems[] = ['label' => $noticeBadge, 'url' => ['/notice'], 'encode' => false];
+    }
+
+    $menuItems[] = ['label' => 'PMS', 'url' => ['/pms'],  'linkOptions' => ['class' => 'text-success']];
+    $menuItems[] = ['label' => 'Главная страница', 'url' => Yii::$app->params['frontendUrl'], 'linkOptions' => ['target' => '_blank']];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
     } else {

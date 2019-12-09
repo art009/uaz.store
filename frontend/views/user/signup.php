@@ -21,9 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['autocomplete' => 'off'],
         'enableClientValidation' => false,
     ]); ?>
-    <div class="form-header">
-        <div class="col-xs-6 text-center">Регистрация</div>
+    <div class="form-header tabs tabs-right">
         <div class="col-xs-6 text-center"><a href="/login">Вход</a></div>
+        <div class="col-xs-6 text-center">Регистрация</div>
     </div>
     <div class="clearfix"></div>
 

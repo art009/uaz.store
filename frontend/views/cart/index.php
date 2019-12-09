@@ -42,13 +42,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				        ?>
 			        </td>
 			        <td class="title"><?php echo $item->getTitle(); ?></td>
-			        <td class="price"><?php echo $item->getPrice(); ?></td>
+			        <td class="price"><?php echo number_format($item->getPrice(), 2, '.', ' '); ?> руб</td>
 			        <td class="quantity">
 				        <?php echo Html::icon('minus', ['class' => 'dec-cart-product', 'data-id' => $item->getProductId()]); ?><div>
 					        <?php echo $item->getQuantity(); ?>
 				        </div><?php echo Html::icon('plus', ['class' => 'inc-cart-product', 'data-id' => $item->getProductId()]); ?>
 			        </td>
-			        <td class="total"><?php echo $item->getTotal(); ?></td>
+			        <td class="total"><?php echo number_format($item->getTotal(), 2, '.', ' '); ?> руб</td>
 		        </tr>
 		        <?php endforeach; ?>
 		    </tbody>

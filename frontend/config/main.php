@@ -52,6 +52,7 @@ return [
 	            ['class' => 'frontend\components\PageUrlRule'],
 	            ['class' => 'frontend\components\ManualUrlRule'],
 	            ['class' => 'frontend\components\CatalogUrlRule'],
+	            ['class' => 'frontend\components\NewsUrlRule'],
             ],
         ],
 		'redis' => [

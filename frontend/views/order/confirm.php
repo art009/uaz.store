@@ -62,9 +62,9 @@ JS
                     ?>
                 </td>
                 <td class="title"><?php echo $item->getTitle(); ?></td>
-                <td class="price"><?php echo $item->getPrice(); ?></td>
+                <td class="price"><?php echo number_format($item->getPrice(), 2, '.', ' '); ?> руб</td>
                 <td class="quantity"><?php echo $item->getQuantity(); ?></td>
-                <td class="total"><?php echo $item->getTotal(); ?></td>
+                <td class="total"><?php echo number_format($item->getTotal(), 2, '.', ' '); ?> руб</td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -107,7 +107,7 @@ JS
             'mask' => '+7(999)999-99-99',
             'options' => [
                 'class' => 'form-control tel_input',
-                'placeholder' => $confirmForm->getAttributeLabel('phone'),
+                'placeholder' => $confirmForm->getAttributeLabel('fax'),
             ],
             'clientOptions' => [
                 'clearIncomplete' => false

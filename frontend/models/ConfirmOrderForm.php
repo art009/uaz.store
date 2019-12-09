@@ -354,6 +354,9 @@ class ConfirmOrderForm extends Model
         if ($attribute == 'postcode') {
             return 'Индекс';
         }
+        if ($attribute == 'fax') {
+            return 'Факс';
+        }
 
         return parent::getAttributeLabel($attribute);
     }

@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="order-list">
 
         <div class="order-header">
-            <div class="col-xs-6 text-center">Заказы</div>
             <div class="col-xs-6 text-center"><a href="/user">Профиль</a></div>
+            <div class="col-xs-6 text-center">Заказы</div>
         </div>
         <div class="clearfix"></div>
 
