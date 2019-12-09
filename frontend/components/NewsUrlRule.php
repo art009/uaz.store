@@ -28,15 +28,15 @@ class NewsUrlRule extends \yii\base\BaseObject implements \yii\web\UrlRuleInterf
         $pathInfo = trim($request->getPathInfo(), '/');
         $pathParts = explode("/", $pathInfo);
 
-        if (count($pathParts) === 2 || $pathParts[0] !== 'news') {
+        if (count($pathParts) !== 2 || $pathParts[0] !== 'news') {
             return false;
         }
 
         $model = News::findOne(['id' => $pathParts[1]]);
-        if ($model) {
-            return ['news/view', ['id' => $model->id]];
+        if (!$model) {
+            return false;
         }
 
-        return false;
+        return ['news/view', ['id' => $model->id]];
     }
 }

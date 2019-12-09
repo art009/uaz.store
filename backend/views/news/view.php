@@ -1,7 +1,7 @@
 <?php
 
+use common\models\News;
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\News */
@@ -26,6 +26,29 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
     <h1><?php echo Html::encode($this->title) ?> (ID: <?php echo $model->id; ?>)</h1>
+    <p>
+        <b>Картинка:</b>
+        <br/>
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <a href="<?php echo $model->getImagePath(false); ?>" target="_blank" class="thumbnail" title="Оригинал">
+                    <img src="<?php echo $model->getImagePath(false); ?>" alt="image">
+                </a>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                <div class="row">
+                    <a href="<?php echo $model->getImagePath(true); ?>" target="_blank" class="thumbnail" title="Размер в списке новостей">
+                        <img src="<?php echo $model->getImagePath(true); ?>" alt="image" width="<?php echo News::SMALL_IMAGE_WIDTH; ?>" height="<?php echo News::SMALL_IMAGE_HEIGHT; ?>">
+                    </a>
+                </div>
+                <div class="row">
+                    <a href="<?php echo $model->getImagePath(false); ?>" target="_blank" class="thumbnail" title="Размер на странице новости">
+                        <img src="<?php echo $model->getImagePath(false); ?>" alt="image" width="<?php echo News::MEDIUM_IMAGE_WIDTH; ?>" height="<?php echo News::MEDIUM_IMAGE_HEIGHT; ?>">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </p>
     <p>
         <b>Текст метатега keywords:</b>
         <br/>
