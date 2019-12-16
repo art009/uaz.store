@@ -1,1 +1,3 @@
+User-agent: *
+Disallow:
 Sitemap: https://uaz.store/sitemap-index.xml
