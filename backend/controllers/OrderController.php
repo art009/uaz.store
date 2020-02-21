@@ -126,7 +126,6 @@ class OrderController extends Controller
 
 			$cashbox->setPhoneOrEmail($user->email);
 			$cashbox->setDelivery($model);
-			$cashbox->setSending($model);
 
 			foreach ($orderProducts as $orderProduct) {
 
