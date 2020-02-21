@@ -125,6 +125,8 @@ class OrderController extends Controller
 		if ($orderProducts and $user) {
 
 			$cashbox->setPhoneOrEmail($user->email);
+			$cashbox->setDelivery($model);
+			$cashbox->setSending($model);
 
 			foreach ($orderProducts as $orderProduct) {
 

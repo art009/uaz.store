@@ -2,6 +2,7 @@
 
 namespace common\components\cashbox;
 
+use common\models\Order;
 use yii\base\Exception;
 
 /**
@@ -138,6 +139,48 @@ class Cashbox extends BaseCashbox
 
 		return $this;
 	}
+
+    /**
+     * Add delivery
+     *
+     * @param float $price Price in rubles
+     * @param int $count
+     * @param string $description
+     * @return $this
+     */
+    public function setDelivery(Order $order)
+    {
+        $this->data['Lines'][] = [
+            "Qty" => self::formatCount(1),
+            "Price" => self::formatPrice($order->delivery_sum),
+            "PayAttribute" => $this->payAttribute,
+            "TaxId" => $this->taxId,
+            "Description"=> 'Доставка',
+        ];
+
+        return $this;
+    }
+
+    /**
+     * Add delivery
+     *
+     * @param float $price Price in rubles
+     * @param int $count
+     * @param string $description
+     * @return $this
+     */
+    public function setSending(Order $order)
+    {
+        $this->data['Lines'][] = [
+            "Qty" => self::formatCount(1),
+            "Price" => self::formatPrice($order->sending_sum),
+            "PayAttribute" => $this->payAttribute,
+            "TaxId" => $this->taxId,
+            "Description"=> 'Доставка',
+        ];
+
+        return $this;
+    }
 
 	/**
 	 * Add phone or email

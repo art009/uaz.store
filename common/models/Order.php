@@ -28,6 +28,8 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property UserOrder $user
  * @property OrderProduct[] $orderProducts
+ * @todo: add property to database and order form
+ * @property integer sending_sum
  */
 class Order extends \yii\db\ActiveRecord
 {
