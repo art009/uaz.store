@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \frontend\components\SeoView */
+
 /* @var $content string */
 /* @var $controllerId string */
 
@@ -29,7 +30,7 @@ $this->addSeoMetatags();
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=0.8">
-    <meta name="yandex-verification" content="57bf07e53461193f" />
+    <meta name="yandex-verification" content="57bf07e53461193f"/>
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?> - UAZ.STORE</title>
     <?php $this->head() ?>
@@ -64,8 +65,15 @@ $this->addSeoMetatags();
     <!-- /Google analytics -->
 
     <!-- Yandex.Metrika counter -->
-        <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(56268205, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script>
-        <noscript><div><img src="https://mc.yandex.ru/watch/56268205" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <script type="text/javascript"> (function (m, e, t, r, i, k, a) {
+        m[i] = m[i] || function () {(m[i].a = m[i].a || []).push(arguments)}
+        m[i].l = 1 * new Date()
+        k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+      })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym')
+      ym(56268205, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true }) </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/56268205" style="position:absolute; left:-9999px;" alt=""/></div>
+    </noscript>
     <!-- /Yandex.Metrika counter -->
 <?php endif; ?>
 <div class="wrap">
@@ -160,6 +168,18 @@ $this->addSeoMetatags();
                         'data-placement' => 'top',
                         'title' => 'Задать вопрос',
                         'data-target' => '#question-form-modal',
+                    ]); ?>
+                </span>
+                <span class="icon-link-outer">
+                    <?php $icon = "<span class='uazicon uazicon-whatsapp'></span>" ?>
+                    <?php $whatsappPhone = 'https://wa.me/' . Yii::$app->params['whatsappPhone'] ?>
+                    <?php echo Html::a($icon, $whatsappPhone, [
+                        'class' => 'link-icon',
+                        'data-toggle' => 'modal',
+                        'data-tooltip' => 'tooltip',
+                        'data-trigger' => 'hover',
+                        'data-placement' => 'top',
+                        'title' => 'Связаться через WhatsApp'
                     ]); ?>
                 </span>
             </p>
