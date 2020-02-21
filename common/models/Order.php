@@ -104,13 +104,10 @@ class Order extends \yii\db\ActiveRecord
      * @var array
      */
     static $paymentList = [
-        self::PAYMENT_CARD => 'Карты Visa, MasterCard, МИР',
-        self::PAYMENT_NON_CASH => 'Безналичный расчет',
-        self::PAYMENT_POD => 'Наложенный платеж',
         self::PAYMENT_SBOL => 'Сбербанк Онлайн',
-        self::PAYMENT_QIWI => 'QIWI-кошелек',
-        self::PAYMENT_YA_MONEY => 'Яндекс деньги',
-        self::PAYMENT_CASH => 'Наличные деньги',
+        self::PAYMENT_CARD => 'Банковская карта',
+        self::PAYMENT_POD => 'Наложенный платеж',
+        self::PAYMENT_NON_CASH => 'Оплата по счёту',
     ];
 
     /**
