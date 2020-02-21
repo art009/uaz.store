@@ -1927,3 +1927,20 @@ form#order-form .form-group b {
     margin-right: auto;
     margin-left: auto;
 }
+
+.uazicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.uazicon-whatsapp {
+    height: 15px;
+    width: 15px;
+    background-image: url("/img/whatsapp-icon.png");
+}

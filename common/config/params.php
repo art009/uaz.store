@@ -16,5 +16,6 @@ return [
     'maxOrderAttempts' => 3,
     'delayBetweenCallbackAttempts' => 300,
     'delayBetweenQuestionAttempts' => 300,
-    'delayBetweenOrderAttempts' => 300
+    'delayBetweenOrderAttempts' => 300,
+    'whatsappPhone' => '79530226932'
 ];
