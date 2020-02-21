@@ -14,7 +14,10 @@ use yii\widgets\Pjax;
 /* @var $productProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Заказ №' . $order->id;
-$this->params['breadcrumbs'][] = ['label' => 'Все заказы', 'url' => ['index']];
+$this->params['breadcrumbs'][] = [
+    'label' => 'Все заказы',
+    'url' => ['index']
+];
 $this->params['breadcrumbs'][] = $this->title;
 
 $items = $order->orderProducts;
@@ -62,7 +65,11 @@ JS
             <?php foreach ($availableStatuses as $status): ?>
                 <?php echo Html::a(
                     Order::statusName($status),
-                    ['change-status', 'id' => $order->id, 'status' => $status],
+                    [
+                        'change-status',
+                        'id' => $order->id,
+                        'status' => $status
+                    ],
                     ['class' => 'btn btn-primary']
                 ); ?>
             <?php endforeach; ?>
@@ -136,8 +143,10 @@ JS
                 'id' => 'order-view-product-search',
                 'options' => [
                     'class' => 'grid-view',
-                    'style' => 'display: ' . (array_key_exists('CatalogProductSearch',
-                            Yii::$app->request->queryParams) ? 'block' : 'none'),
+                    'style' => 'display: ' . (array_key_exists(
+                            'CatalogProductSearch',
+                            Yii::$app->request->queryParams
+                        ) ? 'block' : 'none'),
                 ],
                 'dataProvider' => $productProvider,
                 'filterModel' => $productSearch,
@@ -241,6 +250,16 @@ JS
                                 class="color-yellow"><?php echo $user->representive_position; ?></b>
                     <?php endif; ?>
                 <?php endif; ?>
+                <br>
+                <?= Html::a(
+                    'Отредактировать покупателя',
+                    [
+                        'user-order/update',
+                        'id' => $user->id
+                    ],
+                    ['class' => 'btn btn-success']
+                )
+                ?>
             </div>
             <div class="form-group">
                 Способ доставки:
@@ -259,8 +278,12 @@ JS
                     <b class="color-yellow">бесплатно</b>
                 <?php endif; ?>
                 <br/>
-                <h3 class="total summary">Итого: <b class="color-yellow"><?php echo number_format($order->getTotal(), 2,
-                            '.', ' '); ?></b> руб</h3>
+                <h3 class="total summary">Итого: <b class="color-yellow"><?php echo number_format(
+                            $order->getTotal(),
+                            2,
+                            '.',
+                            ' '
+                        ); ?></b> руб</h3>
             </div>
         </form>
     </div>

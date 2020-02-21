@@ -74,9 +74,9 @@ class UserOrder extends \yii\db\ActiveRecord
     {
         return [
             'email' => 'Email',
-            'phone' => 'Phone',
-            'legal' => 'Legal',
-            'name' => 'Name',
+            'phone' => 'Телефон',
+            'legal' => 'Является юр.лицом',
+            'name' => 'Имя',
             'passport_series' => 'Passport Series',
             'passport_number' => 'Passport Number',
             'inn' => 'Inn',
