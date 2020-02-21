@@ -17,5 +17,6 @@ return [
     'delayBetweenCallbackAttempts' => 300,
     'delayBetweenQuestionAttempts' => 300,
     'delayBetweenOrderAttempts' => 300,
-    'whatsappPhone' => '79530226932'
+    'whatsappPhone' => '79530226932',
+    'viberPhone' => '79530226932',
 ];

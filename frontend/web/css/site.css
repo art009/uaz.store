@@ -1944,3 +1944,9 @@ form#order-form .form-group b {
     width: 15px;
     background-image: url("/img/whatsapp-icon.png");
 }
+
+.uazicon-viber {
+    height: 16px;
+    width: 15px;
+    background-image: url("/img/viber-icon.png");
+}

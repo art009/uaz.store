@@ -182,6 +182,18 @@ $this->addSeoMetatags();
                         'title' => 'Связаться через WhatsApp'
                     ]); ?>
                 </span>
+                <span class="icon-link-outer">
+                    <?php $icon = "<span class='uazicon uazicon-viber'></span>" ?>
+                    <?php $viberPhone = 'viber://chat?number=' . Yii::$app->params['viberPhone'] ?>
+                    <?php echo Html::a($icon, $viberPhone, [
+                        'class' => 'link-icon',
+                        'data-toggle' => 'modal',
+                        'data-tooltip' => 'tooltip',
+                        'data-trigger' => 'hover',
+                        'data-placement' => 'top',
+                        'title' => 'Связаться через Viber'
+                    ]); ?>
+                </span>
             </p>
             <p class="pull-right">
                 <?php echo Html::icon('map-marker'); ?>г. Пенза, ул. Пугачева, 3
