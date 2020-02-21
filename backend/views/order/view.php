@@ -7,7 +7,6 @@ use common\widgets\Alert;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $order Order */
@@ -285,12 +284,33 @@ JS
                     <b class="color-yellow">бесплатно</b>
                 <?php endif; ?>
                 <br/>
+                Стоимость отправки:
+                <?php if ($order->sending_cost > 0): ?>
+                    <b class="color-yellow"><?php echo number_format($order->sending_cost, 2, '.', ' '); ?></b> руб
+                <?php else: ?>
+                    <b class="color-yellow">бесплатно</b>
+                <?php endif; ?>
+                <br/>
+                <?php if ($order->sale_percent > 0): ?>
+                    Скидка:
+                    <b class="color-yellow"><?php echo $order->sale_percent; ?></b> %
+                <?php endif; ?>
+                <br/>
                 <h3 class="total summary">Итого: <b class="color-yellow"><?php echo number_format(
                             $order->getTotal(),
                             2,
                             '.',
                             ' '
                         ); ?></b> руб</h3>
+                <?= Html::a(
+                    'Изменить параметры заказа',
+                    [
+                        'order/update',
+                        'id' => $order->id
+                    ],
+                    ['class' => 'btn btn-success']
+                )
+                ?>
             </div>
         </form>
     </div>

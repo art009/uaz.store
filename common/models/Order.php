@@ -131,14 +131,16 @@ class Order extends \yii\db\ActiveRecord
                     'user_id',
                     'status',
                     'delivery_type',
-                    'payment_type'
+                    'payment_type',
+                    'sale_percent',
                 ],
                 'integer'
             ],
             [
                 [
                     'sum',
-                    'delivery_sum'
+                    'delivery_sum',
+                    'sending_cost',
                 ],
                 'number'
             ],
@@ -158,6 +160,7 @@ class Order extends \yii\db\ActiveRecord
                 'targetClass' => UserOrder::className(),
                 'targetAttribute' => ['user_id' => 'id']
             ],
+            ['sale_percent', 'in', 'range' => range(0, 99)],
         ];
     }
 
@@ -175,6 +178,8 @@ class Order extends \yii\db\ActiveRecord
             'delivery_type' => 'Способ доставки',
             'payment_type' => 'Метод оплаты',
             'payment_id' => 'ID оплаты',
+            'sending_cost' => 'Стоимость отправки',
+            'sale_percent' => 'Скидка %',
             'cash_box_sent_at' => 'Время отправки чека в кассу',
             'cash_box_sent_error' => 'Ошибка отправки чека в кассу',
             'cash_box_return_at' => 'Время отправки возврата в кассу',
