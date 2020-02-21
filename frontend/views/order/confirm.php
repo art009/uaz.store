@@ -274,7 +274,7 @@ JS
         <div class="form-group">
             Стоимость заказа: <b><?php echo number_format($order->sum, 2, '.', ' '); ?></b> руб
             <br/>
-            Стоимость доставки:
+            Доставка курьером до Почты/ТК:
             <span class="delivery-price">
 				<?php if ($order->delivery_sum > 0): ?>
                     <?php echo $deliverySumHtml; ?>
