@@ -7,6 +7,7 @@ use common\widgets\Alert;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $order Order */
@@ -267,6 +268,12 @@ JS
                 <br/>
                 Вариант оплаты:
                 <b class="color-yellow"><?php echo Order::$paymentList[$order->payment_type] ?? 'Не указано'; ?></b>
+                <?php if ($order->payment_type == Order::PAYMENT_CARD): ?>
+                <br/>
+                Ссылка на оплату:
+                <?php $link = Yii::$app->params['frontendUrl'].'order/view?id='.$order->id; ?>
+                <a href="<?= $link ?>"><?= $link ?></a>
+                <?php endif; ?>
             </div>
             <div class="form-group">
                 Стоимость заказа: <b class="color-yellow"><?php echo number_format($order->sum, 2, '.', ' '); ?></b> руб
