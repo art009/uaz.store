@@ -302,6 +302,14 @@ JS
                             '.',
                             ' '
                         ); ?></b> руб</h3>
+                <?php if ($order->sale_percent > 0): ?>
+                <h3 class="total summary">Итого co скидкой: <b class="color-yellow"><?php echo number_format(
+                            $order->getTotalWithDiscount(),
+                            2,
+                            '.',
+                            ' '
+                        ); ?></b> руб</h3>
+                <?php endif; ?>
                 <?= Html::a(
                     'Изменить параметры заказа',
                     [

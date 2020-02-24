@@ -102,6 +102,15 @@ class OrderProduct extends \yii\db\ActiveRecord implements CartProductInterface
 		return $this->price;
 	}
 
+    /**
+     * @inheritdoc
+     */
+    public function getDiscountPrice()
+    {
+        $discountItem = round($this->price * ( $this->order->sale_percent / 100), 2, PHP_ROUND_HALF_DOWN);
+        return $this->price - $discountItem;
+    }
+
 	/**
 	 * Обновление количества
 	 *

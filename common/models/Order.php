@@ -395,7 +395,23 @@ class Order extends \yii\db\ActiveRecord
      */
     public function getTotal()
     {
-        return (float)$this->sum + (float)$this->delivery_sum;
+        return (float)$this->sum + (float)$this->delivery_sum + $this->sending_cost;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTotalWithDiscount()
+    {
+        $discountSum = 0;
+        $orderProducts = $this->getOrderProducts()->all();
+        foreach ($orderProducts as $orderProduct) {
+            $discountItem = round($orderProduct->price * ($this->sale_percent / 100), 2, PHP_ROUND_HALF_DOWN);
+            $discountItem = $discountItem * $orderProduct->quantity;
+            $discountSum += $discountItem;
+        }
+
+        return (float)$this->sum + (float)$this->delivery_sum - $discountSum + $this->sending_cost;
     }
 
     /**

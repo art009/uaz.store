@@ -122,8 +122,29 @@ $this->params['breadcrumbs'][] = $this->title;
                     <b class="color-yellow">бесплатно</b>
                 <?php endif; ?>
                 <br/>
+                Стоимость отправки:
+                <?php if ($order->sending_cost > 0): ?>
+                    <b class="color-yellow"><?php echo number_format($order->sending_cost, 2, '.', ' '); ?></b> руб
+                <?php else: ?>
+                    <b class="color-yellow">бесплатно</b>
+                <?php endif; ?>
+                <br/>
+                <?php if ($order->sale_percent > 0): ?>
+                    Скидка:
+                    <b class="color-yellow"><?php echo $order->sale_percent; ?></b> %
+                <?php endif; ?>
+                <br/>
                 <span class="total summary">Итого: <b class="color-yellow"><?php echo number_format($order->getTotal(),
                             2, '.', ' '); ?></b> руб</span>
+                <?php if ($order->sale_percent > 0): ?>
+                <br/>
+                <span class="total summary">Итого co скидкой: <b class="color-yellow"><?php echo number_format(
+                            $order->getTotalWithDiscount(),
+                            2,
+                            '.',
+                            ' '
+                        ); ?></b> руб</span>
+                <?php endif; ?>
                 <br/>
                 <br/>
             </div>

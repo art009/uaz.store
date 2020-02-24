@@ -131,7 +131,7 @@ class OrderController extends Controller
 
 				$product = $orderProduct->product;
 				if ($product) {
-					$cashbox->setProduct($orderProduct->price, $orderProduct->quantity, $product->title);
+					$cashbox->setProduct($orderProduct->getDiscountPrice(), $orderProduct->quantity, $product->title);
 				}
 			}
 		}
@@ -191,7 +191,7 @@ class OrderController extends Controller
 
 				$product = $orderProduct->product;
 				if ($product) {
-					$cashBox->setProduct($orderProduct->price, $orderProduct->quantity, $product->title);
+					$cashBox->setProduct($orderProduct->getDiscountPrice(), $orderProduct->quantity, $product->title);
 				}
 			}
 		}
