@@ -107,7 +107,7 @@ class OrderProduct extends \yii\db\ActiveRecord implements CartProductInterface
      */
     public function getDiscountPrice()
     {
-        $discountItem = round($this->price * ( $this->order->sale_percent / 100), 2, PHP_ROUND_HALF_DOWN);
+        $discountItem = ceil($this->price * ( $this->order->sale_percent / 100));
         return $this->price - $discountItem;
     }
 

@@ -406,7 +406,7 @@ class Order extends \yii\db\ActiveRecord
         $discountSum = 0;
         $orderProducts = $this->getOrderProducts()->all();
         foreach ($orderProducts as $orderProduct) {
-            $discountItem = round($orderProduct->price * ($this->sale_percent / 100), 2, PHP_ROUND_HALF_DOWN);
+            $discountItem = ceil($orderProduct->price * ($this->sale_percent / 100));
             $discountItem = $discountItem * $orderProduct->quantity;
             $discountSum += $discountItem;
         }
@@ -457,9 +457,9 @@ class Order extends \yii\db\ActiveRecord
         }
 
         if ($hasOverSized) {
-            return $sum >= 50000 ? 0 : 500;
+            return 500;
         } else {
-            return $sum >= 5000 ? 0 : 200;
+            return 200;
         }
     }
 }

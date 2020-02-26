@@ -288,7 +288,7 @@ JS
                 <?php if ($order->sending_cost > 0): ?>
                     <b class="color-yellow"><?php echo number_format($order->sending_cost, 2, '.', ' '); ?></b> руб
                 <?php else: ?>
-                    <b class="color-yellow">бесплатно</b>
+                    <b class="color-yellow">не учитывается</b>
                 <?php endif; ?>
                 <br/>
                 <?php if ($order->sale_percent > 0): ?>

@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="form-group">
                 Стоимость заказа: <b class="color-yellow"><?php echo number_format($order->sum, 2, '.', ' '); ?></b> руб
                 <br/>
-                Стоимость доставки:
+                Доставка курьером до Почты/ТК:
                 <?php if ($order->delivery_sum > 0): ?>
                     <b class="color-yellow"><?php echo number_format($order->delivery_sum, 2, '.', ' '); ?></b> руб
                 <?php else: ?>
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if ($order->sending_cost > 0): ?>
                     <b class="color-yellow"><?php echo number_format($order->sending_cost, 2, '.', ' '); ?></b> руб
                 <?php else: ?>
-                    <b class="color-yellow">бесплатно</b>
+                    <b class="color-yellow">не учитывается</b>
                 <?php endif; ?>
                 <br/>
                 <?php if ($order->sale_percent > 0): ?>
