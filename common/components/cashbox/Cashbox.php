@@ -181,7 +181,7 @@ class Cashbox extends BaseCashbox
 	{
 		$total = 0;
 		foreach ($this->data['Lines'] as $line) {
-			$total += ($line['Price'] * $line['Qty'] / self::getCountFactor());
+			$total += (ceil($line['Price']) * $line['Qty'] / self::getCountFactor());
 		}
 
 		$this->data['NonCash'] = [$total];

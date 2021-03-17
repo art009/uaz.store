@@ -118,7 +118,7 @@ class BaseCashbox extends Component
 	 */
 	protected static function formatPrice(float $price)
 	{
-		return $price * self::$priceFactor;
+		return ceil($price) * self::$priceFactor;
 	}
 
 	/**
