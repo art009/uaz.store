@@ -85,7 +85,8 @@ class LoginForm extends Model
             $this->_user = User::findByEmail($this->username);
         }
         if ($this->_user === null) {
-            $this->_user = User::findByPhone($this->username);
+            $phone = mb_substr(preg_replace('/[^0-9]/', '', $this->username), -10);
+            $this->_user = User::findByPhone($phone);
         }
 
         return $this->_user;
