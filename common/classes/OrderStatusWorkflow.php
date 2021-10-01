@@ -104,12 +104,13 @@ class OrderStatusWorkflow
 					Order::STATUS_REJECT,
 				];
 				break;
-			case Order::STATUS_REJECT:
-				$result = [
-					Order::STATUS_PROCESS,
-				];
-				break;
-		}
+            case Order::STATUS_REJECT:
+            case Order::STATUS_DONE:
+                $result = [
+                    Order::STATUS_PROCESS,
+                ];
+                break;
+        }
 
 		return $result;
 	}
