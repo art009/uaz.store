@@ -15,7 +15,7 @@ class OrderPayment
 			'clientid' => $clientId,
 			'orderid' => $orderId,
 			'sum' => $sum,
-			'phone' => $phone,
+			'client_phone' => $phone,
 		]);
 
 		$options = [
@@ -29,6 +29,6 @@ class OrderPayment
 		$context = stream_context_create($options);
 
 
-		return file_get_contents('http://uaz.server.paykeeper.ru/order/inline/', false, $context);
+		return file_get_contents('https://uaz.server.paykeeper.ru/order/inline/', false, $context);
 	}
 }
