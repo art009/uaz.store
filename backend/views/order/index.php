@@ -99,21 +99,20 @@ $this->params['breadcrumbs'][] = $this->title;
 			        //$model->cash_box_sent_at = '2019-05-01 12:12:12';
 			        if (strtotime($model->cash_box_sent_at) > 0) {
 			        	$result .= 'Чек отправлен: <br><b>' . $model->cash_box_sent_at . '</b><br/>';
-
-			        	if (strtotime($model->cash_box_return_at) <= 0) {
-					        $result .= Html::a(
-						        'Сделать возврат',
-						        ['cash-box-return', 'id' => $model->id],
-						        [
-							        'title' => 'Оформить возврат',
-							        'aria-label' => 'Оформить возврат',
-							        'data-confirm' => 'Вы уверены, что хотите оформить возврат по данному заказу?',
-							        'data-method' => 'post',
-							        'data-pjax' => 0,
-						        ]
-					        );
-				        }
 			        }
+                    if (strtotime($model->cash_box_return_at) <= 0) {
+                        $result .= Html::a(
+                            'Сделать возврат',
+                            ['cash-box-return', 'id' => $model->id],
+                            [
+                                'title' => 'Оформить возврат',
+                                'aria-label' => 'Оформить возврат',
+                                'data-confirm' => 'Вы уверены, что хотите оформить возврат по данному заказу?',
+                                'data-method' => 'post',
+                                'data-pjax' => 0,
+                            ]
+                        );
+                    }
 			        if ($model->cash_box_sent_error) {
 			        	$result .= '<br/><b>Ошибка при отправке чека:</b> ' . $model->cash_box_sent_error;
 			        }
