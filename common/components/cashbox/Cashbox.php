@@ -219,7 +219,7 @@ class Cashbox extends BaseCashbox
 		curl_setopt($curl, CURLOPT_POST, true);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
 		curl_setopt($curl, CURLOPT_URL, self::BASE_URL . $method);
-		curl_setopt($curl, CURLOPT_TIMEOUT, 600);
+		curl_setopt($curl, CURLOPT_TIMEOUT, 0);
 
 		$response = curl_exec($curl);
 
