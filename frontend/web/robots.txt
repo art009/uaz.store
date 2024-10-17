@@ -1,3 +1,13 @@
 User-agent: *
-Disallow:
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.webp
+Allow: /*.svg
+Allow: /*.png
+Allow: /*.css
+Allow: /*.js
+Disallow: /user
+Disallow: /login
+Disallow: /cart
+Disallow: /*?
 Sitemap: https://uaz.store/sitemap-index.xml
