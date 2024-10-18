@@ -8,7 +8,7 @@ use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use common\models\News;
 
-$this->title = 'Новости';
+$this->title = 'Новостии';
 $this->params['breadcrumbs'][] = 'Новости';
 ?>
 <div class="site-about">
