@@ -11,6 +11,14 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . index.php
 
+
+RewriteEngine On
+RewriteRule ^catalog/index$ /catalog [R=301,L]
+
+RewriteEngine On
+RewriteRule ^index\.php$ / [R=301,L]
+
+
 RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
 RewriteRule .* http://%1/$0 [L,R=301]
 
