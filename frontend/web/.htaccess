@@ -22,3 +22,16 @@ RewriteRule .* http://%1/$0 [L,R=301]
 #RewriteCond %{HTTP_USER_AGENT} !^(.*.symbian.*) [NC]
 #RewriteCond %{HTTP_USER_AGENT} !^(.*.blackberry.*) [NC]
 #RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+
+# Редирект с www на без www
+RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
+RewriteRule .* https://%1/$0 [L,R=301]
+
+# Редирект с https://uaz.store/catalog/index на https://uaz.store/catalog
+RewriteCond %{REQUEST_URI} ^/(.*)/index$ [NC]
+RewriteRule ^(.*)/index$ /$1/ [R=301,L]
+
+# Редирект с https://uaz.store/index.php на https://uaz.store/
+RewriteCond %{REQUEST_URI} ^/index\.php$ [NC]
+RewriteRule ^index\.php$ / [R=301,L]
