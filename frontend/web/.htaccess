@@ -13,7 +13,9 @@ RewriteRule . index.php
 
 
 RewriteEngine On
+RewriteCond %{THE_REQUEST} /catalog/index [NC]
 RewriteRule ^catalog/index$ /catalog [R=301,L]
+
 
 RewriteEngine On
 RewriteRule ^index\.php$ / [R=301,L]
