@@ -32,6 +32,9 @@ $this->addSeoMetatags();
     <meta name="viewport" content="width=device-width, initial-scale=0.8">
     <meta name="yandex-verification" content="57bf07e53461193f"/>
     <meta name="yandex-verification" content="ea6288da13f02ed1" />
+    <meta name="google-site-verification" content="aCs1eWuj7VSzqHbomof2KoRB2G574KTf4Qnvp6c2G_0" />
+
+
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?> - UAZ.STORE</title>
     <?php $this->head() ?>
